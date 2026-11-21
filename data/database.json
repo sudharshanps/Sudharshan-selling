@@ -58,7 +58,8 @@
           "desc": "Dynamic web application with database & payment processing"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/web-development.svg"
     },
     {
       "id": "srv-mobile",
@@ -100,7 +101,8 @@
           "desc": "Complex real-time multi-role ecosystem with offline-first sync"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/mobile-app-development.svg"
     },
     {
       "id": "srv-ai",
@@ -142,7 +144,8 @@
           "desc": "Bespoke computer vision, NLP, or predictive machine learning engine"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/ai-automation.svg"
     },
     {
       "id": "srv-custom-software",
@@ -184,7 +187,8 @@
           "desc": "Multi-department operational portal with automated workflows"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/custom-software.svg"
     },
     {
       "id": "srv-cybersecurity",
@@ -226,7 +230,8 @@
           "desc": "Cloud, server, database, and container hardening suite"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/cybersecurity.svg"
     },
     {
       "id": "srv-cloud-devops",
@@ -268,7 +273,8 @@
           "desc": "EC2/ECS, S3, RDS, CloudFront CDN, and auto-recovery"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/cloud-devops.svg"
     },
     {
       "id": "srv-saas",
@@ -310,7 +316,8 @@
           "desc": "High-throughput product with advanced API keys & webhooks"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/saas-development.svg"
     },
     {
       "id": "srv-maintenance",
@@ -352,7 +359,8 @@
           "desc": "Same-day priority turnaround, on-call support & deep optimization"
         }
       ],
-      "active": true
+      "active": true,
+      "image": "/assets/services/it-maintenance.svg"
     }
   ],
   "portfolio_projects": [
@@ -753,7 +761,52 @@
       "created_at": "2026-11-21T16:38:51.569Z"
     }
   ],
-  "quotations": [],
+  "quotations": [
+    {
+      "id": "ST-QTE-2026-001",
+      "customer_name": "Rahul Sharma",
+      "customer_email": "sudharshantech123@gmail.com",
+      "customer_phone": "+91 97914 95418",
+      "business_name": "Sharma Agro Logistics",
+      "requested_services": [
+        "Web Development",
+        "AI Solutions & Automation"
+      ],
+      "project_description": "Full-stack responsive web application with AI chatbot integration for real-time farm logistics tracking and customer enquiries.",
+      "timeline": "7 - 10 Business Days",
+      "validity_date": "2026-12-15",
+      "base_amount": 4198,
+      "additional_amount": 500,
+      "discount": 200,
+      "tax": 0,
+      "final_amount": 4498,
+      "included_features": [
+        "Custom React & Tailwind CSS Responsive Frontend",
+        "FastAPI Python Backend with PostgreSQL Database",
+        "Trained AI Chatbot Assistant for Logistics FAQs",
+        "Automated WhatsApp Alert Webhooks",
+        "Free SSL & Cloud Deployment on Render"
+      ],
+      "milestones": [
+        "Phase 1: UI/UX Wireframing & Scope Confirmation",
+        "Phase 2: Database & Core Web Portal Architecture",
+        "Phase 3: AI Chatbot Training & Integration",
+        "Phase 4: Client Review, Security Audit & Handover"
+      ],
+      "revisions": "3 Complete Review & Adjustment Cycles",
+      "support_period": "30 Days post-deployment technical maintenance",
+      "payment_milestones": "50% Advance on Kickoff, 50% upon Handover",
+      "third_party_charges": "Cloud hosting and SMS gateway keys billed at direct actual cost.",
+      "additional_scope_terms": "Features outside agreed specification estimated via change request addendum.",
+      "status": "Draft",
+      "message_id": "sim-1795281662988",
+      "provider": "simulation_audit",
+      "pdf_path": "/uploads/quotations/quote-ST-QTE-2026-001.pdf",
+      "created_at": "2026-11-21T17:21:02.977Z",
+      "sent_at": "2026-11-21T17:21:02.990Z",
+      "updated_at": "2026-11-21T17:21:02.990Z"
+    }
+  ],
   "payment_submissions": [],
   "notification_logs": [
     {
@@ -851,6 +904,156 @@
       "email": "sudharshantech123@gmail.com",
       "role": "Super Admin",
       "pin_hash": "admin123"
+    }
+  ],
+  "sms_logs": [],
+  "special_offers": [
+    {
+      "id": "off-web",
+      "slug": "website-launch-offer",
+      "title": "Website Launch Offer",
+      "category": "Web & Digital",
+      "badge": "LIMITED LAUNCH",
+      "starting_price": 1199,
+      "unit": "starting project",
+      "short_description": "A budget-friendly starting package for small business websites and personal portfolios.",
+      "banner_image": "/assets/offers/website-launch-offer.svg",
+      "service_id": "srv-web",
+      "features": [
+        "100% Mobile & Tablet Responsive Layout",
+        "Up to 3 Essential Website Pages",
+        "Interactive Contact Section & Lead Capture",
+        "Fast Core Web Vitals & Clean Typography",
+        "Free SSL Setup & Custom Domain Assistance"
+      ],
+      "scope_limits": "Covers single-page or up to 3 static sections. E-commerce portals and custom API backends quoted separately.",
+      "active": true
+    },
+    {
+      "id": "off-ai",
+      "slug": "ai-automation-offer",
+      "title": "AI Automation Offer",
+      "category": "Artificial Intelligence",
+      "badge": "TRENDING TECH",
+      "starting_price": 2999,
+      "unit": "starting project",
+      "short_description": "Explore AI-powered chatbots and business workflow automation.",
+      "banner_image": "/assets/offers/ai-automation-offer.svg",
+      "service_id": "srv-ai",
+      "features": [
+        "Custom Trained AI Chatbot Assistant",
+        "Gemini API & OpenAI Model Integration",
+        "Automated FAQ & Lead Qualification",
+        "Website Embeddable Floating Chat Widget",
+        "Complete Prompt Engineering & Guardrails"
+      ],
+      "scope_limits": "Includes 1 AI agent or automated webhook pipeline. Cloud LLM token costs billed directly via client API key.",
+      "active": true
+    },
+    {
+      "id": "off-cyber",
+      "slug": "cybersecurity-starter",
+      "title": "Cybersecurity Starter",
+      "category": "Cybersecurity",
+      "badge": "FOUNDER SPECIAL",
+      "starting_price": 1999,
+      "unit": "starting audit",
+      "short_description": "Website security review and fundamental security hardening package.",
+      "banner_image": "/assets/offers/cybersecurity-starter.svg",
+      "service_id": "srv-cybersecurity",
+      "features": [
+        "Comprehensive Vulnerability Assessment Report",
+        "OWASP Top 10 Security Exposure Audit",
+        "HTTP Security Headers & SSL Hardening",
+        "SQL Injection & Cross-Site Scripting (XSS) Checks",
+        "Actionable Step-by-Step Remediation Roadmap"
+      ],
+      "scope_limits": "Single web domain assessment. Enterprise internal network penetration testing quoted separately.",
+      "active": true
+    },
+    {
+      "id": "off-cloud",
+      "slug": "cloud-deployment-offer",
+      "title": "Cloud Deployment Offer",
+      "category": "Cloud & DevOps",
+      "badge": "DEVOPS PRO",
+      "starting_price": 1999,
+      "unit": "starting setup",
+      "short_description": "Deployment and initial configuration support for eligible web applications.",
+      "banner_image": "/assets/offers/cloud-deployment-offer.svg",
+      "service_id": "srv-cloud-devops",
+      "features": [
+        "Docker Containerization & Multi-Stage Builds",
+        "Production Deploy to Render, AWS or VPS",
+        "Automated GitHub Actions CI/CD Pipeline",
+        "Environment Secret Configuration & SSL",
+        "Uptime Monitoring & Health Check Setup"
+      ],
+      "scope_limits": "Covers single-service app or standard frontend+backend pair. Multi-cluster Kubernetes architecture quoted separately.",
+      "active": true
+    },
+    {
+      "id": "off-custom",
+      "slug": "business-digitalisation",
+      "title": "Business Digitalisation",
+      "category": "Custom Software",
+      "badge": "PRODUCTIVITY",
+      "starting_price": 2999,
+      "unit": "starting project",
+      "short_description": "Digital dashboards and workflow solutions for small business operations.",
+      "banner_image": "/assets/offers/business-digitalisation.svg",
+      "service_id": "srv-custom-software",
+      "features": [
+        "Custom Interactive Analytics Dashboard",
+        "Inventory & Order Tracking Interface",
+        "Automated Invoicing & Report Export",
+        "Role-Based Access for Staff Members",
+        "Mobile-Friendly Admin Panel"
+      ],
+      "scope_limits": "Starting tier covers up to 5 core dashboard modules. Full ERP/CRM custom integrations quoted separately.",
+      "active": true
+    },
+    {
+      "id": "off-saas",
+      "slug": "startup-saas-offer",
+      "title": "Startup SaaS Offer",
+      "category": "SaaS Development",
+      "badge": "FOUNDER MVP",
+      "starting_price": 8999,
+      "unit": "starting project",
+      "short_description": "Initial development package for founder MVPs and subscription platforms.",
+      "banner_image": "/assets/offers/startup-saas-offer.svg",
+      "service_id": "srv-saas",
+      "features": [
+        "Multi-Tenant Database Architecture",
+        "User Authentication & Role Management",
+        "Subscription Billing Flow (Razorpay / Stripe)",
+        "Modern Responsive SaaS Dashboard",
+        "Cloud Deployment & Database Setup"
+      ],
+      "scope_limits": "Covers MVP scope with 1 core feature loop and billing integration. Extended custom modules scoped per requirement.",
+      "active": true
+    },
+    {
+      "id": "off-maint",
+      "slug": "maintenance-plan",
+      "title": "Maintenance Plan",
+      "category": "IT Support",
+      "badge": "PEACE OF MIND",
+      "starting_price": 299,
+      "unit": "/month",
+      "short_description": "Basic ongoing website maintenance, security updates and technical peace of mind.",
+      "banner_image": "/assets/offers/maintenance-plan.svg",
+      "service_id": "srv-maintenance",
+      "features": [
+        "Weekly Database & Asset Backups",
+        "Security Patches & Dependency Updates",
+        "Continuous Uptime & SSL Monitoring",
+        "Priority Bug Fixes & Minor Content Edits",
+        "Monthly Health & Performance Summary"
+      ],
+      "scope_limits": "Includes up to 2 hours of monthly active maintenance and minor tweaks. Major feature overhauls quoted separately.",
+      "active": true
     }
   ]
 }

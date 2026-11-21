@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F1F5F9" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E53935" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#155EEF" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="480" fill="url(#bgGrad)" />
+
+  <!-- Subtle Tech Grid -->
+  <g opacity="0.4">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    </pattern>
+    <rect width="800" height="480" fill="url(#grid)" />
+  </g>
+
+  <!-- Ambient Decorative Rings -->
+  <circle cx="700" cy="80" r="140" fill="#155EEF" opacity="0.04" />
+  <circle cx="100" cy="420" r="160" fill="#155EEF" opacity="0.04" />
+
+  <!-- Main Illustration Content -->
+  
+  <!-- Central AI Core Node -->
+  <g transform="translate(400, 190)" filter="url(#glow)">
+    <circle cx="0" cy="0" r="70" fill="url(#primaryGrad)" opacity="0.15" />
+    <circle cx="0" cy="0" r="50" fill="#FFFFFF" stroke="#155EEF" stroke-width="3" filter="url(#shadow)" />
+    <!-- AI Brain Circuit Symbol -->
+    <path d="M -20 -15 C -25 -5, -25 10, -15 20 C -5 25, 10 20, 18 10 C 25 0, 20 -15, 10 -20 Z" fill="none" stroke="#155EEF" stroke-width="3" stroke-linecap="round" />
+    <circle cx="-6" cy="-2" r="5" fill="#E53935" />
+    <circle cx="10" cy="4" r="4" fill="#155EEF" />
+    <path d="M -6 -2 L 10 4" stroke="#155EEF" stroke-width="2" />
+  </g>
+
+  <!-- Connected Automation Nodes -->
+  <!-- Node Left: Chatbot Interface -->
+  <g transform="translate(130, 100)" filter="url(#shadow)">
+    <rect width="210" height="150" rx="16" fill="#FFFFFF" stroke="#E2E8F0" />
+    <rect x="16" y="16" width="100" height="12" rx="4" fill="#155EEF" />
+    <!-- Chat Bubbles -->
+    <rect x="16" y="42" width="140" height="34" rx="10" fill="#F1F5F9" />
+    <text x="26" y="63" font-family="sans-serif" font-size="10" fill="#334155">How can AI help my business?</text>
+    <rect x="54" y="86" width="140" height="42" rx="10" fill="#EFF4FF" stroke="#BFDBFE" />
+    <text x="64" y="104" font-family="sans-serif" font-size="10" font-weight="600" fill="#155EEF">Automate 80% of inquiries &amp;</text>
+    <text x="64" y="118" font-family="sans-serif" font-size="10" font-weight="600" fill="#155EEF">streamline lead pipeline!</text>
+  </g>
+
+  <!-- Node Right: Automated Workflow Pipeline -->
+  <g transform="translate(480, 100)" filter="url(#shadow)">
+    <rect width="200" height="150" rx="16" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="18" y="32" font-family="sans-serif" font-size="11" font-weight="800" fill="#172033">Intelligent Pipeline</text>
+    <rect x="18" y="48" width="164" height="26" rx="6" fill="#F0FDF4" stroke="#BBF7D0" />
+    <text x="28" y="65" font-family="monospace" font-size="9" fill="#166534">✓ Trigger: Webhook Event</text>
+    <rect x="18" y="80" width="164" height="26" rx="6" fill="#EFF4FF" stroke="#BFDBFE" />
+    <text x="28" y="97" font-family="monospace" font-size="9" fill="#1D4ED8">⚡ Gemini LLM Analysis</text>
+    <rect x="18" y="112" width="164" height="26" rx="6" fill="#FEF2F2" stroke="#FECACA" />
+    <text x="28" y="129" font-family="monospace" font-size="9" fill="#B91C1C">✉ Auto-Reply &amp; CRM Sync</text>
+  </g>
+
+  <!-- Connecting Stream Lines -->
+  <path d="M 340 175 L 350 190" stroke="#155EEF" stroke-width="2" stroke-dasharray="4 4" />
+  <path d="M 450 190 L 480 175" stroke="#155EEF" stroke-width="2" stroke-dasharray="4 4" />
+  
+
+  <!-- Brand Label Overlay Bar -->
+  <g transform="translate(40, 420)">
+    <rect width="720" height="38" rx="10" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)" />
+    <rect x="12" y="10" width="8" height="18" rx="4" fill="#155EEF" />
+    <text x="30" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="800" fill="#172033">SUDHARSHAN_TECH</text>
+    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• AI Solutions & Automation (LLM Chatbots, AI Agents & Workflow Automation)</text>
+    <text x="690" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#155EEF" text-anchor="end">PRO VERIFIED</text>
+  </g>
+</svg>

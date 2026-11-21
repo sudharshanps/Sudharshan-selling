@@ -34,7 +34,7 @@ export const getInitialData = () => ({
       category: "Web & Digital",
       icon: "Globe",
       badge: "Most Popular",
-      image: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80", // Professional laptop showing modern website design
+      image: "/assets/services/web-development.svg",
       starting_price: 1199,
       unit: "starting project",
       turnaround: "3 - 7 Days",
@@ -62,7 +62,7 @@ export const getInitialData = () => ({
       category: "Mobile",
       icon: "Smartphone",
       badge: "High Growth",
-      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80", // Smartphone mockups showing Android and iOS screens
+      image: "/assets/services/mobile-app-development.svg",
       starting_price: 4999,
       unit: "starting project",
       turnaround: "7 - 21 Days",
@@ -90,7 +90,7 @@ export const getInitialData = () => ({
       category: "Artificial Intelligence",
       icon: "Cpu",
       badge: "Cutting-Edge",
-      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80", // AI assistant interface & chatbot workflow
+      image: "/assets/services/ai-automation.svg",
       starting_price: 2999,
       unit: "starting project",
       turnaround: "4 - 10 Days",
@@ -118,7 +118,7 @@ export const getInitialData = () => ({
       category: "Enterprise Software",
       icon: "Layers",
       badge: "Business Essential",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80", // Enterprise dashboard, CRM interface
+      image: "/assets/services/custom-software.svg",
       starting_price: 2999,
       unit: "starting project",
       turnaround: "7 - 14 Days",
@@ -146,7 +146,7 @@ export const getInitialData = () => ({
       category: "Security",
       icon: "ShieldCheck",
       badge: "Founder Specialty",
-      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80", // Cybersecurity shield, secure network dashboard
+      image: "/assets/services/cybersecurity.svg",
       starting_price: 1999,
       unit: "starting audit",
       turnaround: "2 - 5 Days",
@@ -174,7 +174,7 @@ export const getInitialData = () => ({
       category: "Infrastructure",
       icon: "Cloud",
       badge: "High Performance",
-      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80", // Cloud infrastructure, AWS architecture, CI/CD
+      image: "/assets/services/cloud-devops.svg",
       starting_price: 1999,
       unit: "starting setup",
       turnaround: "2 - 5 Days",
@@ -202,7 +202,7 @@ export const getInitialData = () => ({
       category: "Cloud Products",
       icon: "Rocket",
       badge: "Full Product",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80", // SaaS analytics & subscription dashboard
+      image: "/assets/services/saas-development.svg",
       starting_price: 8999,
       unit: "starting platform",
       turnaround: "14 - 30 Days",
@@ -230,7 +230,7 @@ export const getInitialData = () => ({
       category: "Ongoing Support",
       icon: "Wrench",
       badge: "Peace of Mind",
-      image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80", // Technical support dashboard & monitoring
+      image: "/assets/services/it-maintenance.svg",
       starting_price: 299,
       unit: "starting per month",
       turnaround: "Monthly Retainer",
@@ -504,9 +504,200 @@ export const getInitialData = () => ({
       description: "Pursuing B.E. in Computer Science & Engineering (Cyber Security), excelling in data structures, DBMS, computer networks, and cloud architecture."
     }
   ],
+  special_offers: [
+    {
+      id: "off-web",
+      slug: "website-launch-offer",
+      title: "Website Launch Offer",
+      category: "Web & Digital",
+      badge: "LIMITED LAUNCH",
+      starting_price: 1199,
+      unit: "starting project",
+      short_description: "A budget-friendly starting package for small business websites and personal portfolios.",
+      banner_image: "/assets/offers/website-launch-offer.svg",
+      service_id: "srv-web",
+      features: [
+        "100% Mobile & Tablet Responsive Layout",
+        "Up to 3 Essential Website Pages",
+        "Interactive Contact Section & Lead Capture",
+        "Fast Core Web Vitals & Clean Typography",
+        "Free SSL Setup & Custom Domain Assistance"
+      ],
+      scope_limits: "Covers single-page or up to 3 static sections. E-commerce portals and custom API backends quoted separately.",
+      active: true
+    },
+    {
+      id: "off-ai",
+      slug: "ai-automation-offer",
+      title: "AI Automation Offer",
+      category: "Artificial Intelligence",
+      badge: "TRENDING TECH",
+      starting_price: 2999,
+      unit: "starting project",
+      short_description: "Explore AI-powered chatbots and business workflow automation.",
+      banner_image: "/assets/offers/ai-automation-offer.svg",
+      service_id: "srv-ai",
+      features: [
+        "Custom Trained AI Chatbot Assistant",
+        "Gemini API & OpenAI Model Integration",
+        "Automated FAQ & Lead Qualification",
+        "Website Embeddable Floating Chat Widget",
+        "Complete Prompt Engineering & Guardrails"
+      ],
+      scope_limits: "Includes 1 AI agent or automated webhook pipeline. Cloud LLM token costs billed directly via client API key.",
+      active: true
+    },
+    {
+      id: "off-cyber",
+      slug: "cybersecurity-starter",
+      title: "Cybersecurity Starter",
+      category: "Cybersecurity",
+      badge: "FOUNDER SPECIAL",
+      starting_price: 1999,
+      unit: "starting audit",
+      short_description: "Website security review and fundamental security hardening package.",
+      banner_image: "/assets/offers/cybersecurity-starter.svg",
+      service_id: "srv-cybersecurity",
+      features: [
+        "Comprehensive Vulnerability Assessment Report",
+        "OWASP Top 10 Security Exposure Audit",
+        "HTTP Security Headers & SSL Hardening",
+        "SQL Injection & Cross-Site Scripting (XSS) Checks",
+        "Actionable Step-by-Step Remediation Roadmap"
+      ],
+      scope_limits: "Single web domain assessment. Enterprise internal network penetration testing quoted separately.",
+      active: true
+    },
+    {
+      id: "off-cloud",
+      slug: "cloud-deployment-offer",
+      title: "Cloud Deployment Offer",
+      category: "Cloud & DevOps",
+      badge: "DEVOPS PRO",
+      starting_price: 1999,
+      unit: "starting setup",
+      short_description: "Deployment and initial configuration support for eligible web applications.",
+      banner_image: "/assets/offers/cloud-deployment-offer.svg",
+      service_id: "srv-cloud-devops",
+      features: [
+        "Docker Containerization & Multi-Stage Builds",
+        "Production Deploy to Render, AWS or VPS",
+        "Automated GitHub Actions CI/CD Pipeline",
+        "Environment Secret Configuration & SSL",
+        "Uptime Monitoring & Health Check Setup"
+      ],
+      scope_limits: "Covers single-service app or standard frontend+backend pair. Multi-cluster Kubernetes architecture quoted separately.",
+      active: true
+    },
+    {
+      id: "off-custom",
+      slug: "business-digitalisation",
+      title: "Business Digitalisation",
+      category: "Custom Software",
+      badge: "PRODUCTIVITY",
+      starting_price: 2999,
+      unit: "starting project",
+      short_description: "Digital dashboards and workflow solutions for small business operations.",
+      banner_image: "/assets/offers/business-digitalisation.svg",
+      service_id: "srv-custom-software",
+      features: [
+        "Custom Interactive Analytics Dashboard",
+        "Inventory & Order Tracking Interface",
+        "Automated Invoicing & Report Export",
+        "Role-Based Access for Staff Members",
+        "Mobile-Friendly Admin Panel"
+      ],
+      scope_limits: "Starting tier covers up to 5 core dashboard modules. Full ERP/CRM custom integrations quoted separately.",
+      active: true
+    },
+    {
+      id: "off-saas",
+      slug: "startup-saas-offer",
+      title: "Startup SaaS Offer",
+      category: "SaaS Development",
+      badge: "FOUNDER MVP",
+      starting_price: 8999,
+      unit: "starting project",
+      short_description: "Initial development package for founder MVPs and subscription platforms.",
+      banner_image: "/assets/offers/startup-saas-offer.svg",
+      service_id: "srv-saas",
+      features: [
+        "Multi-Tenant Database Architecture",
+        "User Authentication & Role Management",
+        "Subscription Billing Flow (Razorpay / Stripe)",
+        "Modern Responsive SaaS Dashboard",
+        "Cloud Deployment & Database Setup"
+      ],
+      scope_limits: "Covers MVP scope with 1 core feature loop and billing integration. Extended custom modules scoped per requirement.",
+      active: true
+    },
+    {
+      id: "off-maint",
+      slug: "maintenance-plan",
+      title: "Maintenance Plan",
+      category: "IT Support",
+      badge: "PEACE OF MIND",
+      starting_price: 299,
+      unit: "/month",
+      short_description: "Basic ongoing website maintenance, security updates and technical peace of mind.",
+      banner_image: "/assets/offers/maintenance-plan.svg",
+      service_id: "srv-maintenance",
+      features: [
+        "Weekly Database & Asset Backups",
+        "Security Patches & Dependency Updates",
+        "Continuous Uptime & SSL Monitoring",
+        "Priority Bug Fixes & Minor Content Edits",
+        "Monthly Health & Performance Summary"
+      ],
+      scope_limits: "Includes up to 2 hours of monthly active maintenance and minor tweaks. Major feature overhauls quoted separately.",
+      active: true
+    }
+  ],
   orders: [],
   project_enquiries: [],
-  quotations: [],
+  quotations: [
+    {
+      id: "ST-QTE-2026-001",
+      customer_name: "Rahul Sharma",
+      customer_email: "sudharshantech123@gmail.com",
+      customer_phone: "+91 97914 95418",
+      business_name: "Sharma Agro Logistics",
+      requested_services: ["Web Development", "AI Solutions & Automation"],
+      project_description: "Full-stack responsive web application with AI chatbot integration for real-time farm logistics tracking and customer enquiries.",
+      timeline: "7 - 10 Business Days",
+      validity_date: "2026-12-15",
+      base_amount: 4198,
+      additional_amount: 500,
+      discount: 200,
+      tax: 0,
+      final_amount: 4498,
+      included_features: [
+        "Custom React & Tailwind CSS Responsive Frontend",
+        "FastAPI Python Backend with PostgreSQL Database",
+        "Trained AI Chatbot Assistant for Logistics FAQs",
+        "Automated WhatsApp Alert Webhooks",
+        "Free SSL & Cloud Deployment on Render"
+      ],
+      milestones: [
+        "Phase 1: UI/UX Wireframing & Scope Confirmation",
+        "Phase 2: Database & Core Web Portal Architecture",
+        "Phase 3: AI Chatbot Training & Integration",
+        "Phase 4: Client Review, Security Audit & Handover"
+      ],
+      revisions: "3 Complete Review & Adjustment Cycles",
+      support_period: "30 Days post-deployment technical maintenance",
+      payment_milestones: "50% Advance on Kickoff, 50% upon Handover",
+      third_party_charges: "Cloud hosting and SMS gateway keys billed at direct actual cost.",
+      additional_scope_terms: "Features outside agreed specification estimated via change request addendum.",
+      status: "Draft",
+      message_id: null,
+      provider: "smtp",
+      pdf_path: null,
+      created_at: new Date().toISOString(),
+      sent_at: null,
+      updated_at: new Date().toISOString()
+    }
+  ],
   payment_submissions: [],
   notification_logs: [],
   sms_logs: [],
@@ -534,6 +725,12 @@ export function loadDatabase() {
     // Always merge in any updated service images and schema keys
     const initial = getInitialData();
     if (!data.sms_logs) data.sms_logs = [];
+    if (!data.quotations || data.quotations.length === 0) {
+      data.quotations = initial.quotations || [];
+    }
+    if (!data.special_offers || data.special_offers.length === 0) {
+      data.special_offers = initial.special_offers;
+    }
     
     // Ensure all 8 services have individual images
     if (data.services && data.services.length) {

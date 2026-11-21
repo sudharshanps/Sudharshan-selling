@@ -15,6 +15,13 @@ import {
   sendEmailNotification
 } from './email.js';
 import { notifyOwnerOrderSms, sendSmsNotification } from './sms.js';
+import { 
+  createQuotationRecord, 
+  generateQuotationHtml, 
+  generateQuotationPlainText, 
+  generateQuotationPdf, 
+  sendQuotationEmail 
+} from './quotation.js';
 
 dotenv.config();
 
@@ -422,6 +429,98 @@ app.post('/api/contact', async (req, res) => {
   }
 });
 
+// Special Offers List
+app.get('/api/offers', (req, res) => {
+  const db = loadDatabase();
+  res.json(db.special_offers || []);
+});
+
+// View Quotation HTML
+app.get('/api/quotations/:id/view', (req, res) => {
+  const db = loadDatabase();
+  const quotation = (db.quotations || []).find(q => q.id === req.params.id);
+  if (!quotation) return res.status(404).send('Quotation not found.');
+  res.send(generateQuotationHtml(quotation));
+});
+
+// Download Quotation PDF
+app.get('/api/quotations/:id/pdf', async (req, res) => {
+  try {
+    const db = loadDatabase();
+    const quotation = (db.quotations || []).find(q => q.id === req.params.id);
+    if (!quotation) return res.status(404).json({ error: 'Quotation not found' });
+
+    const pdfDir = path.join(__dirname, '..', 'uploads', 'quotations');
+    if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
+    const pdfPath = path.join(pdfDir, `quote-${quotation.id}.pdf`);
+    
+    await generateQuotationPdf(quotation, pdfPath);
+    res.download(pdfPath, `SUDHARSHAN_TECH_Quotation_${quotation.id}.pdf`);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to generate PDF: ' + err.message });
+  }
+});
+
+// Customer Accept Quotation
+app.get('/api/quotations/:id/accept', (req, res) => {
+  const db = loadDatabase();
+  const index = (db.quotations || []).findIndex(q => q.id === req.params.id);
+  if (index === -1) return res.status(404).send('Quotation not found.');
+  
+  db.quotations[index].status = 'Accepted';
+  db.quotations[index].client_accepted_at = new Date().toISOString();
+  db.quotations[index].updated_at = new Date().toISOString();
+  saveDatabase(db);
+
+  // Notify owner
+  sendEmailNotification({
+    to: db.company_settings.email,
+    subject: `Quotation Accepted by Customer! | #${db.quotations[index].id}`,
+    text: `Customer ${db.quotations[index].customer_name} has accepted Quotation #${db.quotations[index].id} for ₹${db.quotations[index].final_amount}.`,
+    event_type: 'QUOTATION_ACCEPTED',
+    related_id: db.quotations[index].id
+  }).catch(console.error);
+
+  res.send(`
+    <html>
+      <head><title>Quotation Accepted – SUDHARSHAN_TECH</title></head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #F8FAFC; margin: 0; padding: 20px;">
+        <div style="background: white; border: 1px solid #E2E8F0; padding: 40px; border-radius: 20px; max-width: 500px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: #DCFCE7; color: #16A34A; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 16px;">✓</div>
+          <h2 style="color: #172033; margin: 0 0 10px;">Quotation Accepted!</h2>
+          <p style="color: #475569; font-size: 14px; line-height: 1.6;">Thank you, <strong>${db.quotations[index].customer_name}</strong>! Quotation <strong>#${db.quotations[index].id}</strong> has been confirmed. Founder Sudharshan P S has been alerted and will reach out to commence development onboarding.</p>
+          <a href="/" style="display: inline-block; margin-top: 24px; padding: 12px 28px; background: #155EEF; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 13px;">Return to SUDHARSHAN_TECH</a>
+        </div>
+      </body>
+    </html>
+  `);
+});
+
+// Customer Request Changes
+app.get('/api/quotations/:id/request-changes', (req, res) => {
+  const db = loadDatabase();
+  const index = (db.quotations || []).findIndex(q => q.id === req.params.id);
+  if (index === -1) return res.status(404).send('Quotation not found.');
+
+  db.quotations[index].status = 'Revision Requested';
+  db.quotations[index].updated_at = new Date().toISOString();
+  saveDatabase(db);
+
+  res.send(`
+    <html>
+      <head><title>Revision Requested – SUDHARSHAN_TECH</title></head>
+      <body style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #F8FAFC; margin: 0; padding: 20px;">
+        <div style="background: white; border: 1px solid #E2E8F0; padding: 40px; border-radius: 20px; max-width: 500px; text-align: center; box-shadow: 0 10px 25px rgba(0,0,0,0.05);">
+          <div style="width: 64px; height: 64px; border-radius: 50%; background: #EFF4FF; color: #155EEF; display: flex; align-items: center; justify-content: center; font-size: 32px; margin: 0 auto 16px;">💬</div>
+          <h2 style="color: #172033; margin: 0 0 10px;">Revision Requested</h2>
+          <p style="color: #475569; font-size: 14px; line-height: 1.6;">We have noted that you'd like adjustments to Quotation <strong>#${db.quotations[index].id}</strong>. Feel free to message founder Sudharshan directly on WhatsApp at <strong>+91 97914 95418</strong> with your scope modifications.</p>
+          <a href="https://wa.me/919791495418?text=Hello%20SUDHARSHAN_TECH,%20requesting%20revisions%20on%20Quote%20${db.quotations[index].id}" style="display: inline-block; margin-top: 24px; padding: 12px 28px; background: #16A34A; color: white; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 13px;">Open WhatsApp Discussion</a>
+        </div>
+      </body>
+    </html>
+  `);
+});
+
 /* ========================================================
    ADMIN API ROUTES (PROTECTED)
    ======================================================== */
@@ -574,6 +673,93 @@ app.put('/api/admin/services/:id', requireAdmin, (req, res) => {
   };
   saveDatabase(db);
   res.json({ success: true, service: db.services[index] });
+});
+
+// Admin Quotations List
+app.get('/api/admin/quotations', requireAdmin, (req, res) => {
+  const db = loadDatabase();
+  res.json(db.quotations || []);
+});
+
+// Admin Create Quotation
+app.post('/api/admin/quotations', requireAdmin, (req, res) => {
+  try {
+    const quote = createQuotationRecord(req.body);
+    res.status(201).json({ success: true, quotation: quote });
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
+
+// Admin Update Quotation
+app.put('/api/admin/quotations/:id', requireAdmin, (req, res) => {
+  const db = loadDatabase();
+  const index = (db.quotations || []).findIndex(q => q.id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: 'Quotation not found' });
+
+  db.quotations[index] = {
+    ...db.quotations[index],
+    ...req.body,
+    updated_at: new Date().toISOString()
+  };
+  saveDatabase(db);
+  res.json({ success: true, quotation: db.quotations[index] });
+});
+
+// Admin Send Quotation Email
+app.post('/api/admin/quotations/:id/send', requireAdmin, async (req, res) => {
+  try {
+    const { test_recipient } = req.body;
+    const result = await sendQuotationEmail({
+      quotationId: req.params.id,
+      testRecipient: test_recipient
+    });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin Test Email Dispatch
+app.post('/api/admin/quotations/test-email', requireAdmin, async (req, res) => {
+  try {
+    const { recipient, quotation_id } = req.body;
+    const db = loadDatabase();
+    const targetQuote = quotation_id 
+      ? (db.quotations || []).find(q => q.id === quotation_id)
+      : (db.quotations && db.quotations[0]);
+
+    if (!targetQuote) {
+      return res.status(400).json({ error: 'No quotation available to test with.' });
+    }
+
+    const result = await sendQuotationEmail({
+      quotationId: targetQuote.id,
+      testRecipient: recipient || db.company_settings.email
+    });
+
+    res.json({
+      success: true,
+      message: `Test quotation email dispatched to ${recipient || db.company_settings.email}`,
+      result
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Admin Update Special Offer
+app.put('/api/admin/offers/:id', requireAdmin, (req, res) => {
+  const db = loadDatabase();
+  const index = (db.special_offers || []).findIndex(o => o.id === req.params.id);
+  if (index === -1) return res.status(404).json({ error: 'Offer not found' });
+
+  db.special_offers[index] = {
+    ...db.special_offers[index],
+    ...req.body
+  };
+  saveDatabase(db);
+  res.json({ success: true, offer: db.special_offers[index] });
 });
 
 // Admin Manage Projects

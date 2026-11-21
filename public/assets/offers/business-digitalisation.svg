@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 340" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+    <linearGradient id="headerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#155EEF" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <filter id="cardShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+  </defs>
+
+  <rect width="600" height="340" fill="url(#cardBg)" rx="20" stroke="#E2E8F0" stroke-width="1.5" />
+
+  <!-- Top Accent Bar -->
+  <rect width="600" height="12" fill="url(#headerGrad)" rx="6" />
+
+  <!-- Watermark Grid -->
+  <g opacity="0.3">
+    <circle cx="520" cy="100" r="120" fill="#155EEF" opacity="0.06" />
+    <circle cx="80" cy="280" r="80" fill="#E53935" opacity="0.04" />
+  </g>
+
+  <!-- Tag Pill -->
+  <g transform="translate(40, 40)">
+    <rect width="130" height="26" rx="8" fill="#EFF4FF" stroke="#BFDBFE" />
+    <text x="65" y="17" font-family="sans-serif" font-size="10" font-weight="800" fill="#155EEF" text-anchor="middle">PRODUCTIVITY</text>
+  </g>
+
+  <!-- Offer Title -->
+  <text x="40" y="105" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="24" font-weight="900" fill="#172033">Business Digitalisation</text>
+  <text x="40" y="130" font-family="sans-serif" font-size="12" font-weight="600" fill="#64748B">Digital dashboards, inventory & operational workflows</text>
+
+  <!-- Pricing Highlight Card -->
+  <g transform="translate(40, 160)" filter="url(#cardShadow)">
+    <rect width="520" height="110" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    
+    <text x="24" y="40" font-family="sans-serif" font-size="12" font-weight="700" fill="#64748B">Starting Package Rate</text>
+    <text x="24" y="80" font-family="sans-serif" font-size="32" font-weight="900" fill="#155EEF">₹2,999</text>
+    
+    <!-- CTA Visual Pill inside banner -->
+    <g transform="translate(350, 36)">
+      <rect width="145" height="42" rx="10" fill="#155EEF" />
+      <text x="72" y="26" font-family="sans-serif" font-size="12" font-weight="800" fill="#FFFFFF" text-anchor="middle">Explore Offer →</text>
+    </g>
+  </g>
+
+  <!-- Verified Badge Footer -->
+  <text x="40" y="305" font-family="sans-serif" font-size="10" font-weight="700" fill="#10B981">✓ Genuine Starting Rate • Transparent Scope Boundaries • Zero Hidden Charges</text>
+</svg>

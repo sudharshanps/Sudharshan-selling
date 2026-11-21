@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F1F5F9" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E53935" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#10B981" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="480" fill="url(#bgGrad)" />
+
+  <!-- Subtle Tech Grid -->
+  <g opacity="0.4">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    </pattern>
+    <rect width="800" height="480" fill="url(#grid)" />
+  </g>
+
+  <!-- Ambient Decorative Rings -->
+  <circle cx="700" cy="80" r="140" fill="#10B981" opacity="0.04" />
+  <circle cx="100" cy="420" r="160" fill="#155EEF" opacity="0.04" />
+
+  <!-- Main Illustration Content -->
+  
+  <!-- Central Tech Support Control Desk -->
+  <g transform="translate(240, 70)" filter="url(#shadow)">
+    <rect width="320" height="220" rx="16" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="2" />
+    
+    <rect width="320" height="38" rx="16" fill="#F8FAFC" />
+    <circle cx="20" cy="19" r="6" fill="#10B981" />
+    <text x="36" y="23" font-family="sans-serif" font-size="11" font-weight="800" fill="#172033">24/7 Production System Health</text>
+    <text x="300" y="23" font-family="sans-serif" font-size="9" font-weight="800" fill="#10B981" text-anchor="end">ONLINE</text>
+
+    <!-- Gauges & Dials -->
+    <g transform="translate(30, 60)">
+      <circle cx="45" cy="45" r="35" fill="none" stroke="#E2E8F0" stroke-width="6" />
+      <circle cx="45" cy="45" r="35" fill="none" stroke="#155EEF" stroke-width="6" stroke-dasharray="160 220" />
+      <text x="45" y="48" font-family="sans-serif" font-size="12" font-weight="900" fill="#155EEF" text-anchor="middle">99.9%</text>
+      <text x="45" y="95" font-family="sans-serif" font-size="9" font-weight="700" fill="#64748B" text-anchor="middle">Uptime SLA</text>
+    </g>
+
+    <g transform="translate(180, 60)">
+      <circle cx="45" cy="45" r="35" fill="none" stroke="#E2E8F0" stroke-width="6" />
+      <circle cx="45" cy="45" r="35" fill="none" stroke="#10B981" stroke-width="6" stroke-dasharray="190 220" />
+      <text x="45" y="48" font-family="sans-serif" font-size="12" font-weight="900" fill="#10B981" text-anchor="middle">0.12s</text>
+      <text x="45" y="95" font-family="sans-serif" font-size="9" font-weight="700" fill="#64748B" text-anchor="middle">Avg Latency</text>
+    </g>
+
+    <rect x="20" y="170" width="280" height="34" rx="8" fill="#F0FDF4" stroke="#BBF7D0" />
+    <text x="160" y="191" font-family="sans-serif" font-size="10" font-weight="700" fill="#166534" text-anchor="middle">Daily Automated Backups Configured</text>
+  </g>
+
+  <!-- Left: Wrench & Tools Card -->
+  <g transform="translate(90, 140)" filter="url(#shadow)">
+    <rect width="130" height="130" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <circle cx="65" cy="50" r="24" fill="#EFF4FF" />
+    <!-- Gear icon -->
+    <circle cx="65" cy="50" r="10" fill="none" stroke="#155EEF" stroke-width="4" />
+    <text x="65" y="92" font-family="sans-serif" font-size="10" font-weight="800" fill="#1E293B" text-anchor="middle">Bug Fixes &amp;</text>
+    <text x="65" y="106" font-family="sans-serif" font-size="10" font-weight="800" fill="#155EEF" text-anchor="middle">Patch Updates</text>
+  </g>
+
+  <!-- Right: Security & Monitoring -->
+  <g transform="translate(580, 140)" filter="url(#shadow)">
+    <rect width="130" height="130" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <circle cx="65" cy="50" r="24" fill="#FFF1F0" />
+    <!-- Shield icon -->
+    <path d="M 65 35 L 75 40 C 75 55 65 62 65 62 C 65 62 55 55 55 40 Z" fill="#E53935" />
+    <text x="65" y="92" font-family="sans-serif" font-size="10" font-weight="800" fill="#1E293B" text-anchor="middle">Rapid Response</text>
+    <text x="65" y="106" font-family="sans-serif" font-size="10" font-weight="800" fill="#E53935" text-anchor="middle">&lt; 2hr SLA</text>
+  </g>
+  
+
+  <!-- Brand Label Overlay Bar -->
+  <g transform="translate(40, 420)">
+    <rect width="720" height="38" rx="10" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)" />
+    <rect x="12" y="10" width="8" height="18" rx="4" fill="#10B981" />
+    <text x="30" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="800" fill="#172033">SUDHARSHAN_TECH</text>
+    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• IT Maintenance & Support (Software Patches, Backups, Monitoring & Performance Optimisation)</text>
+    <text x="690" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#10B981" text-anchor="end">PRO VERIFIED</text>
+  </g>
+</svg>

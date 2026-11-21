@@ -5,12 +5,13 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ProjectShowcase } from './components/ProjectShowcase';
 import { ServicesSection } from './components/ServicesSection';
-import { FAQSection } from './components/FAQSection';
+import { OffersSection } from './components/OffersSection';
+import { WhyChooseUs } from './components/WhyChooseUs';
 import { GitHubShowcase } from './components/GitHubShowcase';
 import { FounderProfile } from './components/FounderProfile';
 import { CreativeServices } from './components/CreativeServices';
-import { WhyChooseUs } from './components/WhyChooseUs';
 import { CustomProjectForm } from './components/CustomProjectForm';
+import { FAQSection } from './components/FAQSection';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { CartDrawer } from './components/CartDrawer';
@@ -96,33 +97,38 @@ export function AppContent() {
           }}
         />
 
-        {/* 2. Flagship Projects Showcase - Featured immediately after Hero as requested */}
+        {/* 2. Flagship Projects Showcase - Featured immediately after Hero */}
         <ProjectShowcase />
 
-        {/* 3. Official 8 Services Marketplace with Swiggy-inspired card discovery */}
+        {/* 3. Official 8 Services Marketplace */}
         <ServicesSection 
           onCustomQuote={handleCustomQuote}
         />
 
-        {/* 4. Frequently Asked Questions (FAQ) Accordion */}
-        <FAQSection />
+        {/* 4. Exclusive Digital Solution Offers */}
+        <OffersSection 
+          onCustomQuote={handleCustomQuote}
+        />
 
-        {/* 5. Live GitHub Ecosystem */}
-        <GitHubShowcase />
-
-        {/* 6. Founder Profile & Academic/Internship Achievements */}
-        <FounderProfile />
-
-        {/* 7. Creative Digital Services & Posters */}
-        <CreativeServices />
-
-        {/* 8. Why Choose Us Technology Pillars */}
+        {/* 5. Why Choose SUDHARSHAN_TECH Technology Pillars */}
         <WhyChooseUs />
 
-        {/* 9. Dedicated Custom Project Request Form */}
+        {/* 6. Live GitHub Ecosystem & Tech Stack */}
+        <GitHubShowcase />
+
+        {/* 7. Founder Profile & Academic/Internship Achievements */}
+        <FounderProfile />
+
+        {/* 8. Creative Design Gallery & Posters */}
+        <CreativeServices />
+
+        {/* 9. Dedicated Customer Project Request Form */}
         <CustomProjectForm />
 
-        {/* 10. Contact Office & Interactive Location */}
+        {/* 10. Frequently Asked Questions (FAQ) Accordion */}
+        <FAQSection />
+
+        {/* 11. Contact Office & Interactive Location */}
         <ContactSection />
       </main>
 

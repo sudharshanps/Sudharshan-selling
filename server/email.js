@@ -30,7 +30,7 @@ if (SMTP_USER && SMTP_PASS) {
 /**
  * Log notification attempt to database for complete auditability
  */
-function logNotification({ event_type, recipient, subject, body_preview, status, error_message, related_id }) {
+function logNotification({ event_type, recipient, subject, body_preview, status, error_message, related_id, message_id, provider }) {
   const db = loadDatabase();
   const logEntry = {
     id: `notif-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
@@ -39,6 +39,8 @@ function logNotification({ event_type, recipient, subject, body_preview, status,
     subject,
     body_preview,
     status, // 'sent' | 'simulated_logged' | 'failed'
+    message_id: message_id || null,
+    provider: provider || 'smtp',
     error_message: error_message || null,
     related_id: related_id || null,
     created_at: new Date().toISOString()
@@ -53,10 +55,56 @@ function logNotification({ event_type, recipient, subject, body_preview, status,
 }
 
 /**
- * Send an email notification with automatic fallback and reliable logging
+ * Send an email notification with automatic fallback, reliable logging & attachment support
  */
-export async function sendEmailNotification({ to, subject, html, text, event_type, related_id }) {
+export async function sendEmailNotification({ to, subject, html, text, event_type, related_id, attachments = [] }) {
   const preview = text || (html ? html.replace(/<[^>]+>/g, ' ').substring(0, 150) : '');
+  const fromAddress = process.env.EMAIL_FROM || (SMTP_USER ? `"SUDHARSHAN_TECH" <${SMTP_USER}>` : `"SUDHARSHAN_TECH" <sudharshantech123@gmail.com>`);
+  const replyToAddress = process.env.REPLY_TO || 'sudharshantech123@gmail.com';
+
+  // Support Resend HTTP API if RESEND_API_KEY is configured
+  if (process.env.RESEND_API_KEY) {
+    try {
+      const resendPayload = {
+        from: fromAddress,
+        to: [to],
+        reply_to: replyToAddress,
+        subject,
+        html,
+        text: text || preview,
+        attachments: attachments.map(a => ({
+          filename: a.filename,
+          content: fs.readFileSync(a.path).toString('base64')
+        }))
+      };
+
+      const res = await fetch('https://api.resend.com/emails', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${process.env.RESEND_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(resendPayload)
+      });
+
+      const resData = await res.json();
+      if (!res.ok) throw new Error(resData.message || 'Resend API dispatch failed');
+
+      return logNotification({
+        event_type,
+        recipient: to,
+        subject,
+        body_preview: preview.trim(),
+        status: 'sent',
+        message_id: resData.id,
+        provider: 'resend',
+        error_message: null,
+        related_id
+      });
+    } catch (resendErr) {
+      console.warn("Resend dispatch error, falling back to SMTP/simulated:", resendErr.message);
+    }
+  }
   
   if (!transporter) {
     console.log(`\n======================================================`);
@@ -64,6 +112,7 @@ export async function sendEmailNotification({ to, subject, html, text, event_typ
     console.log(`To: ${to}`);
     console.log(`Subject: ${subject}`);
     console.log(`Event: ${event_type} | ID: ${related_id}`);
+    console.log(`Attachments: ${attachments.length} file(s)`);
     console.log(`Preview: ${preview.trim()}`);
     console.log(`======================================================\n`);
     
@@ -73,18 +122,25 @@ export async function sendEmailNotification({ to, subject, html, text, event_typ
       subject,
       body_preview: preview.trim(),
       status: 'simulated_logged',
-      error_message: 'SMTP credentials not configured. Email logged safely to admin audit history.',
+      message_id: `sim-${Date.now()}`,
+      provider: 'simulation_audit',
+      error_message: 'SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.',
       related_id
     });
   }
 
   try {
     const info = await transporter.sendMail({
-      from: `"SUDHARSHAN_TECH" <${SMTP_USER || OWNER_EMAIL}>`,
+      from: fromAddress,
+      replyTo: replyToAddress,
       to,
       subject,
       text: text || preview,
-      html
+      html,
+      attachments: attachments.map(a => ({
+        filename: a.filename,
+        path: a.path
+      }))
     });
 
     return logNotification({
@@ -93,6 +149,8 @@ export async function sendEmailNotification({ to, subject, html, text, event_typ
       subject,
       body_preview: preview.trim(),
       status: 'sent',
+      message_id: info.messageId,
+      provider: 'smtp',
       error_message: null,
       related_id
     });
@@ -104,6 +162,8 @@ export async function sendEmailNotification({ to, subject, html, text, event_typ
       subject,
       body_preview: preview.trim(),
       status: 'failed',
+      message_id: null,
+      provider: 'smtp',
       error_message: error.message,
       related_id
     });

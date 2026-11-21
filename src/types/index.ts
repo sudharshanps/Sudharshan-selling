@@ -152,3 +152,50 @@ export interface SmsLog {
   related_id?: string;
   created_at: string;
 }
+
+export interface SpecialOffer {
+  id: string;
+  slug: string;
+  title: string;
+  category: string;
+  badge: string;
+  starting_price: number;
+  unit: string;
+  short_description: string;
+  banner_image: string;
+  service_id: string;
+  features: string[];
+  scope_limits: string;
+  active: boolean;
+}
+
+export interface Quotation {
+  id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  business_name?: string;
+  requested_services: string[];
+  project_description: string;
+  timeline: string;
+  validity_date: string;
+  base_amount: number;
+  additional_amount: number;
+  discount: number;
+  tax: number;
+  final_amount: number;
+  included_features: string[];
+  milestones: string[];
+  revisions: string;
+  support_period: string;
+  payment_milestones: string;
+  third_party_charges: string;
+  additional_scope_terms: string;
+  status: 'Draft' | 'Sent' | 'Delivered' | 'Accepted' | 'Revision Requested' | 'Expired' | 'Rejected';
+  message_id?: string;
+  provider?: string;
+  pdf_path?: string;
+  created_at: string;
+  sent_at?: string;
+  updated_at: string;
+}

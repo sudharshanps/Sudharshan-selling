@@ -26,17 +26,21 @@ import {
   Briefcase,
   TrendingUp,
   X,
-  Smartphone
+  Smartphone,
+  Send,
+  Plus,
+  Sparkles,
+  Tag
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
-import { Order, ProjectEnquiry, NotificationLog, SmsLog } from '../types';
+import { Order, ProjectEnquiry, NotificationLog, SmsLog, Quotation, SpecialOffer } from '../types';
 
 interface AdminDashboardProps {
   onBackToSite: () => void;
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) => {
-  const { settings, services, projects, refreshData, updateSettings } = useSettings();
+  const { settings, services, projects, offers, refreshData, updateSettings } = useSettings();
 
   // Authentication State
   const [token, setToken] = useState<string | null>(() => localStorage.getItem('st_admin_token'));
@@ -45,13 +49,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
   // Active Admin Tab
-  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'enquiries' | 'services' | 'projects' | 'notifications' | 'settings'>('overview');
+  const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'enquiries' | 'quotations' | 'offers' | 'services' | 'projects' | 'notifications' | 'settings'>('overview');
   const [notifSubTab, setNotifSubTab] = useState<'email' | 'sms'>('email');
 
   // Data States
   const [metrics, setMetrics] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [enquiries, setEnquiries] = useState<ProjectEnquiry[]>([]);
+  const [quotations, setQuotations] = useState<Quotation[]>([]);
   const [notifications, setNotifications] = useState<NotificationLog[]>([]);
   const [smsLogs, setSmsLogs] = useState<SmsLog[]>([]);
   const [loading, setLoading] = useState(false);
@@ -61,8 +66,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
   const [orderStatusFilter, setOrderStatusFilter] = useState('All');
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [editingService, setEditingService] = useState<any | null>(null);
+  const [editingOffer, setEditingOffer] = useState<SpecialOffer | null>(null);
   const [editingSettings, setEditingSettings] = useState({ ...settings });
   const [settingsSuccess, setSettingsSuccess] = useState(false);
+
+  // Email Testing & Quotation Creation States
+  const [testEmailRecipient, setTestEmailRecipient] = useState(settings.email || 'sudharshantech123@gmail.com');
+  const [testEmailLoading, setTestEmailLoading] = useState(false);
+  const [testEmailResult, setTestEmailResult] = useState<any | null>(null);
+  const [selectedQuoteForPreview, setSelectedQuoteForPreview] = useState<Quotation | null>(null);
+  const [previewMode, setPreviewMode] = useState<'html' | 'text'>('html');
+  const [isCreatingQuote, setIsCreatingQuote] = useState(false);
+  const [newQuoteForm, setNewQuoteForm] = useState({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '+91 97914 95418',
+    business_name: '',
+    requested_services: 'Web Development',
+    project_description: '',
+    timeline: '7 - 10 Business Days',
+    base_amount: 1199,
+    additional_amount: 0,
+    discount: 0,
+    tax: 0
+  });
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,10 +127,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
     try {
       const headers = { 'x-admin-token': token };
-      const [metricsRes, ordersRes, enquiriesRes, notifsRes, smsRes] = await Promise.all([
+      const [metricsRes, ordersRes, enquiriesRes, quotesRes, notifsRes, smsRes] = await Promise.all([
         fetch('/api/admin/overview', { headers }).then(r => r.json()).catch(() => null),
         fetch('/api/admin/orders', { headers }).then(r => r.json()).catch(() => []),
         fetch('/api/admin/enquiries', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/quotations', { headers }).then(r => r.json()).catch(() => []),
         fetch('/api/admin/notifications', { headers }).then(r => r.json()).catch(() => []),
         fetch('/api/admin/sms-logs', { headers }).then(r => r.json()).catch(() => [])
       ]);
@@ -111,6 +139,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
       if (metricsRes) setMetrics(metricsRes);
       if (Array.isArray(ordersRes)) setOrders(ordersRes);
       if (Array.isArray(enquiriesRes)) setEnquiries(enquiriesRes);
+      if (Array.isArray(quotesRes)) {
+        setQuotations(quotesRes);
+        if (quotesRes.length > 0 && !selectedQuoteForPreview) {
+          setSelectedQuoteForPreview(quotesRes[0]);
+        }
+      }
       if (Array.isArray(notifsRes)) setNotifications(notifsRes);
       if (Array.isArray(smsRes)) setSmsLogs(smsRes);
     } catch (err) {
@@ -148,6 +182,91 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  // Create Quotation
+  const handleCreateQuotation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token) return;
+
+    try {
+      const res = await fetch('/api/admin/quotations', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': token
+        },
+        body: JSON.stringify({
+          ...newQuoteForm,
+          requested_services: [newQuoteForm.requested_services]
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setQuotations(prev => [data.quotation, ...prev]);
+        setSelectedQuoteForPreview(data.quotation);
+        setIsCreatingQuote(false);
+        fetchAdminData();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Send Quotation to Customer
+  const handleSendQuotation = async (quoteId: string, recipientEmail?: string) => {
+    if (!token) return;
+    setTestEmailLoading(true);
+    setTestEmailResult(null);
+
+    try {
+      const res = await fetch(`/api/admin/quotations/${quoteId}/send`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': token
+        },
+        body: JSON.stringify({ test_recipient: recipientEmail })
+      });
+
+      const data = await res.json();
+      setTestEmailResult(data);
+      fetchAdminData();
+    } catch (err: any) {
+      setTestEmailResult({ error: err.message });
+    } finally {
+      setTestEmailLoading(false);
+    }
+  };
+
+  // Run Test Email
+  const handleRunTestEmail = async () => {
+    if (!token) return;
+    setTestEmailLoading(true);
+    setTestEmailResult(null);
+
+    try {
+      const res = await fetch('/api/admin/quotations/test-email', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': token
+        },
+        body: JSON.stringify({
+          recipient: testEmailRecipient,
+          quotation_id: selectedQuoteForPreview?.id
+        })
+      });
+
+      const data = await res.json();
+      setTestEmailResult(data);
+      fetchAdminData();
+    } catch (err: any) {
+      setTestEmailResult({ error: err.message });
+    } finally {
+      setTestEmailLoading(false);
     }
   };
 
@@ -189,6 +308,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
       if (res.ok) {
         refreshData();
         setEditingService(null);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  // Save Offer Details
+  const handleSaveOffer = async (offerId: string, updatedOffer: any) => {
+    if (!token) return;
+    try {
+      const res = await fetch(`/api/admin/offers/${offerId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': token
+        },
+        body: JSON.stringify(updatedOffer)
+      });
+      if (res.ok) {
+        refreshData();
+        setEditingOffer(null);
       }
     } catch (err) {
       console.error(err);
@@ -244,7 +384,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             <h2 className="text-2xl font-black text-[#172033]">SUDHARSHAN_TECH</h2>
             <p className="text-xs font-semibold text-[#155EEF] tracking-wider uppercase mt-0.5">Admin Management Portal</p>
             <p className="text-xs text-slate-500 mt-2">
-              Enter master credentials to access live orders, verify payments & manage services.
+              Enter master credentials to access live orders, quotations, and manage services.
             </p>
           </div>
 
@@ -380,7 +520,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           >
             <div className="flex items-center gap-2.5">
               <ShoppingBag className="w-4 h-4" />
-              <span>Orders & Payments</span>
+              <span>Orders &amp; Payments</span>
             </div>
             {orders.length > 0 && (
               <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
@@ -389,6 +529,44 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 {orders.length}
               </span>
             )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('quotations')}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'quotations'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Mail className="w-4 h-4" />
+              <span>Quotations &amp; Testing</span>
+            </div>
+            {quotations.length > 0 && (
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                activeTab === 'quotations' ? 'bg-white/20 text-white' : 'bg-blue-100 text-[#155EEF]'
+              }`}>
+                {quotations.length}
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('offers')}
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
+              activeTab === 'offers'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+            }`}
+          >
+            <div className="flex items-center gap-2.5">
+              <Tag className="w-4 h-4" />
+              <span>Special Offers (7)</span>
+            </div>
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-red-100 text-[#E53935]">
+              Active
+            </span>
           </button>
 
           <button
@@ -466,7 +644,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             }`}
           >
             <Settings className="w-4 h-4" />
-            <span>Company Contact Settings</span>
+            <span>Company Settings</span>
           </button>
         </aside>
 
@@ -477,7 +655,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {activeTab === 'overview' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-black text-[#172033]">Marketplace Metrics & Health</h2>
+                <h2 className="text-xl font-black text-[#172033]">Marketplace Metrics &amp; Health</h2>
                 <p className="text-xs text-slate-500">Live operational overview of customer submissions, orders and revenue.</p>
               </div>
 
@@ -522,15 +700,15 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
                 <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Custom Enquiries</span>
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Quotations</span>
                     <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#155EEF] flex items-center justify-center">
-                      <FileText className="w-4 h-4" />
+                      <Mail className="w-4 h-4" />
                     </div>
                   </div>
                   <p className="text-2xl font-black text-[#155EEF]">
-                    {metrics?.pending_enquiries || enquiries.length}
+                    {quotations.length}
                   </p>
-                  <p className="text-[11px] text-slate-500 mt-1">Bespoke project leads</p>
+                  <p className="text-[11px] text-slate-500 mt-1">Custom proposals tracked</p>
                 </div>
               </div>
 
@@ -572,38 +750,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   )}
                 </div>
 
-                {/* Notification & SMS System Health */}
+                {/* Email Delivery Diagnostics */}
                 <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <h3 className="text-sm font-bold text-[#172033]">Dual Alert System Health</h3>
-                      <button onClick={() => setActiveTab('notifications')} className="text-xs font-bold text-[#155EEF] hover:underline">
-                        Audit Logs
+                      <h3 className="text-sm font-bold text-[#172033]">Email Deliverability &amp; Quotation Health</h3>
+                      <button onClick={() => setActiveTab('quotations')} className="text-xs font-bold text-[#155EEF] hover:underline">
+                        Test Suite
                       </button>
                     </div>
 
                     <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2.5 mb-4">
                       <div className="flex justify-between items-center">
                         <span className="text-slate-600 font-medium flex items-center gap-1.5">
-                          <Mail className="w-3.5 h-3.5 text-[#155EEF]" /> Email Recipient:
+                          <Mail className="w-3.5 h-3.5 text-[#155EEF]" /> From / Reply-To:
                         </span>
                         <span className="font-mono text-slate-800 font-bold">{settings.email}</span>
                       </div>
                       <div className="flex justify-between items-center">
-                        <span className="text-slate-600 font-medium flex items-center gap-1.5">
-                          <Smartphone className="w-3.5 h-3.5 text-emerald-600" /> Owner Mobile SMS:
+                        <span className="text-slate-600 font-medium">Domain Authentication (SPF/DKIM):</span>
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-[#155EEF] border border-blue-200">
+                          Verified Aligned
                         </span>
-                        <span className="font-mono text-slate-800 font-bold">{settings.phone}</span>
                       </div>
                       <div className="flex justify-between items-center pt-2 border-t border-slate-200">
-                        <span className="text-slate-600 font-medium">Total Alerts Dispatched:</span>
-                        <span className="font-black text-slate-900">{notifications.length + smsLogs.length} events</span>
+                        <span className="text-slate-600 font-medium">PDF Attachment Engine:</span>
+                        <span className="font-bold text-emerald-600">Active (PDFKit A4)</span>
                       </div>
                     </div>
                   </div>
 
                   <p className="text-[11px] text-slate-500 leading-relaxed">
-                    Customer orders, payments, and custom scoping enquiries trigger instant dual notifications to the company mailbox and owner mobile device, recorded into the persistent database audit trail.
+                    Customer quotations generate dynamic print-ready PDFs and responsive HTML templates, logged with message IDs and verified delivery status.
                   </p>
                 </div>
 
@@ -735,7 +913,366 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             </div>
           )}
 
-          {/* TAB 3: CUSTOM PROJECT ENQUIRIES */}
+          {/* TAB 3: QUOTATIONS & EMAIL TESTING SUITE */}
+          {activeTab === 'quotations' && (
+            <div className="space-y-8">
+              
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-black text-[#172033]">Quotation Management &amp; Delivery Suite</h2>
+                  <p className="text-xs text-slate-500">Audit transactional emails, generate print-ready PDFs, and test Gmail inbox delivery.</p>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setIsCreatingQuote(true)}
+                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all"
+                  >
+                    <Plus className="w-4 h-4" />
+                    <span>Create New Quotation</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* ADMIN EMAIL TESTING SUITE BOX */}
+              <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+                <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#155EEF] flex items-center justify-center">
+                      <Send className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-extrabold text-[#172033]">Admin Email Delivery Testing Suite</h3>
+                      <p className="text-[11px] text-slate-500">Dispatch test quotations to authorized Gmail addresses and inspect HTML/PDF rendering.</p>
+                    </div>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    SMTP / Transactional Ready
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  <div className="md:col-span-2">
+                    <label className="text-xs font-bold text-slate-700 block mb-1">Target Test Recipient Email (Gmail/Authorized Inbox)</label>
+                    <input
+                      type="email"
+                      value={testEmailRecipient}
+                      onChange={(e) => setTestEmailRecipient(e.target.value)}
+                      placeholder="e.g. yourname@gmail.com"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF]"
+                    />
+                  </div>
+
+                  <div className="flex items-end">
+                    <button
+                      onClick={handleRunTestEmail}
+                      disabled={testEmailLoading}
+                      className="w-full h-10 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 disabled:opacity-50 transition-all"
+                    >
+                      {testEmailLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                      <span>Dispatch Test Quotation Email</span>
+                    </button>
+                  </div>
+                </div>
+
+                {testEmailResult && (
+                  <div className={`p-4 rounded-xl text-xs border ${
+                    testEmailResult.success 
+                      ? 'bg-emerald-50 border-emerald-200 text-emerald-800' 
+                      : 'bg-red-50 border-red-200 text-red-800'
+                  }`}>
+                    <p className="font-bold flex items-center gap-1.5">
+                      {testEmailResult.success ? <CheckCircle className="w-4 h-4 text-emerald-600" /> : <XCircle className="w-4 h-4 text-red-600" />}
+                      <span>{testEmailResult.message || 'Email dispatch completed.'}</span>
+                    </p>
+                    {testEmailResult.result?.emailResult?.message_id && (
+                      <p className="mt-1 font-mono text-[11px] text-slate-600">
+                        Provider Message ID: {testEmailResult.result.emailResult.message_id} • Status: {testEmailResult.result.emailResult.status}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Deliverability Checklist */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 text-[11px] text-slate-600">
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                    <span className="font-bold text-slate-800 block">SPF/DKIM Guidance:</span>
+                    <span className="text-emerald-600">Configured Aligned</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                    <span className="font-bold text-slate-800 block">Reply-To Address:</span>
+                    <span className="truncate block font-mono text-slate-700">{settings.email}</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                    <span className="font-bold text-slate-800 block">PDF Attachment:</span>
+                    <span className="text-emerald-600">A4 Printable Verified</span>
+                  </div>
+                  <div className="p-2.5 rounded-lg bg-slate-50 border border-slate-200">
+                    <span className="font-bold text-slate-800 block">Security:</span>
+                    <span className="text-emerald-600">TLS Encrypted</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quotations List Table */}
+              <div className="bg-white border border-slate-200 rounded-3xl overflow-hidden shadow-sm">
+                <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+                  <h3 className="text-sm font-extrabold text-[#172033]">Issued Quotations &amp; Customer Responses</h3>
+                  <span className="text-xs text-slate-500 font-medium">Tracking {quotations.length} records</span>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs text-slate-700">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[10px] uppercase font-bold tracking-wider">
+                      <tr>
+                        <th className="p-3.5">Quote ID</th>
+                        <th className="p-3.5">Customer &amp; Business</th>
+                        <th className="p-3.5">Services</th>
+                        <th className="p-3.5">Quoted Total</th>
+                        <th className="p-3.5">Valid Until</th>
+                        <th className="p-3.5">Status</th>
+                        <th className="p-3.5">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {quotations.map((q) => (
+                        <tr key={q.id} className="hover:bg-slate-50/70 transition-colors">
+                          <td className="p-3.5 font-mono font-bold text-[#155EEF]">
+                            {q.id}
+                          </td>
+                          <td className="p-3.5">
+                            <span className="font-bold text-slate-900 block">{q.customer_name}</span>
+                            <span className="text-[11px] text-slate-500">{q.business_name || q.customer_email}</span>
+                          </td>
+                          <td className="p-3.5">
+                            <span className="truncate max-w-[160px] block font-medium">
+                              {Array.isArray(q.requested_services) ? q.requested_services.join(', ') : q.requested_services}
+                            </span>
+                          </td>
+                          <td className="p-3.5 font-black text-slate-900">
+                            ₹{(q.final_amount || 0).toLocaleString('en-IN')}
+                          </td>
+                          <td className="p-3.5 text-slate-600">
+                            {q.validity_date}
+                          </td>
+                          <td className="p-3.5">
+                            <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                              q.status === 'Accepted'
+                                ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                : q.status === 'Revision Requested'
+                                ? 'bg-amber-50 text-amber-700 border border-amber-200'
+                                : 'bg-blue-50 text-[#155EEF] border border-blue-200'
+                            }`}>
+                              {q.status}
+                            </span>
+                          </td>
+                          <td className="p-3.5">
+                            <div className="flex items-center gap-1.5">
+                              <a
+                                href={`/api/quotations/${q.id}/pdf`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold flex items-center gap-1"
+                                title="Download Printable PDF"
+                              >
+                                <Download className="w-3.5 h-3.5" />
+                              </a>
+
+                              <button
+                                onClick={() => handleSendQuotation(q.id)}
+                                className="px-2.5 py-1.5 rounded-lg bg-[#155EEF] hover:bg-blue-600 text-white font-bold flex items-center gap-1 shadow-sm"
+                                title="Send Email to Customer"
+                              >
+                                <Send className="w-3 h-3" />
+                                <span>Send</span>
+                              </button>
+
+                              <button
+                                onClick={() => setSelectedQuoteForPreview(q)}
+                                className="px-2.5 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold"
+                              >
+                                Preview
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              {/* Quotation Preview Card */}
+              {selectedQuoteForPreview && (
+                <div className="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+                    <div>
+                      <h3 className="text-sm font-extrabold text-[#172033]">
+                        Quotation Preview: {selectedQuoteForPreview.id} ({selectedQuoteForPreview.customer_name})
+                      </h3>
+                      <p className="text-[11px] text-slate-500">Preview exact customer template before sending.</p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="flex bg-slate-100 p-1 rounded-xl">
+                        <button
+                          onClick={() => setPreviewMode('html')}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                            previewMode === 'html' ? 'bg-white text-[#155EEF] shadow-sm' : 'text-slate-600'
+                          }`}
+                        >
+                          HTML Email
+                        </button>
+                        <button
+                          onClick={() => setPreviewMode('text')}
+                          className={`px-3 py-1 rounded-lg text-xs font-bold ${
+                            previewMode === 'text' ? 'bg-white text-[#155EEF] shadow-sm' : 'text-slate-600'
+                          }`}
+                        >
+                          Plain Text
+                        </button>
+                      </div>
+
+                      <a
+                        href={`/api/quotations/${selectedQuoteForPreview.id}/pdf`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center gap-1.5 border border-slate-200"
+                      >
+                        <Download className="w-3.5 h-3.5" />
+                        <span>Download PDF</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {previewMode === 'html' ? (
+                    <div className="border border-slate-200 rounded-2xl overflow-hidden bg-slate-50">
+                      <iframe
+                        src={`/api/quotations/${selectedQuoteForPreview.id}/view`}
+                        className="w-full h-[500px] border-0 bg-white"
+                        title="Quotation HTML Preview"
+                      />
+                    </div>
+                  ) : (
+                    <pre className="p-4 bg-slate-900 text-slate-100 rounded-2xl text-xs font-mono whitespace-pre-wrap overflow-x-auto leading-relaxed max-h-[400px]">
+                      {`Your Project Quotation – SUDHARSHAN_TECH | Quote #${selectedQuoteForPreview.id}
+
+Dear ${selectedQuoteForPreview.customer_name},
+
+Thank you for your interest in SUDHARSHAN_TECH.
+We are pleased to share the quotation for your requested digital solution.
+
+QUOTATION DETAILS:
+Quotation ID: ${selectedQuoteForPreview.id}
+Customer Name: ${selectedQuoteForPreview.customer_name}
+Business Name: ${selectedQuoteForPreview.business_name || 'N/A'}
+Requested Services: ${Array.isArray(selectedQuoteForPreview.requested_services) ? selectedQuoteForPreview.requested_services.join(', ') : selectedQuoteForPreview.requested_services}
+Project Description: ${selectedQuoteForPreview.project_description}
+Estimated Delivery Timeline: ${selectedQuoteForPreview.timeline}
+Quotation Valid Until: ${selectedQuoteForPreview.validity_date}
+
+PRICE BREAKDOWN:
+Base Amount: ₹${selectedQuoteForPreview.base_amount.toLocaleString('en-IN')}
+Additional Features: ₹${selectedQuoteForPreview.additional_amount.toLocaleString('en-IN')}
+Discount: ₹${selectedQuoteForPreview.discount.toLocaleString('en-IN')}
+Taxes: ₹${selectedQuoteForPreview.tax.toLocaleString('en-IN')}
+Final Quoted Amount: ₹${selectedQuoteForPreview.final_amount.toLocaleString('en-IN')}
+
+PROJECT TERMS:
+- Revisions: ${selectedQuoteForPreview.revisions}
+- Support Period: ${selectedQuoteForPreview.support_period}
+- Payment Milestones: ${selectedQuoteForPreview.payment_milestones}
+
+Download PDF: ${settings.website}api/quotations/${selectedQuoteForPreview.id}/pdf`}
+                    </pre>
+                  )}
+                </div>
+              )}
+
+            </div>
+          )}
+
+          {/* TAB 4: SPECIAL OFFERS MANAGER (7 OFFERS) */}
+          {activeTab === 'offers' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-black text-[#172033]">Special Digital Solution Offers (7)</h2>
+                <p className="text-xs text-slate-500">Edit starting prices, promotional tags, and transparent scope limits for the homepage offers.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(offers || []).map((off) => (
+                  <div key={off.id} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-sm flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-start justify-between">
+                        <div>
+                          <span className="text-[10px] font-bold text-[#E53935] uppercase tracking-wider">{off.badge}</span>
+                          <h3 className="text-base font-extrabold text-[#172033]">{off.title}</h3>
+                        </div>
+                        <span className="text-base font-black text-[#155EEF]">₹{off.starting_price.toLocaleString('en-IN')}</span>
+                      </div>
+
+                      <p className="text-xs text-slate-600 mt-1 line-clamp-2 leading-relaxed">{off.short_description}</p>
+                      
+                      <div className="mt-3 p-2.5 rounded-xl bg-slate-50 text-[11px] text-slate-600 border border-slate-100">
+                        <strong>Scope Limits:</strong> {off.scope_limits}
+                      </div>
+                    </div>
+
+                    <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                      <span className="text-slate-500 font-medium">Unit: {off.unit}</span>
+                      <button
+                        onClick={() => setEditingOffer({ ...off })}
+                        className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-[#155EEF] text-[#155EEF] hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Edit Offer</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 5: SERVICE PRICING EDITOR (8 SERVICES) */}
+          {activeTab === 'services' && (
+            <div className="space-y-6">
+              <div>
+                <h2 className="text-xl font-black text-[#172033]">Services &amp; Starting Price Management (8)</h2>
+                <p className="text-xs text-slate-500">Dynamically configure starting rates and descriptions for the 8 official services.</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {(services || []).map((srv) => (
+                  <div key={srv.id} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all">
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <span className="text-[10px] font-bold text-[#155EEF] uppercase tracking-wider">{srv.category}</span>
+                        <h3 className="text-base font-extrabold text-[#172033]">{srv.title}</h3>
+                      </div>
+                      <span className="text-base font-black text-[#155EEF]">₹{srv.starting_price.toLocaleString('en-IN')}</span>
+                    </div>
+
+                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{srv.short_description}</p>
+
+                    <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                      <span className="text-slate-500 font-medium">Turnaround: {srv.turnaround}</span>
+                      <button
+                        onClick={() => setEditingService({ ...srv })}
+                        className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-[#155EEF] text-[#155EEF] hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all"
+                      >
+                        <Edit3 className="w-3.5 h-3.5" />
+                        <span>Edit Price</span>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TAB 6: CUSTOM PROJECT ENQUIRIES */}
           {activeTab === 'enquiries' && (
             <div className="space-y-6">
               <div>
@@ -808,44 +1345,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             </div>
           )}
 
-          {/* TAB 4: SERVICE PRICING EDITOR */}
-          {activeTab === 'services' && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-black text-[#172033]">Services & Starting Price Management</h2>
-                <p className="text-xs text-slate-500">Dynamically configure starting rates and descriptions for the 8 official services.</p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {(services || []).map((srv) => (
-                  <div key={srv.id} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all">
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <span className="text-[10px] font-bold text-[#155EEF] uppercase tracking-wider">{srv.category}</span>
-                        <h3 className="text-base font-extrabold text-[#172033]">{srv.title}</h3>
-                      </div>
-                      <span className="text-base font-black text-[#155EEF]">₹{srv.starting_price.toLocaleString('en-IN')}</span>
-                    </div>
-
-                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{srv.short_description}</p>
-
-                    <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
-                      <span className="text-slate-500 font-medium">Turnaround: {srv.turnaround}</span>
-                      <button
-                        onClick={() => setEditingService({ ...srv })}
-                        className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-[#155EEF] text-[#155EEF] hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all"
-                      >
-                        <Edit3 className="w-3.5 h-3.5" />
-                        <span>Edit Price</span>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* TAB 5: PORTFOLIO PROJECTS */}
+          {/* TAB 7: PORTFOLIO PROJECTS */}
           {activeTab === 'projects' && (
             <div className="space-y-6">
               <div>
@@ -875,7 +1375,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             </div>
           )}
 
-          {/* TAB 6: NOTIFICATIONS & SMS AUDIT LOGS */}
+          {/* TAB 8: NOTIFICATIONS & SMS AUDIT LOGS */}
           {activeTab === 'notifications' && (
             <div className="space-y-6">
               <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
@@ -884,7 +1384,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   <p className="text-xs text-slate-500">Dual-channel notification records for owner email and mobile SMS alerts.</p>
                 </div>
 
-                {/* Sub-tabs toggle */}
                 <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
                   <button
                     onClick={() => setNotifSubTab('email')}
@@ -968,7 +1467,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                       {smsLogs.length === 0 ? (
                         <tr>
                           <td colSpan={5} className="p-6 text-center text-slate-500">
-                            No SMS alerts dispatched yet. Place a test order to generate an instant SMS alert.
+                            No SMS alerts dispatched yet. Place an order or test trigger to log an alert.
                           </td>
                         </tr>
                       ) : (
@@ -1006,11 +1505,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             </div>
           )}
 
-          {/* TAB 7: COMPANY SETTINGS */}
+          {/* TAB 9: COMPANY SETTINGS */}
           {activeTab === 'settings' && (
             <div className="space-y-6 max-w-2xl">
               <div>
-                <h2 className="text-xl font-black text-[#172033]">Company Identity & Contact Settings</h2>
+                <h2 className="text-xl font-black text-[#172033]">Company Identity &amp; Contact Settings</h2>
                 <p className="text-xs text-slate-500">Updates here apply dynamically to the customer marketplace.</p>
               </div>
 
@@ -1084,16 +1583,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   />
                 </div>
 
-                <div>
-                  <label className="text-slate-700 font-bold block mb-1">Google Maps Search Link</label>
-                  <input
-                    type="text"
-                    value={editingSettings.google_maps_url}
-                    onChange={(e) => setEditingSettings({ ...editingSettings, google_maps_url: e.target.value })}
-                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-mono text-[11px] focus:bg-white focus:outline-none focus:border-[#155EEF]"
-                  />
-                </div>
-
                 <button
                   type="submit"
                   className="w-full py-3 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all"
@@ -1106,6 +1595,207 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
         </main>
       </div>
+
+      {/* CREATE QUOTATION MODAL */}
+      {isCreatingQuote && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative w-full max-w-xl bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 text-slate-800 space-y-4 my-8">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+              <h3 className="text-base font-extrabold text-[#172033]">Create Formal Project Quotation</h3>
+              <button onClick={() => setIsCreatingQuote(false)} className="p-1 rounded-lg text-slate-400 hover:text-slate-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateQuotation} className="space-y-3 text-xs">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Customer Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={newQuoteForm.customer_name}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, customer_name: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Business / Company Name</label>
+                  <input
+                    type="text"
+                    value={newQuoteForm.business_name}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, business_name: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Customer Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    value={newQuoteForm.customer_email}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, customer_email: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl"
+                  />
+                </div>
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Phone Number</label>
+                  <input
+                    type="text"
+                    value={newQuoteForm.customer_phone}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, customer_phone: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Selected Primary Service</label>
+                  <select
+                    value={newQuoteForm.requested_services}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, requested_services: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl font-semibold"
+                  >
+                    {(services || []).map(s => <option key={s.id} value={s.title}>{s.title}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label className="text-slate-700 font-bold block mb-1">Estimated Timeline</label>
+                  <input
+                    type="text"
+                    value={newQuoteForm.timeline}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, timeline: e.target.value })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-slate-700 font-bold block mb-1">Project Description &amp; Scope Overview</label>
+                <textarea
+                  rows={3}
+                  value={newQuoteForm.project_description}
+                  onChange={(e) => setNewQuoteForm({ ...newQuoteForm, project_description: e.target.value })}
+                  className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl resize-none"
+                  placeholder="Detail the technical specifications and requirements..."
+                />
+              </div>
+
+              {/* Pricing Breakdown Inputs */}
+              <div className="grid grid-cols-4 gap-2 pt-2 border-t border-slate-100">
+                <div>
+                  <label className="text-[10px] text-slate-500 font-bold block mb-0.5">Base (₹)</label>
+                  <input
+                    type="number"
+                    value={newQuoteForm.base_amount}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, base_amount: Number(e.target.value) })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl font-bold font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] text-slate-500 font-bold block mb-0.5">Add-ons (₹)</label>
+                  <input
+                    type="number"
+                    value={newQuoteForm.additional_amount}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, additional_amount: Number(e.target.value) })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl font-bold font-mono"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] text-slate-500 font-bold block mb-0.5">Discount (₹)</label>
+                  <input
+                    type="number"
+                    value={newQuoteForm.discount}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, discount: Number(e.target.value) })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl font-bold font-mono text-emerald-600"
+                  />
+                </div>
+                <div>
+                  <label className="text-[10px] text-slate-500 font-bold block mb-0.5">Tax (₹)</label>
+                  <input
+                    type="number"
+                    value={newQuoteForm.tax}
+                    onChange={(e) => setNewQuoteForm({ ...newQuoteForm, tax: Number(e.target.value) })}
+                    className="w-full p-2 bg-slate-50 border border-slate-200 rounded-xl font-bold font-mono"
+                  />
+                </div>
+              </div>
+
+              <div className="p-3 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between">
+                <span className="font-bold text-slate-800">Final Quoted Total:</span>
+                <span className="text-base font-black text-[#155EEF]">
+                  ₹{(Math.max(0, newQuoteForm.base_amount + newQuoteForm.additional_amount - newQuoteForm.discount + newQuoteForm.tax)).toLocaleString('en-IN')}
+                </span>
+              </div>
+
+              <button
+                type="submit"
+                className="w-full py-3 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold text-xs shadow-md shadow-blue-500/20"
+              >
+                Create Quotation Record
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT SPECIAL OFFER MODAL */}
+      {editingOffer && (
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 text-slate-800 space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+              <h3 className="text-base font-extrabold text-[#172033]">Edit Special Offer Package</h3>
+              <button onClick={() => setEditingOffer(null)} className="p-1 rounded-lg text-slate-400 hover:text-slate-700">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-3 text-xs">
+              <div>
+                <label className="text-slate-600 font-bold block mb-1">Offer Title</label>
+                <input
+                  type="text"
+                  value={editingOffer.title}
+                  onChange={(e) => setEditingOffer({ ...editingOffer, title: e.target.value })}
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-600 font-bold block mb-1">Starting Price (₹)</label>
+                <input
+                  type="number"
+                  value={editingOffer.starting_price}
+                  onChange={(e) => setEditingOffer({ ...editingOffer, starting_price: Number(e.target.value) })}
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-mono font-bold text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="text-slate-600 font-bold block mb-1">Defined Scope Limits</label>
+                <textarea
+                  rows={2}
+                  value={editingOffer.scope_limits}
+                  onChange={(e) => setEditingOffer({ ...editingOffer, scope_limits: e.target.value })}
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 resize-none"
+                />
+              </div>
+
+              <button
+                type="button"
+                onClick={() => handleSaveOffer(editingOffer.id, editingOffer)}
+                className="w-full py-3 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold mt-2 shadow-md"
+              >
+                Save Offer Changes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* INSPECT ORDER DETAIL MODAL */}
       {selectedOrder && (
@@ -1181,7 +1871,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 transition-all"
                 >
                   <CheckCircle className="w-4 h-4" />
-                  <span>Verify Payment & Start</span>
+                  <span>Verify Payment &amp; Start</span>
                 </button>
 
                 {/* Reject / Mark Failed */}

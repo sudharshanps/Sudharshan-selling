@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { CompanySettings, Service, PortfolioProject, FounderAchievement, PosterItem } from '../types';
+import { CompanySettings, Service, PortfolioProject, FounderAchievement, PosterItem, SpecialOffer } from '../types';
 
 interface SettingsContextType {
   settings: CompanySettings;
@@ -7,6 +7,7 @@ interface SettingsContextType {
   projects: PortfolioProject[];
   achievements: FounderAchievement[];
   posters: PosterItem[];
+  offers: SpecialOffer[];
   loading: boolean;
   refreshData: () => Promise<void>;
   updateSettings: (newSettings: Partial<CompanySettings>) => void;
@@ -39,16 +40,18 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [projects, setProjects] = useState<PortfolioProject[]>([]);
   const [achievements, setAchievements] = useState<FounderAchievement[]>([]);
   const [posters, setPosters] = useState<PosterItem[]>([]);
+  const [offers, setOffers] = useState<SpecialOffer[]>([]);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
     try {
-      const [settingsRes, servicesRes, projectsRes, achRes, postersRes] = await Promise.allSettled([
+      const [settingsRes, servicesRes, projectsRes, achRes, postersRes, offersRes] = await Promise.allSettled([
         fetch('/api/settings').then(r => r.json()),
         fetch('/api/services').then(r => r.json()),
         fetch('/api/projects').then(r => r.json()),
         fetch('/api/achievements').then(r => r.json()),
-        fetch('/api/posters').then(r => r.json())
+        fetch('/api/posters').then(r => r.json()),
+        fetch('/api/offers').then(r => r.json())
       ]);
 
       if (settingsRes.status === 'fulfilled' && settingsRes.value && settingsRes.value.name) {
@@ -65,6 +68,9 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       }
       if (postersRes.status === 'fulfilled' && Array.isArray(postersRes.value)) {
         setPosters(postersRes.value);
+      }
+      if (offersRes.status === 'fulfilled' && Array.isArray(offersRes.value)) {
+        setOffers(offersRes.value);
       }
     } catch (err) {
       console.warn("Could not load backend data, relying on defaults:", err);
@@ -88,6 +94,7 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       projects,
       achievements,
       posters,
+      offers,
       loading,
       refreshData: fetchData,
       updateSettings
