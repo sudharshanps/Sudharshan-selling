@@ -1,0 +1,542 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const DB_FILE = path.join(__dirname, '..', 'data', 'database.json');
+
+// Default initial state
+const getInitialData = () => ({
+  company_settings: {
+    name: "SUDHARSHAN_TECH",
+    tagline: "Code. Create. Elevate.",
+    phone: "+91 97914 95418",
+    whatsapp: "+91 97914 95418",
+    email: "sudharshantech123@gmail.com",
+    personal_email: "sudharshanthemagnet@gmail.com",
+    upi_id: "sudharshanthemagnet@okaxis",
+    website: "https://sudharshan-tech.onrender.com/",
+    instagram: "https://www.instagram.com/sudharshan_tech/",
+    github: "https://github.com/sudharshanps",
+    linkedin: "https://linkedin.com/in/sudharshan-ps-5a6b9a325",
+    address: "No. 16A, Thendral Nagar, Veerakeralam, Coimbatore – 641007, Tamil Nadu, India",
+    google_maps_url: "https://www.google.com/maps/search/?api=1&query=No.+16A%2C+Thendral+Nagar%2C+Veerakeralam%2C+Coimbatore+641007%2C+Tamil+Nadu",
+    qr_image: "/assets/gpay-qr.jpg",
+    logo_image: "/assets/logo.jpg",
+    resume_url: "/assets/Sudharshan_PS_Resume.pdf"
+  },
+  services: [
+    {
+      id: "srv-web",
+      slug: "web-development",
+      title: "Web Development",
+      category: "Web & Digital",
+      icon: "Globe",
+      badge: "Most Popular",
+      starting_price: 1199,
+      unit: "starting project",
+      turnaround: "3 - 7 Days",
+      short_description: "Business websites, landing pages, e-commerce, portfolios, web applications and UI/UX design.",
+      full_description: "From lightweight, lightning-fast landing pages to full-featured enterprise web portals and e-commerce platforms. Built with modern, scalable stacks including React, Next.js, Node.js, Tailwind CSS, and secure database backends.",
+      deliverables: [
+        "100% Mobile & Tablet Responsive",
+        "SEO Optimization & Fast Core Web Vitals",
+        "Modern Glassmorphism & Clean UI Design",
+        "Lead Capture & Contact Form Integration",
+        "Free SSL Setup & Custom Domain Configuration",
+        "1 Month Post-Launch Maintenance Support"
+      ],
+      packages: [
+        { name: "Starter Landing Page", price: 1199, duration: "2-3 Days", desc: "Single-page responsive showcase or personal portfolio" },
+        { name: "Business Pro", price: 3499, duration: "4-6 Days", desc: "Multi-page corporate website with CMS & lead capture" },
+        { name: "Full-Stack Custom App / E-commerce", price: 7999, duration: "7-12 Days", desc: "Dynamic web application with database & payment processing" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-mobile",
+      slug: "mobile-app-development",
+      title: "Mobile App Development",
+      category: "Mobile",
+      icon: "Smartphone",
+      badge: "High Growth",
+      starting_price: 4999,
+      unit: "starting project",
+      turnaround: "7 - 21 Days",
+      short_description: "Android, iOS and cross-platform mobile applications with sleek native feel.",
+      full_description: "High-performance native and cross-platform applications built with React Native and Flutter. Designed with smooth micro-animations, offline storage, push notifications, and rock-solid REST API integrations.",
+      deliverables: [
+        "Cross-Platform Android & iOS Builds",
+        "Intuitive User Experience & Modern Material/Cupertino UI",
+        "Secure Authentication & User Sessions",
+        "Push Notifications & Cloud Storage Sync",
+        "App Store & Play Store Deployment Assistance",
+        "Complete Source Code & Documentation"
+      ],
+      packages: [
+        { name: "Prototype / MVP App", price: 4999, duration: "7-10 Days", desc: "Functional mobile application with core screens and API integration" },
+        { name: "Full Business App", price: 11999, duration: "14-20 Days", desc: "Production-ready Android/iOS app with authentication & payment" },
+        { name: "Enterprise Custom Mobile Solution", price: 21999, duration: "25-35 Days", desc: "Complex real-time multi-role ecosystem with offline-first sync" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-ai",
+      slug: "ai-automation",
+      title: "AI Solutions & Automation",
+      category: "Artificial Intelligence",
+      icon: "Cpu",
+      badge: "Cutting-Edge",
+      starting_price: 2999,
+      unit: "starting project",
+      turnaround: "4 - 10 Days",
+      short_description: "AI chatbots, intelligent assistants, AI integrations and workflow automation.",
+      full_description: "Supercharge your business with custom LLM agents, Gemini API integrations, conversational customer service bots, OCR document parsers, and automated multi-step business pipelines.",
+      deliverables: [
+        "Custom LLM & Gemini / OpenAI API Integration",
+        "Context-Aware Chatbots with Company Knowledge Base",
+        "Workflow Automation (Zapier, n8n, Custom Webhooks)",
+        "Computer Vision & Document Processing Pipelines",
+        "Secure Prompt Engineering & Guardrails",
+        "Usage Monitoring & Analytics Dashboard"
+      ],
+      packages: [
+        { name: "Smart AI Chatbot Assistant", price: 2999, duration: "3-5 Days", desc: "Website chatbot trained on your business FAQs and docs" },
+        { name: "Workflow & Data Automation Pipeline", price: 5999, duration: "6-8 Days", desc: "Automate manual data extraction, syncing, and alerting" },
+        { name: "Custom Applied AI System", price: 12999, duration: "10-15 Days", desc: "Bespoke computer vision, NLP, or predictive machine learning engine" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-custom-software",
+      slug: "custom-software-development",
+      title: "Custom Software & ERP",
+      category: "Enterprise Software",
+      icon: "Layers",
+      badge: "Business Essential",
+      starting_price: 2999,
+      unit: "starting project",
+      turnaround: "7 - 14 Days",
+      short_description: "CRM, ERP, billing systems, inventory management, dashboards and business management software.",
+      full_description: "Tailor-made software built to eliminate spreadsheets and automate your company operations. Features role-based access control, relational database architecture, real-time analytics, and exportable invoicing.",
+      deliverables: [
+        "Modular Multi-User Architecture (Admin, Staff, Client)",
+        "Inventory Tracking, Invoicing & GST/Tax Billing",
+        "Real-Time Data Visualization & Exportable Reports",
+        "Role-Based Access Control (RBAC) & Audit Logs",
+        "Scalable SQL/PostgreSQL Relational Storage",
+        "Comprehensive Admin Controls"
+      ],
+      packages: [
+        { name: "Custom Business Dashboard", price: 2999, duration: "5-7 Days", desc: "Clean metrics reporting dashboard with secure authentication" },
+        { name: "Inventory & Billing Portal", price: 6999, duration: "8-12 Days", desc: "Full inventory management with barcode/PDF invoice generation" },
+        { name: "Comprehensive ERP / CRM Suite", price: 14999, duration: "15-25 Days", desc: "Multi-department operational portal with automated workflows" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-cybersecurity",
+      slug: "cybersecurity",
+      title: "Cybersecurity & Hardening",
+      category: "Security",
+      icon: "ShieldCheck",
+      badge: "Founder Specialty",
+      starting_price: 1999,
+      unit: "starting audit",
+      turnaround: "2 - 5 Days",
+      short_description: "Website security assessments, vulnerability testing, secure development and security hardening.",
+      full_description: "Led by founder Sudharshan P S (Cybersecurity Specialist). Thorough vulnerability assessments covering OWASP Top 10, penetration testing, server hardening, SSL/TLS configuration, and SQL injection prevention.",
+      deliverables: [
+        "Comprehensive Vulnerability Audit (OWASP Top 10)",
+        "Detailed Executive & Technical Remediation Report",
+        "Authentication & Authorization Hardening",
+        "Rate Limiting & DDoS Shielding Recommendations",
+        "Secure Headers & SSL/TLS Configuration Check",
+        "Post-Fix Retesting & Certificate of Review"
+      ],
+      packages: [
+        { name: "Web Application Security Audit", price: 1999, duration: "2-3 Days", desc: "Deep vulnerability scan and prioritized remediation report" },
+        { name: "Full Pentest & Source Code Review", price: 4499, duration: "4-6 Days", desc: "Hands-on penetration testing and API security assessment" },
+        { name: "Enterprise Infrastructure Hardening", price: 8999, duration: "7-10 Days", desc: "Cloud, server, database, and container hardening suite" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-cloud-devops",
+      slug: "cloud-devops",
+      title: "Cloud & DevOps",
+      category: "Infrastructure",
+      icon: "Cloud",
+      badge: "High Performance",
+      starting_price: 1999,
+      unit: "starting setup",
+      turnaround: "2 - 5 Days",
+      short_description: "AWS cloud deployment, Docker, CI/CD pipelines, server configuration and monitoring.",
+      full_description: "Seamless deployment pipelines and scalable cloud architecture. We containerize your applications with Docker, configure automated GitHub Actions CI/CD, and deploy on AWS, Render, Vercel, or DigitalOcean.",
+      deliverables: [
+        "Production Cloud Setup (AWS / Render / Vercel)",
+        "Docker Containerization & Multi-Stage Builds",
+        "Automated CI/CD Pipelines with GitHub Actions",
+        "Domain, DNS, Reverse Proxy (Nginx) & SSL",
+        "Live System Health Monitoring & Uptime Alerts",
+        "Zero-Downtime Deployment Best Practices"
+      ],
+      packages: [
+        { name: "Standard Cloud Deployment", price: 1999, duration: "2-3 Days", desc: "Production deploy of frontend + backend + database" },
+        { name: "Docker & CI/CD Pipeline Setup", price: 3999, duration: "3-5 Days", desc: "Automated test and deploy on every git push" },
+        { name: "Scalable AWS Cloud Infrastructure", price: 7999, duration: "5-8 Days", desc: "EC2/ECS, S3, RDS, CloudFront CDN, and auto-recovery" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-saas",
+      slug: "saas-development",
+      title: "SaaS Development",
+      category: "Cloud Products",
+      icon: "Rocket",
+      badge: "Full Product",
+      starting_price: 8999,
+      unit: "starting platform",
+      turnaround: "14 - 30 Days",
+      short_description: "Subscription-based platforms, scalable software products and SaaS dashboards.",
+      full_description: "Turn your startup idea into a recurring-revenue software product. We build scalable multi-tenant SaaS applications equipped with customer billing, user seats, onboarding flows, and analytics.",
+      deliverables: [
+        "Multi-Tenant User & Team Organization Architecture",
+        "Stripe / Razorpay Recurring Subscription & Tier Billing",
+        "Interactive Customer Self-Serve Dashboard",
+        "Transactional Email Notifications & Onboarding",
+        "Admin Management & Churn / Revenue Analytics",
+        "Scalable Microservices / Modular Monolith Design"
+      ],
+      packages: [
+        { name: "SaaS MVP Architecture", price: 8999, duration: "14-18 Days", desc: "Core SaaS prototype with authentication and billing setup" },
+        { name: "Production SaaS Platform", price: 18999, duration: "20-30 Days", desc: "End-to-end multi-tenant application with team permissions" },
+        { name: "Scale-Ready Enterprise SaaS", price: 34999, duration: "30-45 Days", desc: "High-throughput product with advanced API keys & webhooks" }
+      ],
+      active: true
+    },
+    {
+      id: "srv-maintenance",
+      slug: "it-maintenance-support",
+      title: "IT Maintenance & Support",
+      category: "Ongoing Support",
+      icon: "Wrench",
+      badge: "Peace of Mind",
+      starting_price: 299,
+      unit: "starting per month",
+      turnaround: "Monthly Retainer",
+      short_description: "Bug fixes, software updates, backups, security patches and performance optimisation.",
+      full_description: "Keep your digital infrastructure running 24/7 without disruptions. Our maintenance packages provide proactive dependency patching, automated database backups, speed tuning, and on-call technical troubleshooting.",
+      deliverables: [
+        "Scheduled Weekly Database & Code Backups",
+        "Critical Security & Vulnerability Patching",
+        "Performance Monitoring & Speed Optimization",
+        "Priority Bug Fixes & Urgent Response SLA",
+        "Server Health & Storage Space Inspections",
+        "Monthly Technical Health Summary"
+      ],
+      packages: [
+        { name: "Basic Peace of Mind", price: 299, duration: "Monthly", desc: "Essential security updates, backups & uptime monitoring" },
+        { name: "Standard Business Care", price: 999, duration: "Monthly", desc: "Includes up to 10 hours of active bug fixes & minor tweaks" },
+        { name: "Priority Dedicated Support", price: 2499, duration: "Monthly", desc: "Same-day priority turnaround, on-call support & deep optimization" }
+      ],
+      active: true
+    }
+  ],
+  portfolio_projects: [
+    {
+      id: "proj-drishti",
+      title: "Drishti 360",
+      tagline: "AI-Powered Visual Crop & Farm Quality Intelligence",
+      category: "AI & AgriTech",
+      image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps/Drishti-360",
+      demo_url: "",
+      featured: true,
+      description: "Comprehensive agricultural AI platform delivering visual crop quality grading, smart packaging compliance intelligence, a grade-linked fair price determination engine, and tamper-evident Digital Quality Passports.",
+      tech_stack: ["JavaScript", "Python", "Computer Vision", "AI Model", "Tailwind CSS"],
+      highlights: [
+        "AI Visual Crop Intelligence for real-time defect and maturity scoring",
+        "Smart Label & Compliance Intelligence for export standards",
+        "Grade-Linked Fair Price Engine ensuring agricultural equity",
+        "Digital Quality Passport verifiable via cryptographic scan"
+      ]
+    },
+    {
+      id: "proj-nidhi",
+      title: "Nidhi Setu",
+      tagline: "AI-Enabled Hackathon & Grant Intelligence Prototype",
+      category: "AI & Full-Stack",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps/NidhiVizh",
+      demo_url: "",
+      featured: true,
+      description: "AI-powered grant recommendation and discovery platform built for hackathons, matching innovators with public and private funding opportunities using Gemini API and contextual embeddings.",
+      tech_stack: ["React", "Vite", "Python", "FastAPI", "PostgreSQL", "Docker", "Gemini API"],
+      highlights: [
+        "Contextual search powered by Gemini API",
+        "Containerized microservices with Docker",
+        "Relational storage with normalized PostgreSQL schema",
+        "Fast response times via FastAPI asynchronous endpoints"
+      ]
+    },
+    {
+      id: "proj-aicte",
+      title: "AICTE Integrated Institution Complaint Dashboard",
+      tagline: "Centralised Case Tracking & Academic Grievance Monitoring",
+      category: "Enterprise Software",
+      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps/Frontend",
+      demo_url: "",
+      featured: true,
+      description: "Centralized institutional grievance management system with 360-degree institution profiles, smart overlap detection between regulatory boards (RB) and grievances committees (PGRC), and live analytics.",
+      tech_stack: ["React", "Node.js", "Express", "PostgreSQL", "Tailwind CSS"],
+      highlights: [
+        "Institution 360° Profile & comprehensive case timeline",
+        "RB–PGRC Overlap Detection to eliminate duplicate reporting",
+        "Smart Alerts & automated escalation for overdue cases",
+        "Advanced search, multi-field filtering & exportable audit reports"
+      ]
+    },
+    {
+      id: "proj-taskguard",
+      title: "TaskGuard",
+      tagline: "Enterprise Task & Sprint Management Platform",
+      category: "Enterprise Software",
+      image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps",
+      demo_url: "",
+      featured: true,
+      description: "Full-featured task management platform designed for agile engineering teams. Features Kanban boards, task dependencies, burndown charts, and role-based permissions.",
+      tech_stack: ["TypeScript", "React", "Node.js", "PostgreSQL", "Tailwind CSS"],
+      highlights: [
+        "Kanban & list views with drag-and-drop workflow",
+        "Role-based access controls and team hierarchy",
+        "Automated sprint report generation & project milestone tracking"
+      ]
+    },
+    {
+      id: "proj-syllabus",
+      title: "School Subject & Syllabus Management System",
+      tagline: "Academic Curriculum & Faculty Allocation Architecture",
+      category: "Education & Java",
+      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps/School-Subject-Syllabus-Management-System",
+      demo_url: "",
+      featured: false,
+      description: "Robust academic curriculum and syllabus tracking system built with enterprise Java and Spring Boot. Manages subject prerequisites, faculty mapping, and syllabus completion audits.",
+      tech_stack: ["Java", "Spring Boot", "MySQL", "JDBC", "Hibernate"],
+      highlights: [
+        "Clean enterprise MVC architecture with Spring Boot",
+        "Normalized relational database with strict constraints",
+        "Automated syllabus progress tracking and department reports"
+      ]
+    },
+    {
+      id: "proj-sizora",
+      title: "Sizora",
+      tagline: "Smart Apparel Size Recommendation Platform",
+      category: "E-Commerce & AI",
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps",
+      demo_url: "",
+      featured: false,
+      description: "Intelligent sizing engine for fashion e-commerce that minimizes returns by recommending optimal garment fits based on user body dimensions and brand sizing variance.",
+      tech_stack: ["React", "Python", "Flask", "Tailwind CSS"],
+      highlights: [
+        "Algorithmic fit matching across disparate brand sizing charts",
+        "Interactive measurement input with visual guide",
+        "Reduction of e-commerce return rates by estimated 35%"
+      ]
+    },
+    {
+      id: "proj-technico",
+      title: "Technico Website",
+      tagline: "Corporate Portal for Laboratory Products Manufacturer",
+      category: "Web Development",
+      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps/technico-laboratory-products",
+      demo_url: "",
+      featured: true,
+      description: "Production business website and product showcase designed and developed for Technico Laboratory Products Pvt. Ltd., Chennai, translating industrial product specs into intuitive digital catalog layouts.",
+      tech_stack: ["TypeScript", "React", "Tailwind CSS", "Figma Design"],
+      highlights: [
+        "Interactive product showcase with dynamic specification sheets",
+        "Fast quote inquiry flow for enterprise laboratory buyers",
+        "Engineered during official UI/UX internship with client"
+      ]
+    },
+    {
+      id: "proj-hackademia",
+      title: "Hackademia — AI Online Exam Invigilation",
+      tagline: "Computer Vision Proctoring System | Top 50 National Finalist",
+      category: "AI & Computer Vision",
+      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps/hackademia-ai-invigilation",
+      demo_url: "",
+      featured: true,
+      description: "AI-powered proctoring solution utilizing real-time face tracking, gaze direction, and suspicious activity detection. Recognized as a Top 50 Finalist among 500+ teams nationwide.",
+      tech_stack: ["Python", "OpenCV", "MediaPipe", "Machine Learning", "Flask"],
+      highlights: [
+        "Top 50 Finalist among 500+ teams at National AI Hackathon",
+        "Real-time head pose, multiple face, and suspicious object detection",
+        "Automated timestamped violation reporting and incident logging"
+      ]
+    },
+    {
+      id: "proj-threat-detection",
+      title: "AI-Powered Cybersecurity Threat Detection Platform",
+      tagline: "Phishing & Anomaly Detection Pipeline",
+      category: "Cybersecurity & AI",
+      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+      github: "https://github.com/sudharshanps",
+      demo_url: "",
+      featured: false,
+      description: "AI-driven platform for phishing URL classification and anomalous network activity detection using Scikit-learn with containerized FastAPI endpoints.",
+      tech_stack: ["FastAPI", "Python", "Scikit-learn", "Docker"],
+      highlights: [
+        "Real-time heuristic & ML threat scoring engine",
+        "Containerized Docker architecture for rapid deployment",
+        "OWASP compliance and live security monitoring"
+      ]
+    },
+    {
+      id: "proj-portfolio",
+      title: "Official SUDHARSHAN_TECH Digital Showcase",
+      tagline: "Live Company Portal & Digital Solutions Hub",
+      category: "Web Development",
+      image: "/assets/logo.jpg",
+      github: "https://github.com/sudharshanps/Sudharshan_tech-Portfolio",
+      demo_url: "https://sudharshan-tech.onrender.com/",
+      featured: true,
+      description: "Official online identity for SUDHARSHAN_TECH, showcasing full-stack capabilities, developer ecosystem, and client solution offerings.",
+      tech_stack: ["React", "Vite", "Tailwind CSS", "Render"],
+      highlights: [
+        "Live deployment on Render at sudharshan-tech.onrender.com",
+        "Clean modern aesthetic, dark navy themes, and seamless transitions"
+      ]
+    }
+  ],
+  poster_gallery: [
+    {
+      id: "post-1",
+      title: "Modern Tech Startup Launch Poster",
+      category: "Business Posters",
+      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80",
+      description: "High-impact visual branding for product launches and investor pitch presentations."
+    },
+    {
+      id: "post-2",
+      title: "Cybersecurity Awareness & Shield Campaign",
+      category: "Social Media Creatives",
+      image: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=800&q=80",
+      description: "Engaging educational infographics covering zero-trust architecture and threat prevention."
+    },
+    {
+      id: "post-3",
+      title: "Minimalist Brand Identity & Logo Suite",
+      category: "Branding",
+      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80",
+      description: "Clean vector geometry, typography guidelines, and digital brand styleguides."
+    },
+    {
+      id: "post-4",
+      title: "SaaS Application Landing Page Mockup",
+      category: "Website Designs",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+      description: "Conversion-optimized hero headers, feature matrices, and interactive pricing tables."
+    },
+    {
+      id: "post-5",
+      title: "FinTech Mobile App UI/UX Concept",
+      category: "UI/UX Designs",
+      image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
+      description: "Figma wireframes with user journey mapping and responsive design systems."
+    },
+    {
+      id: "post-6",
+      title: "AI Product Feature Banner & Ads",
+      category: "Advertisements",
+      image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+      description: "Targeted digital marketing creatives engineered for high click-through rates."
+    }
+  ],
+  achievements: [
+    {
+      id: "ach-1",
+      title: "Top 50 Finalist (500+ Projects)",
+      organization: "Hackademia National AI Hackathon",
+      date: "2026",
+      type: "Hackathon",
+      description: "Engineered Hackademia AI Online Exam Invigilation System with real-time OpenCV & MediaPipe violation detection among 500+ national competing engineering teams."
+    },
+    {
+      id: "ach-2",
+      title: "2nd Runner-Up",
+      organization: "Tex-Research Hackathon, YUGAM",
+      date: "2026",
+      type: "Hackathon",
+      description: "Recognized for innovative applied technology and rapid prototype execution during prestigious YUGAM technical festival."
+    },
+    {
+      id: "ach-3",
+      title: "Active Contributor & Technical Mentor",
+      organization: "Cybersecurity Club, SKCET",
+      date: "2024 – Present",
+      type: "Leadership",
+      description: "Leading peer-to-peer technical workshops on network security, OWASP vulnerabilities, and ethical hacking for junior engineering peers."
+    },
+    {
+      id: "ach-4",
+      title: "Academic Excellence (CGPA 8.5 / 10)",
+      organization: "Sri Krishna College of Engineering & Technology, Coimbatore",
+      date: "2024 – 2028",
+      type: "Education",
+      description: "Pursuing B.E. in Computer Science & Engineering (Cyber Security), excelling in data structures, DBMS, computer networks, and cloud architecture."
+    }
+  ],
+  orders: [],
+  project_enquiries: [],
+  quotations: [],
+  payment_submissions: [],
+  notification_logs: [],
+  admin_users: [
+    {
+      id: "adm-1",
+      email: "sudharshantech123@gmail.com",
+      role: "Super Admin",
+      pin_hash: "admin123" // Editable via environment variable / settings
+    }
+  ]
+});
+
+// Helper to safely load data
+export function loadDatabase() {
+  try {
+    if (!fs.existsSync(DB_FILE)) {
+      const initial = getInitialData();
+      fs.writeFileSync(DB_FILE, JSON.stringify(initial, null, 2), 'utf8');
+      return initial;
+    }
+    const raw = fs.readFileSync(DB_FILE, 'utf8');
+    const data = JSON.parse(raw);
+    return data;
+  } catch (err) {
+    console.error("Error reading database file, returning fallback:", err);
+    return getInitialData();
+  }
+}
+
+// Helper to safely save data atomically
+export function saveDatabase(data) {
+  try {
+    const tempFile = `${DB_FILE}.tmp`;
+    fs.writeFileSync(tempFile, JSON.stringify(data, null, 2), 'utf8');
+    fs.renameSync(tempFile, DB_FILE);
+    return true;
+  } catch (err) {
+    console.error("Error saving database file:", err);
+    return false;
+  }
+}
