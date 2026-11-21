@@ -12,6 +12,7 @@ export interface Service {
   category: string;
   icon: string;
   badge?: string;
+  image?: string;
   starting_price: number;
   unit: string;
   turnaround: string;
@@ -136,6 +137,17 @@ export interface NotificationLog {
   subject: string;
   body_preview: string;
   status: 'sent' | 'simulated_logged' | 'failed';
+  error_message?: string;
+  related_id?: string;
+  created_at: string;
+}
+
+export interface SmsLog {
+  id: string;
+  recipient: string;
+  message: string;
+  status: 'sent' | 'simulated_logged' | 'failed';
+  provider: string;
   error_message?: string;
   related_id?: string;
   created_at: string;

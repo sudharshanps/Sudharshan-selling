@@ -4,28 +4,28 @@
 
 @layer base {
   body {
-    @apply bg-[#070c18] text-slate-100 font-sans antialiased;
+    @apply bg-white text-slate-800 font-sans antialiased;
     overflow-x: hidden;
   }
 }
 
-/* Custom scrollbar */
+/* Custom modern light scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #070c18;
+  background: #F8FAFC;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: #CBD5E1;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #94A3B8;
 }
 
 .scrollbar-none::-webkit-scrollbar {

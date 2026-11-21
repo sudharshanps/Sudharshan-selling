@@ -4,12 +4,10 @@ import {
   Phone, 
   Menu, 
   X, 
-  ExternalLink, 
   Sparkles, 
   Shield, 
-  Code, 
-  Layers,
-  ArrowRight
+  ChevronRight,
+  MessageSquare
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useSettings } from '../context/SettingsContext';
@@ -17,10 +15,9 @@ import { useSettings } from '../context/SettingsContext';
 interface NavbarProps {
   onOpenEnquiry: () => void;
   onOpenAdmin: () => void;
-  isAdminView?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry, onOpenAdmin, isAdminView }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry, onOpenAdmin }) => {
   const { totalItems, subtotal, openCart } = useCart();
   const { settings } = useSettings();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,15 +25,16 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry, onOpenAdmin, isAd
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 15);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const navLinks = [
+    { label: 'Home', href: '#' },
+    { label: 'Our Work', href: '#projects' },
     { label: 'Services', href: '#services' },
-    { label: 'Projects', href: '#projects' },
     { label: 'GitHub', href: '#github' },
     { label: 'Founder & Profile', href: '#founder' },
     { label: 'Creatives', href: '#creatives' },
@@ -45,15 +43,17 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry, onOpenAdmin, isAd
   ];
 
   return (
-    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-      isScrolled ? 'bg-[#070c18]/95 backdrop-blur-md shadow-xl border-b border-slate-800/80 py-3' : 'bg-transparent py-4'
+    <header className={`fixed top-0 left-0 right-0 z-40 transition-all duration-200 ${
+      isScrolled 
+        ? 'bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-200/90 py-2.5' 
+        : 'bg-white/90 backdrop-blur-sm border-b border-slate-100 py-3.5'
     }`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between gap-4">
           
-          {/* Brand Logo & Tagline */}
-          <a href="#" className="flex items-center gap-3 group">
-            <div className="relative w-11 h-11 rounded-xl overflow-hidden border border-blue-500/30 p-0.5 bg-slate-900 shadow-md shadow-blue-500/10 group-hover:border-blue-400 transition-all">
+          {/* Brand Logo & Title */}
+          <a href="#" className="flex items-center gap-3 shrink-0 group">
+            <div className="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 p-0.5 bg-white shadow-sm group-hover:border-[#155EEF] transition-all">
               <img 
                 src={settings.logo_image || "/assets/logo.jpg"} 
                 alt="SUDHARSHAN_TECH Logo" 
@@ -62,128 +62,128 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenEnquiry, onOpenAdmin, isAd
             </div>
             <div>
               <div className="flex items-center gap-1.5">
-                <span className="font-extrabold text-lg sm:text-xl tracking-tight text-white group-hover:text-blue-400 transition-colors">
-                  SUDHARSHAN<span className="text-blue-500">_TECH</span>
+                <span className="font-extrabold text-base sm:text-lg tracking-tight text-slate-900 group-hover:text-[#155EEF] transition-colors">
+                  SUDHARSHAN<span className="text-[#155EEF]">_TECH</span>
                 </span>
-                <span className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-semibold tracking-wider uppercase bg-blue-500/10 border border-blue-500/30 text-blue-400 rounded">
+                <span className="hidden sm:inline-block px-1.5 py-0.2 text-[9px] font-bold tracking-wider uppercase bg-[#EFF4FF] border border-[#155EEF]/20 text-[#155EEF] rounded">
                   PRO
                 </span>
               </div>
-              <p className="text-[11px] font-medium tracking-wide text-slate-400 hidden xs:block">
+              <p className="text-[10.5px] font-medium tracking-wide text-slate-500 hidden sm:block">
                 {settings.tagline || "Code. Create. Elevate."}
               </p>
             </div>
           </a>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden xl:flex items-center gap-5">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium text-slate-300 hover:text-blue-400 transition-colors relative py-1 hover:after:w-full after:w-0 after:h-0.5 after:bg-blue-500 after:absolute after:bottom-0 after:left-0 after:transition-all"
+                className="text-[13px] font-semibold text-slate-600 hover:text-[#155EEF] transition-colors py-1 relative hover:after:w-full after:w-0 after:h-0.5 after:bg-[#155EEF] after:absolute after:bottom-0 after:left-0 after:transition-all"
               >
                 {link.label}
               </a>
             ))}
           </nav>
 
-          {/* Action CTAs */}
-          <div className="flex items-center gap-3">
+          {/* Right Action Controls */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
             
-            {/* Direct Phone Dialler CTA */}
+            {/* Phone Dialler Link */}
             <a 
               href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`}
-              className="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-2 rounded-lg bg-slate-800/80 hover:bg-slate-700/80 text-slate-200 border border-slate-700 transition-all"
+              className="hidden lg:flex items-center gap-1.5 text-xs font-semibold px-3 py-2 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 transition-colors"
               title="Call SUDHARSHAN_TECH"
             >
-              <Phone className="w-3.5 h-3.5 text-blue-400" />
+              <Phone className="w-3.5 h-3.5 text-[#155EEF]" />
               <span>{settings.phone}</span>
             </a>
 
-            {/* Swiggy-Inspired Cart Drawer Trigger */}
+            {/* Cart Button with Swiggy Style Badge */}
             <button
               onClick={openCart}
-              className="relative flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-medium text-xs sm:text-sm shadow-lg shadow-blue-600/25 transition-all transform active:scale-95"
+              className="relative flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#155EEF] hover:bg-[#1049B8] text-white font-semibold text-xs sm:text-sm shadow-md shadow-[#155EEF]/20 transition-all active:scale-95"
               aria-label="View Cart"
             >
               <ShoppingBag className="w-4 h-4" />
-              <span className="hidden sm:inline font-semibold">Cart</span>
+              <span className="hidden sm:inline">Cart</span>
               {totalItems > 0 && (
-                <span className="inline-flex items-center justify-center bg-white text-blue-700 font-extrabold text-[11px] px-1.5 py-0.2 min-w-5 h-5 rounded-full shadow-inner animate-pulse">
+                <span className="inline-flex items-center justify-center bg-[#E53935] text-white font-extrabold text-[10px] px-1.5 py-0.2 min-w-4 h-4 rounded-full shadow-sm animate-pulse">
                   {totalItems}
                 </span>
               )}
               {subtotal > 0 && (
-                <span className="hidden md:inline pl-1 border-l border-blue-400/50 text-xs text-blue-100">
+                <span className="hidden md:inline pl-1 border-l border-white/30 text-xs text-blue-50">
                   ₹{subtotal.toLocaleString('en-IN')}
                 </span>
               )}
             </button>
 
-            {/* Custom Project Button */}
+            {/* Start Project CTA */}
             <button
               onClick={onOpenEnquiry}
-              className="hidden sm:flex items-center gap-1.5 px-3.5 py-2 text-xs font-semibold rounded-xl bg-slate-800/90 hover:bg-slate-700 border border-slate-700 text-blue-400 hover:text-white transition-all"
+              className="hidden md:flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold rounded-xl bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 hover:text-[#155EEF] transition-all shadow-sm"
             >
-              <Sparkles className="w-3.5 h-3.5" />
+              <Sparkles className="w-3.5 h-3.5 text-[#E53935]" />
               <span>Start Project</span>
             </button>
 
             {/* Admin Switcher */}
             <button
               onClick={onOpenAdmin}
-              className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-lg transition-colors"
+              className="p-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
               title="Admin Portal"
             >
-              <Shield className="w-4 h-4" />
+              <Shield className="w-4 h-4 text-[#155EEF]" />
             </button>
 
-            {/* Mobile Hamburger Menu Toggle */}
+            {/* Mobile Hamburger Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg transition-colors"
+              className="xl:hidden p-2 text-slate-700 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors"
               aria-label="Toggle Navigation"
             >
-              {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Navigation Dropdown */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#0a101f] border-b border-slate-800 px-4 pt-3 pb-6 space-y-3 shadow-2xl animate-in slide-in-from-top-4 duration-200">
-          <div className="grid grid-cols-2 gap-2 pt-2">
+        <div className="xl:hidden bg-white border-b border-slate-200 px-4 pt-3 pb-6 shadow-xl animate-in slide-in-from-top-2 duration-150">
+          <div className="grid grid-cols-2 gap-2 pt-1 pb-4">
             {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
                 onClick={() => setMobileMenuOpen(false)}
-                className="px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/60 transition-colors"
+                className="px-3 py-2 rounded-lg text-xs font-semibold text-slate-700 hover:text-[#155EEF] hover:bg-blue-50/60 transition-colors"
               >
                 {link.label}
               </a>
             ))}
           </div>
 
-          <div className="pt-3 border-t border-slate-800/80 flex flex-col gap-2">
+          <div className="pt-3 border-t border-slate-200 flex flex-col gap-2">
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onOpenEnquiry();
               }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-blue-600 text-white font-semibold text-sm shadow-md"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-[#155EEF] text-white font-bold text-xs shadow-md"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Request Custom Project</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#FFF1F0]" />
+              <span>Start Custom Project</span>
             </button>
 
             <a
               href={`tel:${settings.phone.replace(/[^0-9+]/g, '')}`}
-              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-800 text-slate-300 font-medium text-sm"
+              className="w-full flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-slate-100 text-slate-800 font-semibold text-xs"
             >
-              <Phone className="w-4 h-4 text-blue-400" />
+              <Phone className="w-3.5 h-3.5 text-[#155EEF]" />
               <span>Direct Call: {settings.phone}</span>
             </a>
           </div>

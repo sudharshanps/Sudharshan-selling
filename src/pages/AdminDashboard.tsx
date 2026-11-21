@@ -4,7 +4,6 @@ import {
   Lock, 
   LogOut, 
   ShoppingBag, 
-  Users, 
   Clock, 
   CheckCircle, 
   XCircle, 
@@ -16,8 +15,6 @@ import {
   ExternalLink, 
   Download, 
   Edit3, 
-  Plus, 
-  Trash2, 
   Mail, 
   Phone, 
   MessageSquare, 
@@ -27,12 +24,12 @@ import {
   Bell,
   Layers,
   Briefcase,
-  ChevronRight,
   TrendingUp,
-  X
+  X,
+  Smartphone
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
-import { Order, ProjectEnquiry, NotificationLog } from '../types';
+import { Order, ProjectEnquiry, NotificationLog, SmsLog } from '../types';
 
 interface AdminDashboardProps {
   onBackToSite: () => void;
@@ -49,12 +46,14 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
   // Active Admin Tab
   const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'enquiries' | 'services' | 'projects' | 'notifications' | 'settings'>('overview');
+  const [notifSubTab, setNotifSubTab] = useState<'email' | 'sms'>('email');
 
   // Data States
   const [metrics, setMetrics] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [enquiries, setEnquiries] = useState<ProjectEnquiry[]>([]);
   const [notifications, setNotifications] = useState<NotificationLog[]>([]);
+  const [smsLogs, setSmsLogs] = useState<SmsLog[]>([]);
   const [loading, setLoading] = useState(false);
 
   // Filters & Selected State
@@ -101,17 +100,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
     try {
       const headers = { 'x-admin-token': token };
-      const [metricsRes, ordersRes, enquiriesRes, notifsRes] = await Promise.all([
-        fetch('/api/admin/overview', { headers }).then(r => r.json()),
-        fetch('/api/admin/orders', { headers }).then(r => r.json()),
-        fetch('/api/admin/enquiries', { headers }).then(r => r.json()),
-        fetch('/api/admin/notifications', { headers }).then(r => r.json())
+      const [metricsRes, ordersRes, enquiriesRes, notifsRes, smsRes] = await Promise.all([
+        fetch('/api/admin/overview', { headers }).then(r => r.json()).catch(() => null),
+        fetch('/api/admin/orders', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/enquiries', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/notifications', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/sms-logs', { headers }).then(r => r.json()).catch(() => [])
       ]);
 
-      setMetrics(metricsRes);
+      if (metricsRes) setMetrics(metricsRes);
       if (Array.isArray(ordersRes)) setOrders(ordersRes);
       if (Array.isArray(enquiriesRes)) setEnquiries(enquiriesRes);
       if (Array.isArray(notifsRes)) setNotifications(notifsRes);
+      if (Array.isArray(smsRes)) setSmsLogs(smsRes);
     } catch (err) {
       console.error("Error fetching admin data:", err);
     } finally {
@@ -230,63 +231,65 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     return matchesSearch && matchesStatus;
   });
 
-  // Login View
+  // Login View - Light Professional Theme
   if (!token) {
     return (
-      <div className="min-h-screen bg-[#070c18] flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-[#0c1527] border border-slate-800 rounded-3xl p-8 shadow-2xl text-slate-100">
+      <div className="min-h-screen bg-[#F8FAFC] flex items-center justify-center p-4">
+        <div className="w-full max-w-md bg-white border border-slate-200 rounded-3xl p-8 shadow-xl text-slate-800">
           
           <div className="text-center mb-6">
-            <div className="w-14 h-14 bg-blue-600/20 border border-blue-500/30 rounded-2xl flex items-center justify-center mx-auto text-blue-400 mb-3">
-              <Shield className="w-7 h-7" />
+            <div className="w-16 h-16 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-center mx-auto text-[#155EEF] mb-3 shadow-inner">
+              <Shield className="w-8 h-8" />
             </div>
-            <h2 className="text-xl font-black text-white">SUDHARSHAN_TECH Admin</h2>
-            <p className="text-xs text-slate-400 mt-1">
-              Enter master credentials to access orders & company settings.
+            <h2 className="text-2xl font-black text-[#172033]">SUDHARSHAN_TECH</h2>
+            <p className="text-xs font-semibold text-[#155EEF] tracking-wider uppercase mt-0.5">Admin Management Portal</p>
+            <p className="text-xs text-slate-500 mt-2">
+              Enter master credentials to access live orders, verify payments & manage services.
             </p>
           </div>
 
           {loginError && (
-            <div className="p-3 bg-red-950/60 border border-red-800 rounded-xl text-xs text-red-300 mb-4 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-red-400 shrink-0" />
+            <div className="p-3 bg-[#FFF1F0] border border-red-200 rounded-xl text-xs text-[#E53935] mb-4 flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-[#E53935] shrink-0" />
               <span>{loginError}</span>
             </div>
           )}
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-bold text-slate-700 block mb-1">
                 Admin Password / Master PIN
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                 <input
                   type="password"
                   required
                   placeholder="Enter admin password..."
                   value={passwordInput}
                   onChange={(e) => setPasswordInput(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs sm:text-sm text-slate-200 focus:outline-none focus:border-blue-500"
+                  className="w-full pl-9 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#155EEF]/20 focus:border-[#155EEF] transition-all"
                 />
               </div>
-              <p className="text-[10px] text-slate-500 mt-1">
-                Default: <code>sudharshan@admin2026</code> or <code>admin123</code>
+              <p className="text-[11px] text-slate-500 mt-1.5 flex items-center gap-1">
+                <span>Default:</span>
+                <code className="px-1.5 py-0.5 bg-slate-100 rounded text-slate-700 font-mono text-[10px]">sudharshan@admin2026</code>
               </p>
             </div>
 
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 transition-all active:scale-98 disabled:opacity-50"
+              className="w-full py-3 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-blue-500/20 transition-all active:scale-98 disabled:opacity-50"
             >
               {isLoggingIn ? 'Authenticating...' : 'Sign In to Dashboard'}
             </button>
           </form>
 
-          <div className="mt-6 pt-4 border-t border-slate-800 text-center">
+          <div className="mt-6 pt-4 border-t border-slate-100 text-center">
             <button
               onClick={onBackToSite}
-              className="text-xs text-slate-400 hover:text-white transition-colors"
+              className="text-xs font-semibold text-slate-500 hover:text-[#155EEF] transition-colors"
             >
               ← Back to Marketplace Website
             </button>
@@ -297,51 +300,52 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
     );
   }
 
-  // Authenticated Admin Dashboard
+  // Authenticated Admin Dashboard - Light Professional Theme
   return (
-    <div className="min-h-screen bg-[#070c18] text-slate-100 flex flex-col">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800 flex flex-col font-sans">
       
       {/* Admin Top Navigation */}
-      <header className="bg-[#0a1020] border-b border-slate-800 px-4 sm:px-8 py-3.5 flex items-center justify-between sticky top-0 z-30">
+      <header className="bg-white border-b border-slate-200 px-4 sm:px-8 py-3 flex items-center justify-between sticky top-0 z-30 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-blue-600/20 border border-blue-500/30 flex items-center justify-center font-bold text-blue-400">
+          <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center font-black text-[#155EEF] shadow-sm">
             ST
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-sm sm:text-base font-extrabold text-white">
+              <h1 className="text-sm sm:text-base font-extrabold text-[#172033]">
                 SUDHARSHAN_TECH Admin Panel
               </h1>
-              <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                 LIVE
               </span>
             </div>
-            <p className="text-[11px] text-slate-400 hidden xs:block">
+            <p className="text-[11px] text-slate-500 hidden xs:block">
               Super Admin: Sudharshan P S ({settings.email})
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <button
             onClick={fetchAdminData}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+            className="p-2 text-slate-500 hover:text-slate-800 rounded-lg hover:bg-slate-100 transition-colors"
             title="Refresh Live Data"
           >
-            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin text-[#155EEF]' : ''}`} />
           </button>
 
           <button
             onClick={onBackToSite}
-            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 transition-colors"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 transition-colors border border-slate-200"
           >
-            <ExternalLink className="w-3.5 h-3.5" />
+            <ExternalLink className="w-3.5 h-3.5 text-slate-500" />
             <span>View Marketplace</span>
           </button>
 
           <button
             onClick={handleLogout}
-            className="p-2 text-slate-400 hover:text-red-400 rounded-lg hover:bg-slate-800"
+            className="p-2 text-slate-500 hover:text-[#E53935] rounded-lg hover:bg-red-50 transition-colors"
             title="Sign Out"
           >
             <LogOut className="w-4 h-4" />
@@ -353,13 +357,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
       <div className="flex-1 flex flex-col md:flex-row">
         
         {/* Navigation Sidebar */}
-        <aside className="w-full md:w-64 bg-[#080d1a] border-r border-slate-800/80 p-4 shrink-0 space-y-1">
+        <aside className="w-full md:w-64 bg-white border-r border-slate-200 p-4 shrink-0 space-y-1">
           <button
             onClick={() => setActiveTab('overview')}
-            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'overview'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <TrendingUp className="w-4 h-4" />
@@ -368,10 +372,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
           <button
             onClick={() => setActiveTab('orders')}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'orders'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -379,7 +383,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               <span>Orders & Payments</span>
             </div>
             {orders.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                activeTab === 'orders' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}>
                 {orders.length}
               </span>
             )}
@@ -387,10 +393,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
           <button
             onClick={() => setActiveTab('enquiries')}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'enquiries'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <div className="flex items-center gap-2.5">
@@ -398,7 +404,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               <span>Project Enquiries</span>
             </div>
             {enquiries.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                activeTab === 'enquiries' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}>
                 {enquiries.length}
               </span>
             )}
@@ -406,10 +414,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
           <button
             onClick={() => setActiveTab('services')}
-            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'services'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -418,10 +426,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
           <button
             onClick={() => setActiveTab('projects')}
-            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'projects'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -430,29 +438,31 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
           <button
             onClick={() => setActiveTab('notifications')}
-            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'notifications'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <div className="flex items-center gap-2.5">
               <Bell className="w-4 h-4" />
-              <span>Email Audit Logs</span>
+              <span>Alert Logs (Email/SMS)</span>
             </div>
-            {notifications.length > 0 && (
-              <span className="px-1.5 py-0.2 rounded-full bg-slate-800 text-[10px]">
-                {notifications.length}
+            {(notifications.length + smsLogs.length) > 0 && (
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                activeTab === 'notifications' ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-700'
+              }`}>
+                {notifications.length + smsLogs.length}
               </span>
             )}
           </button>
 
           <button
             onClick={() => setActiveTab('settings')}
-            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+            className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-xs font-bold transition-all ${
               activeTab === 'settings'
-                ? 'bg-blue-600 text-white shadow-md'
-                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-900'
+                ? 'bg-[#155EEF] text-white shadow-md shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
             }`}
           >
             <Settings className="w-4 h-4" />
@@ -467,52 +477,60 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {activeTab === 'overview' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-white">Marketplace Metrics & Health</h2>
-                <p className="text-xs text-slate-400">Live operational overview of customer submissions and revenue.</p>
+                <h2 className="text-xl font-black text-[#172033]">Marketplace Metrics & Health</h2>
+                <p className="text-xs text-slate-500">Live operational overview of customer submissions, orders and revenue.</p>
               </div>
 
               {/* Stat Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-4">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-slate-400">Total Orders</span>
-                    <ShoppingBag className="w-4 h-4 text-blue-400" />
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Orders</span>
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#155EEF] flex items-center justify-center">
+                      <ShoppingBag className="w-4 h-4" />
+                    </div>
                   </div>
-                  <p className="text-2xl font-black text-white">{metrics?.total_orders || orders.length}</p>
-                  <p className="text-[10px] text-slate-500 mt-1">{metrics?.orders_today || 0} placed today</p>
+                  <p className="text-2xl font-black text-[#172033]">{metrics?.total_orders || orders.length}</p>
+                  <p className="text-[11px] text-slate-500 mt-1">{metrics?.orders_today || 0} placed today</p>
                 </div>
 
-                <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-4">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-slate-400">Awaiting Verification</span>
-                    <Clock className="w-4 h-4 text-amber-400" />
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Awaiting Verification</span>
+                    <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center">
+                      <Clock className="w-4 h-4" />
+                    </div>
                   </div>
-                  <p className="text-2xl font-black text-amber-400">
+                  <p className="text-2xl font-black text-amber-600">
                     {metrics?.awaiting_verification ?? orders.filter(o => o.payment_status === 'Pending Verification').length}
                   </p>
-                  <p className="text-[10px] text-slate-500 mt-1">Pending admin confirmation</p>
+                  <p className="text-[11px] text-slate-500 mt-1">Pending admin confirmation</p>
                 </div>
 
-                <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-4">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-slate-400">Verified Revenue</span>
-                    <DollarSign className="w-4 h-4 text-emerald-400" />
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Verified Revenue</span>
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                      <DollarSign className="w-4 h-4" />
+                    </div>
                   </div>
-                  <p className="text-2xl font-black text-emerald-400">
+                  <p className="text-2xl font-black text-emerald-600">
                     ₹{(metrics?.total_verified_revenue || 0).toLocaleString('en-IN')}
                   </p>
-                  <p className="text-[10px] text-slate-500 mt-1">Confirmed payments</p>
+                  <p className="text-[11px] text-slate-500 mt-1">Confirmed payments</p>
                 </div>
 
-                <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-4">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs text-slate-400">Custom Enquiries</span>
-                    <FileText className="w-4 h-4 text-cyan-400" />
+                    <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Custom Enquiries</span>
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#155EEF] flex items-center justify-center">
+                      <FileText className="w-4 h-4" />
+                    </div>
                   </div>
-                  <p className="text-2xl font-black text-cyan-400">
+                  <p className="text-2xl font-black text-[#155EEF]">
                     {metrics?.pending_enquiries || enquiries.length}
                   </p>
-                  <p className="text-[10px] text-slate-500 mt-1">Bespoke project leads</p>
+                  <p className="text-[11px] text-slate-500 mt-1">Bespoke project leads</p>
                 </div>
               </div>
 
@@ -520,11 +538,11 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 
                 {/* Recent Orders List */}
-                <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-5">
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm">
                   <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-bold text-white">Recent Customer Orders</h3>
-                    <button onClick={() => setActiveTab('orders')} className="text-xs text-blue-400 hover:underline">
-                      View All
+                    <h3 className="text-sm font-bold text-[#172033]">Recent Customer Orders</h3>
+                    <button onClick={() => setActiveTab('orders')} className="text-xs font-bold text-[#155EEF] hover:underline">
+                      View All ({orders.length})
                     </button>
                   </div>
 
@@ -533,15 +551,19 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   ) : (
                     <div className="space-y-2.5">
                       {orders.slice(0, 5).map(o => (
-                        <div key={o.id} onClick={() => setSelectedOrder(o)} className="p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-blue-500/40 cursor-pointer flex items-center justify-between text-xs">
+                        <div 
+                          key={o.id} 
+                          onClick={() => setSelectedOrder(o)} 
+                          className="p-3 rounded-xl bg-slate-50 border border-slate-200 hover:border-blue-300 hover:bg-blue-50/30 cursor-pointer flex items-center justify-between text-xs transition-all"
+                        >
                           <div>
-                            <span className="font-bold text-white">{o.customer_name}</span>
-                            <span className="text-[10px] text-slate-400 block">{o.id} • {o.items?.length || 1} items</span>
+                            <span className="font-bold text-slate-900">{o.customer_name}</span>
+                            <span className="text-[11px] text-slate-500 block">{o.id} • {o.items?.length || 1} item(s)</span>
                           </div>
                           <div className="text-right">
-                            <span className="font-extrabold text-blue-400">₹{(o.total_amount || 0).toLocaleString('en-IN')}</span>
-                            <span className={`block text-[10px] font-semibold ${
-                              o.payment_status === 'Payment Verified' ? 'text-emerald-400' : 'text-amber-400'
+                            <span className="font-black text-[#155EEF]">₹{(o.total_amount || 0).toLocaleString('en-IN')}</span>
+                            <span className={`block text-[10px] font-bold ${
+                              o.payment_status === 'Payment Verified' ? 'text-emerald-600' : 'text-amber-600'
                             }`}>{o.payment_status}</span>
                           </div>
                         </div>
@@ -550,28 +572,38 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                   )}
                 </div>
 
-                {/* Notification System Health */}
-                <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="text-sm font-bold text-white">Email Notification Health</h3>
-                    <button onClick={() => setActiveTab('notifications')} className="text-xs text-blue-400 hover:underline">
-                      Logs
-                    </button>
+                {/* Notification & SMS System Health */}
+                <div className="bg-white border border-slate-200 rounded-2xl p-5 shadow-sm flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-sm font-bold text-[#172033]">Dual Alert System Health</h3>
+                      <button onClick={() => setActiveTab('notifications')} className="text-xs font-bold text-[#155EEF] hover:underline">
+                        Audit Logs
+                      </button>
+                    </div>
+
+                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 text-xs space-y-2.5 mb-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 font-medium flex items-center gap-1.5">
+                          <Mail className="w-3.5 h-3.5 text-[#155EEF]" /> Email Recipient:
+                        </span>
+                        <span className="font-mono text-slate-800 font-bold">{settings.email}</span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-600 font-medium flex items-center gap-1.5">
+                          <Smartphone className="w-3.5 h-3.5 text-emerald-600" /> Owner Mobile SMS:
+                        </span>
+                        <span className="font-mono text-slate-800 font-bold">{settings.phone}</span>
+                      </div>
+                      <div className="flex justify-between items-center pt-2 border-t border-slate-200">
+                        <span className="text-slate-600 font-medium">Total Alerts Dispatched:</span>
+                        <span className="font-black text-slate-900">{notifications.length + smsLogs.length} events</span>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="p-3.5 bg-slate-900 rounded-xl border border-slate-800 text-xs space-y-2 mb-4">
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Target Notification Email:</span>
-                      <span className="font-mono text-cyan-300 font-semibold">{settings.email}</span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-slate-400">Total Alerts Dispatched:</span>
-                      <span className="font-bold text-white">{notifications.length}</span>
-                    </div>
-                  </div>
-
-                  <p className="text-[11px] text-slate-400 leading-relaxed">
-                    All customer orders, custom quotations, and payment uploads trigger real-time dispatch and are saved in the immutable database audit trail.
+                  <p className="text-[11px] text-slate-500 leading-relaxed">
+                    Customer orders, payments, and custom scoping enquiries trigger instant dual notifications to the company mailbox and owner mobile device, recorded into the persistent database audit trail.
                   </p>
                 </div>
 
@@ -585,16 +617,16 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               
               <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-bold text-white">Live Customer Orders</h2>
-                  <p className="text-xs text-slate-400">Review specifications, verify UPI payments, update status.</p>
+                  <h2 className="text-xl font-black text-[#172033]">Live Customer Orders</h2>
+                  <p className="text-xs text-slate-500">Review specifications, verify UPI payments, update status.</p>
                 </div>
 
                 <div className="flex items-center gap-2">
                   <button
                     onClick={handleExportCSV}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-semibold text-slate-200 border border-slate-700"
+                    className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-xs font-bold text-slate-700 border border-slate-200 shadow-sm transition-all"
                   >
-                    <Download className="w-3.5 h-3.5" />
+                    <Download className="w-3.5 h-3.5 text-slate-500" />
                     <span>Export CSV</span>
                   </button>
                 </div>
@@ -603,20 +635,20 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               {/* Filters & Search */}
               <div className="flex flex-col sm:flex-row gap-3">
                 <div className="relative flex-1">
-                  <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
                   <input
                     type="text"
-                    placeholder="Search by Order ID, name, email or phone..."
+                    placeholder="Search by Order ID, customer name, email or phone..."
                     value={orderSearch}
                     onChange={(e) => setOrderSearch(e.target.value)}
-                    className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                    className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#155EEF]/20 focus:border-[#155EEF] shadow-sm"
                   />
                 </div>
 
                 <select
                   value={orderStatusFilter}
                   onChange={(e) => setOrderStatusFilter(e.target.value)}
-                  className="p-2 bg-slate-900 border border-slate-800 rounded-xl text-xs text-slate-200"
+                  className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:border-[#155EEF]"
                 >
                   <option value="All">All Statuses</option>
                   <option value="New Enquiry">New Enquiry</option>
@@ -630,10 +662,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               </div>
 
               {/* Orders Table */}
-              <div className="bg-[#0c1527] border border-slate-800 rounded-2xl overflow-hidden">
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
                 <div className="overflow-x-auto">
-                  <table className="w-full text-left text-xs text-slate-300">
-                    <thead className="bg-[#091124] border-b border-slate-800 text-slate-400 text-[10px] uppercase font-bold tracking-wider">
+                  <table className="w-full text-left text-xs text-slate-700">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[10px] uppercase font-bold tracking-wider">
                       <tr>
                         <th className="p-3.5">Order ID</th>
                         <th className="p-3.5">Customer</th>
@@ -644,7 +676,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                         <th className="p-3.5">Action</th>
                       </tr>
                     </thead>
-                    <tbody className="divide-y divide-slate-800/60">
+                    <tbody className="divide-y divide-slate-100">
                       {filteredOrders.length === 0 ? (
                         <tr>
                           <td colSpan={7} className="p-8 text-center text-slate-500">
@@ -653,42 +685,42 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                         </tr>
                       ) : (
                         filteredOrders.map((order) => (
-                          <tr key={order.id} className="hover:bg-slate-900/50 transition-colors">
-                            <td className="p-3.5 font-mono font-bold text-blue-400">
+                          <tr key={order.id} className="hover:bg-slate-50/70 transition-colors">
+                            <td className="p-3.5 font-mono font-bold text-[#155EEF]">
                               {order.id}
                             </td>
                             <td className="p-3.5">
-                              <span className="font-semibold text-white block">{order.customer_name}</span>
-                              <span className="text-[10px] text-slate-500">{order.customer_email}</span>
+                              <span className="font-bold text-slate-900 block">{order.customer_name}</span>
+                              <span className="text-[11px] text-slate-500">{order.customer_email}</span>
                             </td>
                             <td className="p-3.5">
-                              <span className="truncate max-w-[160px] block font-medium">
+                              <span className="truncate max-w-[160px] block font-medium text-slate-700">
                                 {(order.items || []).map(i => i.service_title).join(', ')}
                               </span>
                             </td>
-                            <td className="p-3.5 font-extrabold text-white">
+                            <td className="p-3.5 font-black text-slate-900">
                               ₹{(order.total_amount || 0).toLocaleString('en-IN')}
                             </td>
                             <td className="p-3.5">
-                              <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
                                 order.payment_status === 'Payment Verified'
-                                  ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                                  : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200'
+                                  : 'bg-amber-50 text-amber-700 border border-amber-200'
                               }`}>
                                 {order.payment_status}
                               </span>
                             </td>
                             <td className="p-3.5">
-                              <span className="px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                              <span className="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-50 text-[#155EEF] border border-blue-200">
                                 {order.order_status}
                               </span>
                             </td>
                             <td className="p-3.5">
                               <button
                                 onClick={() => setSelectedOrder(order)}
-                                className="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-white font-medium flex items-center gap-1"
+                                className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#155EEF] text-slate-700 hover:text-white font-bold flex items-center gap-1 transition-all"
                               >
-                                <Eye className="w-3 h-3" />
+                                <Eye className="w-3.5 h-3.5" />
                                 <span>Inspect</span>
                               </button>
                             </td>
@@ -707,27 +739,27 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {activeTab === 'enquiries' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-white">Custom Project Requests</h2>
-                <p className="text-xs text-slate-400">Bespoke technical inquiries requiring customized scoping and proposals.</p>
+                <h2 className="text-xl font-black text-[#172033]">Custom Project Requests</h2>
+                <p className="text-xs text-slate-500">Bespoke technical inquiries requiring customized scoping and proposals.</p>
               </div>
 
               <div className="space-y-4">
                 {enquiries.length === 0 ? (
-                  <div className="bg-[#0c1527] border border-slate-800 rounded-2xl p-12 text-center text-slate-500 text-xs">
+                  <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 text-xs shadow-sm">
                     No custom project enquiries submitted yet.
                   </div>
                 ) : (
                   enquiries.map((enq) => (
-                    <div key={enq.id} className="bg-[#0c1527] border border-slate-800 rounded-2xl p-5 space-y-3">
+                    <div key={enq.id} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-sm">
                       <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
                         <div>
                           <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-cyan-400 text-xs">{enq.id}</span>
-                            <span className="text-xs px-2 py-0.5 rounded bg-slate-900 border border-slate-800 text-slate-300">
+                            <span className="font-mono font-bold text-[#155EEF] text-xs">{enq.id}</span>
+                            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
                               {enq.status}
                             </span>
                           </div>
-                          <h3 className="text-base font-bold text-white mt-1">{enq.customer_name} {enq.business_name && `(${enq.business_name})`}</h3>
+                          <h3 className="text-base font-extrabold text-[#172033] mt-1">{enq.customer_name} {enq.business_name && `(${enq.business_name})`}</h3>
                         </div>
 
                         <div className="flex items-center gap-2 text-xs">
@@ -735,29 +767,36 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                             href={`https://wa.me/${enq.customer_phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(enq.customer_name)},%20inquiring%20about%20your%20SUDHARSHAN_TECH%20project.`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="p-1.5 rounded-lg bg-emerald-950/60 text-emerald-400 hover:bg-emerald-900 flex items-center gap-1"
+                            className="p-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 font-bold flex items-center gap-1.5 transition-colors"
                           >
                             <MessageSquare className="w-3.5 h-3.5" />
                             <span>WhatsApp</span>
                           </a>
                           <a
                             href={`mailto:${enq.customer_email}`}
-                            className="p-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white flex items-center gap-1"
+                            className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold flex items-center gap-1.5 transition-colors"
                           >
                             <Mail className="w-3.5 h-3.5" />
                             <span>Email</span>
                           </a>
+                          <a
+                            href={`tel:${enq.customer_phone}`}
+                            className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold flex items-center gap-1.5 transition-colors"
+                          >
+                            <Phone className="w-3.5 h-3.5" />
+                            <span>Call</span>
+                          </a>
                         </div>
                       </div>
 
-                      <div className="bg-slate-900/90 rounded-xl p-3 border border-slate-800/80 text-xs text-slate-300 space-y-1">
-                        <p><strong>Required Services:</strong> {Array.isArray(enq.services_required) ? enq.services_required.join(', ') : enq.services_required}</p>
-                        <p><strong>Budget / Timeline:</strong> {enq.estimated_budget} | {enq.timeline}</p>
-                        <p className="mt-2 text-slate-200"><strong>Description:</strong> {enq.project_description}</p>
+                      <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-xs text-slate-700 space-y-1.5">
+                        <p><strong>Required Services:</strong> <span className="text-[#155EEF] font-semibold">{Array.isArray(enq.services_required) ? enq.services_required.join(', ') : enq.services_required}</span></p>
+                        <p><strong>Budget / Timeline:</strong> {enq.estimated_budget || 'Flexible'} | {enq.timeline || 'Standard'}</p>
+                        <p className="mt-2 text-slate-800"><strong>Description:</strong> {enq.project_description}</p>
                         {enq.reference_file && (
-                          <p className="pt-1">
-                            <a href={enq.reference_file} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline">
-                              📎 Download Attached Reference File
+                          <p className="pt-2">
+                            <a href={enq.reference_file} target="_blank" rel="noopener noreferrer" className="text-[#155EEF] hover:underline font-bold flex items-center gap-1">
+                              <span>📎 Download Attached Reference File</span>
                             </a>
                           </p>
                         )}
@@ -773,30 +812,30 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {activeTab === 'services' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-white">Services & Starting Price Management</h2>
-                <p className="text-xs text-slate-400">Dynamically configure starting rates and descriptions for the 8 official services.</p>
+                <h2 className="text-xl font-black text-[#172033]">Services & Starting Price Management</h2>
+                <p className="text-xs text-slate-500">Dynamically configure starting rates and descriptions for the 8 official services.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {(services || []).map((srv) => (
-                  <div key={srv.id} className="bg-[#0c1527] border border-slate-800 rounded-2xl p-5 space-y-3">
+                  <div key={srv.id} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-sm hover:border-blue-300 transition-all">
                     <div className="flex items-start justify-between">
                       <div>
-                        <span className="text-[10px] font-bold text-blue-400 uppercase tracking-wider">{srv.category}</span>
-                        <h3 className="text-base font-bold text-white">{srv.title}</h3>
+                        <span className="text-[10px] font-bold text-[#155EEF] uppercase tracking-wider">{srv.category}</span>
+                        <h3 className="text-base font-extrabold text-[#172033]">{srv.title}</h3>
                       </div>
-                      <span className="text-base font-black text-blue-400">₹{srv.starting_price.toLocaleString('en-IN')}</span>
+                      <span className="text-base font-black text-[#155EEF]">₹{srv.starting_price.toLocaleString('en-IN')}</span>
                     </div>
 
-                    <p className="text-xs text-slate-400 line-clamp-2">{srv.short_description}</p>
+                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed">{srv.short_description}</p>
 
-                    <div className="pt-2 border-t border-slate-800 flex justify-between items-center text-xs">
-                      <span className="text-slate-400">Est: {srv.turnaround}</span>
+                    <div className="pt-3 border-t border-slate-100 flex justify-between items-center text-xs">
+                      <span className="text-slate-500 font-medium">Turnaround: {srv.turnaround}</span>
                       <button
                         onClick={() => setEditingService({ ...srv })}
-                        className="px-3 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white font-semibold text-[11px] flex items-center gap-1"
+                        className="px-3.5 py-1.5 rounded-xl bg-blue-50 hover:bg-[#155EEF] text-[#155EEF] hover:text-white font-bold text-xs flex items-center gap-1.5 transition-all"
                       >
-                        <Edit3 className="w-3 h-3" />
+                        <Edit3 className="w-3.5 h-3.5" />
                         <span>Edit Price</span>
                       </button>
                     </div>
@@ -810,21 +849,22 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {activeTab === 'projects' && (
             <div className="space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-white">Portfolio Projects Showcase</h2>
-                <p className="text-xs text-slate-400">Active showcase projects, GitHub repositories, and tech stacks.</p>
+                <h2 className="text-xl font-black text-[#172033]">Portfolio Projects Showcase</h2>
+                <p className="text-xs text-slate-500">Active showcase projects, GitHub repositories, and tech stacks displayed on the website.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {(projects || []).map(p => (
-                  <div key={p.id} className="bg-[#0c1527] border border-slate-800 rounded-2xl p-4 flex flex-col justify-between">
+                  <div key={p.id} className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between shadow-sm">
                     <div>
-                      <span className="text-[10px] text-cyan-400 font-bold uppercase">{p.category}</span>
-                      <h4 className="text-sm font-bold text-white mt-0.5">{p.title}</h4>
-                      <p className="text-xs text-slate-400 line-clamp-2 mt-1">{p.description}</p>
+                      <span className="text-[10px] text-[#155EEF] font-bold uppercase tracking-wider">{p.category}</span>
+                      <h4 className="text-sm font-extrabold text-[#172033] mt-1">{p.title}</h4>
+                      <p className="text-xs text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">{p.description}</p>
                     </div>
                     {p.github && (
-                      <div className="pt-3 border-t border-slate-800/80 mt-3 text-xs">
-                        <a href={p.github} target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline flex items-center gap-1 truncate">
+                      <div className="pt-3 border-t border-slate-100 mt-4 text-xs">
+                        <a href={p.github} target="_blank" rel="noopener noreferrer" className="text-[#155EEF] hover:underline flex items-center gap-1 font-bold truncate">
+                          <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                           <span>GitHub: {p.github.split('/').pop()}</span>
                         </a>
                       </div>
@@ -835,54 +875,134 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             </div>
           )}
 
-          {/* TAB 6: NOTIFICATIONS AUDIT LOGS */}
+          {/* TAB 6: NOTIFICATIONS & SMS AUDIT LOGS */}
           {activeTab === 'notifications' && (
             <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-bold text-white">Email Notification Audit Logs</h2>
-                <p className="text-xs text-slate-400">Verifiable delivery records for owner alerts and customer confirmations.</p>
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                <div>
+                  <h2 className="text-xl font-black text-[#172033]">Independent Alert Audit Trail</h2>
+                  <p className="text-xs text-slate-500">Dual-channel notification records for owner email and mobile SMS alerts.</p>
+                </div>
+
+                {/* Sub-tabs toggle */}
+                <div className="flex bg-slate-100 p-1 rounded-xl border border-slate-200">
+                  <button
+                    onClick={() => setNotifSubTab('email')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      notifSubTab === 'email' ? 'bg-white text-[#155EEF] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Email Logs ({notifications.length})
+                  </button>
+                  <button
+                    onClick={() => setNotifSubTab('sms')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      notifSubTab === 'sms' ? 'bg-white text-[#155EEF] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Mobile SMS Logs ({smsLogs.length})
+                  </button>
+                </div>
               </div>
 
-              <div className="bg-[#0c1527] border border-slate-800 rounded-2xl overflow-hidden">
-                <table className="w-full text-left text-xs text-slate-300">
-                  <thead className="bg-[#091124] border-b border-slate-800 text-[10px] uppercase text-slate-400 font-bold">
-                    <tr>
-                      <th className="p-3.5">Time</th>
-                      <th className="p-3.5">Event Type</th>
-                      <th className="p-3.5">Recipient</th>
-                      <th className="p-3.5">Subject</th>
-                      <th className="p-3.5">Delivery Status</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-slate-800/60">
-                    {notifications.length === 0 ? (
+              {/* Email Logs Table */}
+              {notifSubTab === 'email' && (
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  <table className="w-full text-left text-xs text-slate-700">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase text-slate-500 font-bold">
                       <tr>
-                        <td colSpan={5} className="p-6 text-center text-slate-500">
-                          No notification dispatches logged yet.
-                        </td>
+                        <th className="p-3.5">Time</th>
+                        <th className="p-3.5">Event Type</th>
+                        <th className="p-3.5">Recipient</th>
+                        <th className="p-3.5">Subject</th>
+                        <th className="p-3.5">Delivery Status</th>
                       </tr>
-                    ) : (
-                      notifications.map(n => (
-                        <tr key={n.id} className="hover:bg-slate-900/50">
-                          <td className="p-3.5 text-slate-500 whitespace-nowrap">
-                            {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                          </td>
-                          <td className="p-3.5 font-mono text-cyan-300 text-[11px]">{n.event_type}</td>
-                          <td className="p-3.5">{n.recipient}</td>
-                          <td className="p-3.5 max-w-[200px] truncate">{n.subject}</td>
-                          <td className="p-3.5">
-                            <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                              n.status === 'sent' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-300'
-                            }`}>
-                              {n.status}
-                            </span>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {notifications.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="p-6 text-center text-slate-500">
+                            No email notification dispatches logged yet.
                           </td>
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                      ) : (
+                        notifications.map(n => (
+                          <tr key={n.id} className="hover:bg-slate-50/60">
+                            <td className="p-3.5 text-slate-500 whitespace-nowrap">
+                              {new Date(n.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </td>
+                            <td className="p-3.5 font-mono text-[#155EEF] font-bold text-[11px]">{n.event_type}</td>
+                            <td className="p-3.5 font-medium">{n.recipient}</td>
+                            <td className="p-3.5 max-w-[240px] truncate text-slate-600">{n.subject}</td>
+                            <td className="p-3.5">
+                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                n.status === 'sent' 
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                                  : 'bg-blue-50 text-[#155EEF] border border-blue-200'
+                              }`}>
+                                {n.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* SMS Logs Table */}
+              {notifSubTab === 'sms' && (
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  <table className="w-full text-left text-xs text-slate-700">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase text-slate-500 font-bold">
+                      <tr>
+                        <th className="p-3.5">Time</th>
+                        <th className="p-3.5">Recipient</th>
+                        <th className="p-3.5">Provider</th>
+                        <th className="p-3.5">SMS Message Body</th>
+                        <th className="p-3.5">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {smsLogs.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="p-6 text-center text-slate-500">
+                            No SMS alerts dispatched yet. Place a test order to generate an instant SMS alert.
+                          </td>
+                        </tr>
+                      ) : (
+                        smsLogs.map(s => (
+                          <tr key={s.id} className="hover:bg-slate-50/60">
+                            <td className="p-3.5 text-slate-500 whitespace-nowrap">
+                              {new Date(s.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </td>
+                            <td className="p-3.5 font-mono font-bold text-slate-900">{s.recipient}</td>
+                            <td className="p-3.5">
+                              <span className="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-semibold text-slate-700">
+                                {s.provider}
+                              </span>
+                            </td>
+                            <td className="p-3.5 max-w-[280px] truncate text-slate-600 font-mono text-[11px]">
+                              {s.message}
+                            </td>
+                            <td className="p-3.5">
+                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                s.status === 'sent' 
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' 
+                                  : 'bg-blue-50 text-[#155EEF] border border-blue-200'
+                              }`}>
+                                {s.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
             </div>
           )}
 
@@ -890,93 +1010,93 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
           {activeTab === 'settings' && (
             <div className="space-y-6 max-w-2xl">
               <div>
-                <h2 className="text-xl font-bold text-white">Company Identity & Contact Settings</h2>
-                <p className="text-xs text-slate-400">Updates here apply dynamically to the customer marketplace.</p>
+                <h2 className="text-xl font-black text-[#172033]">Company Identity & Contact Settings</h2>
+                <p className="text-xs text-slate-500">Updates here apply dynamically to the customer marketplace.</p>
               </div>
 
               {settingsSuccess && (
-                <div className="p-3 bg-emerald-950/60 border border-emerald-800 rounded-xl text-xs text-emerald-300 flex items-center gap-2">
-                  <Check className="w-4 h-4 text-emerald-400" />
-                  <span>Company contact settings updated successfully!</span>
+                <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-xl text-xs text-emerald-800 flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-600" />
+                  <span className="font-semibold">Company contact settings updated successfully!</span>
                 </div>
               )}
 
-              <form onSubmit={handleSaveSettings} className="bg-[#0c1527] border border-slate-800 rounded-2xl p-6 space-y-4 text-xs">
+              <form onSubmit={handleSaveSettings} className="bg-white border border-slate-200 rounded-2xl p-6 space-y-4 text-xs shadow-sm">
                 <div>
-                  <label className="text-slate-300 font-semibold block mb-1">Company Tagline</label>
+                  <label className="text-slate-700 font-bold block mb-1">Company Tagline</label>
                   <input
                     type="text"
                     value={editingSettings.tagline}
                     onChange={(e) => setEditingSettings({ ...editingSettings, tagline: e.target.value })}
-                    className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF]"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-slate-300 font-semibold block mb-1">Official Phone</label>
+                    <label className="text-slate-700 font-bold block mb-1">Official Phone</label>
                     <input
                       type="text"
                       value={editingSettings.phone}
                       onChange={(e) => setEditingSettings({ ...editingSettings, phone: e.target.value })}
-                      className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF]"
                     />
                   </div>
                   <div>
-                    <label className="text-slate-300 font-semibold block mb-1">WhatsApp Number</label>
+                    <label className="text-slate-700 font-bold block mb-1">WhatsApp Number</label>
                     <input
                       type="text"
                       value={editingSettings.whatsapp}
                       onChange={(e) => setEditingSettings({ ...editingSettings, whatsapp: e.target.value })}
-                      className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF]"
                     />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-slate-300 font-semibold block mb-1">Notification Email</label>
+                    <label className="text-slate-700 font-bold block mb-1">Notification Email</label>
                     <input
                       type="email"
                       value={editingSettings.email}
                       onChange={(e) => setEditingSettings({ ...editingSettings, email: e.target.value })}
-                      className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF]"
                     />
                   </div>
                   <div>
-                    <label className="text-slate-300 font-semibold block mb-1">UPI ID for GPay</label>
+                    <label className="text-slate-700 font-bold block mb-1">UPI ID for GPay</label>
                     <input
                       type="text"
                       value={editingSettings.upi_id}
                       onChange={(e) => setEditingSettings({ ...editingSettings, upi_id: e.target.value })}
-                      className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200"
+                      className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF]"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-semibold block mb-1">Registered Address</label>
+                  <label className="text-slate-700 font-bold block mb-1">Registered Office Address</label>
                   <textarea
                     rows={2}
                     value={editingSettings.address}
                     onChange={(e) => setEditingSettings({ ...editingSettings, address: e.target.value })}
-                    className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 resize-none"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:bg-white focus:outline-none focus:border-[#155EEF] resize-none"
                   />
                 </div>
 
                 <div>
-                  <label className="text-slate-300 font-semibold block mb-1">Google Maps Search Link</label>
+                  <label className="text-slate-700 font-bold block mb-1">Google Maps Search Link</label>
                   <input
                     type="text"
                     value={editingSettings.google_maps_url}
                     onChange={(e) => setEditingSettings({ ...editingSettings, google_maps_url: e.target.value })}
-                    className="w-full p-2.5 bg-slate-900 border border-slate-800 rounded-xl text-slate-200 font-mono text-[11px]"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-mono text-[11px] focus:bg-white focus:outline-none focus:border-[#155EEF]"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs"
+                  className="w-full py-3 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all"
                 >
                   Save Company Settings
                 </button>
@@ -989,55 +1109,58 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
       {/* INSPECT ORDER DETAIL MODAL */}
       {selectedOrder && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative w-full max-w-2xl bg-[#0c1527] border border-slate-700 rounded-2xl shadow-2xl p-6 text-slate-100 space-y-5 my-8">
-            <div className="flex justify-between items-start pb-3 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 text-slate-800 space-y-5 my-8">
+            <div className="flex justify-between items-start pb-3 border-b border-slate-100">
               <div>
-                <span className="font-mono font-bold text-blue-400 text-xs">ORDER DETAILS</span>
-                <h3 className="text-xl font-bold text-white mt-0.5">{selectedOrder.id}</h3>
+                <span className="font-mono font-bold text-[#155EEF] text-xs uppercase tracking-wider">ORDER SPECIFICATION</span>
+                <h3 className="text-xl font-black text-[#172033] mt-0.5">{selectedOrder.id}</h3>
               </div>
-              <button onClick={() => setSelectedOrder(null)} className="p-1 text-slate-400 hover:text-white">
+              <button 
+                onClick={() => setSelectedOrder(null)} 
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Customer Details */}
-            <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 text-xs space-y-1">
-              <p><strong>Customer:</strong> {selectedOrder.customer_name} {selectedOrder.business_name && `(${selectedOrder.business_name})`}</p>
-              <p><strong>Email:</strong> <a href={`mailto:${selectedOrder.customer_email}`} className="text-blue-400">{selectedOrder.customer_email}</a></p>
-              <p><strong>Phone:</strong> <a href={`tel:${selectedOrder.customer_phone}`} className="text-blue-400">{selectedOrder.customer_phone}</a> (<a href={`https://wa.me/${selectedOrder.customer_phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-emerald-400">WhatsApp</a>)</p>
+            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs space-y-1.5">
+              <p><strong>Customer:</strong> <span className="font-bold text-slate-900">{selectedOrder.customer_name}</span> {selectedOrder.business_name && `(${selectedOrder.business_name})`}</p>
+              <p><strong>Email:</strong> <a href={`mailto:${selectedOrder.customer_email}`} className="text-[#155EEF] hover:underline font-semibold">{selectedOrder.customer_email}</a></p>
+              <p><strong>Phone:</strong> <a href={`tel:${selectedOrder.customer_phone}`} className="text-[#155EEF] hover:underline font-semibold">{selectedOrder.customer_phone}</a> (<a href={`https://wa.me/${selectedOrder.customer_phone.replace(/[^0-9]/g, '')}`} target="_blank" rel="noopener noreferrer" className="text-emerald-600 font-bold hover:underline">WhatsApp</a>)</p>
               {selectedOrder.billing_address && <p><strong>Address:</strong> {selectedOrder.billing_address}</p>}
             </div>
 
             {/* Ordered Services */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-2">Services Ordered</h4>
-              <div className="space-y-1.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Services Ordered</h4>
+              <div className="space-y-2">
                 {(selectedOrder.items || []).map((item, idx) => (
-                  <div key={idx} className="bg-slate-900/60 p-2.5 rounded-lg border border-slate-800 flex justify-between items-center text-xs">
+                  <div key={idx} className="bg-slate-50 p-3 rounded-xl border border-slate-200 flex justify-between items-center text-xs">
                     <div>
-                      <span className="font-semibold text-white">{item.service_title}</span>
-                      <span className="text-slate-400 block text-[11px]">Package: {item.package_name} (Qty: {item.quantity})</span>
+                      <span className="font-bold text-slate-900">{item.service_title}</span>
+                      <span className="text-slate-500 block text-[11px]">Package: {item.package_name} (Qty: {item.quantity})</span>
                     </div>
-                    <span className="font-bold text-blue-400">₹{(item.price * item.quantity).toLocaleString('en-IN')}</span>
+                    <span className="font-black text-[#155EEF]">₹{(item.price * item.quantity).toLocaleString('en-IN')}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             {/* Payment & UTR Proof Inspection */}
-            <div className="bg-slate-900 p-4 rounded-xl border border-slate-800 text-xs space-y-2">
+            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs space-y-2">
               <div className="flex justify-between items-center">
-                <span>Payment Method: <strong>{selectedOrder.payment_method}</strong></span>
-                <span className="font-bold text-blue-400 text-sm">Total: ₹{(selectedOrder.total_amount || 0).toLocaleString('en-IN')}</span>
+                <span>Payment Mode: <strong>{selectedOrder.payment_method}</strong></span>
+                <span className="font-black text-[#155EEF] text-base">Total: ₹{(selectedOrder.total_amount || 0).toLocaleString('en-IN')}</span>
               </div>
               {selectedOrder.transaction_ref && (
-                <p><strong>UTR / Transaction Ref:</strong> <code className="text-cyan-300 font-mono">{selectedOrder.transaction_ref}</code></p>
+                <p><strong>UTR / Ref Number:</strong> <code className="bg-white px-2 py-0.5 rounded border border-slate-200 text-[#155EEF] font-mono font-bold">{selectedOrder.transaction_ref}</code></p>
               )}
               {selectedOrder.payment_proof && (
                 <div className="pt-2">
-                  <a href={selectedOrder.payment_proof} target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:underline flex items-center gap-1 font-semibold">
-                    <span>🖼️ View Uploaded Payment Screenshot Proof</span>
+                  <a href={selectedOrder.payment_proof} target="_blank" rel="noopener noreferrer" className="text-[#155EEF] hover:underline flex items-center gap-1.5 font-bold">
+                    <span>🖼️ View Uploaded GPay Screenshot Proof</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </a>
                 </div>
@@ -1045,8 +1168,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
             </div>
 
             {/* Update Controls */}
-            <div className="pt-2 border-t border-slate-800 space-y-3">
-              <h4 className="text-xs font-bold uppercase text-slate-400">Administrative Actions</h4>
+            <div className="pt-3 border-t border-slate-100 space-y-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500">Administrative Actions</h4>
               
               <div className="grid grid-cols-2 gap-3">
                 {/* Verify Payment Button */}
@@ -1055,7 +1178,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     payment_status: 'Payment Verified', 
                     order_status: 'In Progress' 
                   })}
-                  className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-emerald-600/20 transition-all"
                 >
                   <CheckCircle className="w-4 h-4" />
                   <span>Verify Payment & Start</span>
@@ -1067,7 +1190,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                     payment_status: 'Failed',
                     order_status: 'Cancelled' 
                   })}
-                  className="py-2.5 px-3 rounded-xl bg-red-950 hover:bg-red-900 text-red-300 border border-red-800 font-bold text-xs flex items-center justify-center gap-1.5"
+                  className="py-2.5 px-3 rounded-xl bg-[#FFF1F0] hover:bg-red-100 text-[#E53935] border border-red-200 font-bold text-xs flex items-center justify-center gap-1.5 transition-all"
                 >
                   <XCircle className="w-4 h-4" />
                   <span>Reject Payment</span>
@@ -1075,13 +1198,13 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
               </div>
 
               {/* Status Selector */}
-              <div className="grid grid-cols-2 gap-3 pt-2 text-xs">
+              <div className="grid grid-cols-2 gap-3 pt-1 text-xs">
                 <div>
-                  <label className="text-slate-400 block mb-1">Change Order Status</label>
+                  <label className="text-slate-600 font-bold block mb-1">Change Order Status</label>
                   <select
                     value={selectedOrder.order_status}
                     onChange={(e) => handleUpdateOrderStatus(selectedOrder.id, { order_status: e.target.value as any })}
-                    className="w-full p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-200"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-semibold focus:outline-none focus:border-[#155EEF]"
                   >
                     <option value="New Enquiry">New Enquiry</option>
                     <option value="Quote Required">Quote Required</option>
@@ -1095,12 +1218,12 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
                 </div>
 
                 <div>
-                  <label className="text-slate-400 block mb-1">Adjust Quoted Price (₹)</label>
+                  <label className="text-slate-600 font-bold block mb-1">Adjust Quoted Price (₹)</label>
                   <input
                     type="number"
                     defaultValue={selectedOrder.total_amount}
                     onBlur={(e) => handleUpdateOrderStatus(selectedOrder.id, { total_amount: Number(e.target.value) })}
-                    className="w-full p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-200 font-mono"
+                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-mono font-bold focus:outline-none focus:border-[#155EEF]"
                   />
                 </div>
               </div>
@@ -1112,50 +1235,53 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
       {/* EDIT SERVICE MODAL */}
       {editingService && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
-          <div className="relative w-full max-w-md bg-[#0c1527] border border-slate-700 rounded-2xl shadow-2xl p-6 text-slate-100 space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-800">
-              <h3 className="text-base font-bold text-white">Edit Service Starting Price</h3>
-              <button onClick={() => setEditingService(null)} className="p-1 text-slate-400 hover:text-white">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 text-slate-800 space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-slate-100">
+              <h3 className="text-base font-extrabold text-[#172033]">Edit Service Starting Price</h3>
+              <button 
+                onClick={() => setEditingService(null)} 
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100"
+              >
                 <X className="w-5 h-5" />
               </button>
             </div>
 
             <div className="space-y-3 text-xs">
               <div>
-                <label className="text-slate-400 block mb-1">Service Title</label>
+                <label className="text-slate-600 font-bold block mb-1">Service Title</label>
                 <input
                   type="text"
                   value={editingService.title}
                   onChange={(e) => setEditingService({ ...editingService, title: e.target.value })}
-                  className="w-full p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-200"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#155EEF]"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Starting Price (₹)</label>
+                <label className="text-slate-600 font-bold block mb-1">Starting Price (₹)</label>
                 <input
                   type="number"
                   value={editingService.starting_price}
                   onChange={(e) => setEditingService({ ...editingService, starting_price: Number(e.target.value) })}
-                  className="w-full p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-200 font-mono text-sm"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 font-mono font-bold text-sm focus:outline-none focus:border-[#155EEF]"
                 />
               </div>
 
               <div>
-                <label className="text-slate-400 block mb-1">Estimated Turnaround</label>
+                <label className="text-slate-600 font-bold block mb-1">Estimated Turnaround</label>
                 <input
                   type="text"
                   value={editingService.turnaround}
                   onChange={(e) => setEditingService({ ...editingService, turnaround: e.target.value })}
-                  className="w-full p-2 bg-slate-900 border border-slate-800 rounded-lg text-slate-200"
+                  className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-slate-800 focus:outline-none focus:border-[#155EEF]"
                 />
               </div>
 
               <button
                 type="button"
                 onClick={() => handleSaveServicePrice(editingService.id, editingService)}
-                className="w-full py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-bold mt-2"
+                className="w-full py-3 rounded-xl bg-[#155EEF] hover:bg-blue-600 text-white font-bold mt-2 shadow-md shadow-blue-500/20 transition-all"
               >
                 Save Price Changes
               </button>

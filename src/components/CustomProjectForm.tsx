@@ -125,32 +125,32 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
   };
 
   const content = (
-    <div className="bg-[#0c1527] border border-slate-700/80 rounded-2xl p-6 sm:p-8 text-slate-100 shadow-2xl">
+    <div className="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 text-slate-900 shadow-xl">
       
       {submittedEnquiry ? (
         <div className="text-center py-6 space-y-5">
-          <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/30 rounded-full flex items-center justify-center mx-auto text-emerald-400">
+          <div className="w-16 h-16 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
             <CheckCircle2 className="w-10 h-10" />
           </div>
 
           <div>
-            <span className="px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 font-bold text-xs uppercase tracking-wider">
+            <span className="px-3 py-1 rounded-full bg-[#EFF4FF] text-[#155EEF] font-bold text-xs uppercase tracking-wider">
               Enquiry Dispatched Successfully
             </span>
-            <h4 className="text-2xl font-black text-white mt-2">
+            <h4 className="text-2xl font-black text-slate-900 mt-2">
               Thank You, {submittedEnquiry.customer_name}!
             </h4>
-            <p className="text-sm text-slate-300 mt-1">
+            <p className="text-sm text-slate-600 mt-1">
               Your Unique Enquiry Reference:{' '}
-              <span className="font-mono font-bold text-cyan-400">
+              <span className="font-mono font-bold text-[#155EEF]">
                 {submittedEnquiry.id}
               </span>
             </p>
           </div>
 
-          <div className="p-4 bg-slate-900 border border-slate-800 rounded-xl text-left text-xs space-y-1.5 text-slate-300">
+          <div className="p-4 bg-slate-50 border border-slate-200 rounded-xl text-left text-xs space-y-1.5 text-slate-700">
             <p>• An instant confirmation email has been dispatched to <strong>{submittedEnquiry.customer_email}</strong>.</p>
-            <p>• Company owner & lead engineer Sudharshan P S has been alerted.</p>
+            <p>• Company founder Sudharshan P S (+91 97914 95418) has been notified.</p>
             <p>• We will prepare a detailed proposal & timeline estimate within 24 hours.</p>
           </div>
 
@@ -160,7 +160,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
               href={`https://wa.me/919791495418?text=Hello%20SUDHARSHAN_TECH!%20I%20have%20submitted%20project%20enquiry%20${submittedEnquiry.id}.%20Can%20we%20discuss%20further?`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-emerald-600/25"
+              className="flex-1 py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20"
             >
               <MessageSquare className="w-4 h-4" />
               <span>Connect on WhatsApp</span>
@@ -168,7 +168,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
 
             <a
               href={`mailto:${settings.email}?subject=Project Enquiry ${submittedEnquiry.id}`}
-              className="flex-1 py-3 px-4 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs sm:text-sm flex items-center justify-center gap-2"
+              className="flex-1 py-3 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs sm:text-sm flex items-center justify-center gap-2"
             >
               <Mail className="w-4 h-4" />
               <span>Email SUDHARSHAN_TECH</span>
@@ -178,7 +178,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
           {onClose && (
             <button
               onClick={onClose}
-              className="text-xs text-slate-400 hover:text-white pt-2 block mx-auto underline"
+              className="text-xs text-slate-500 hover:text-slate-800 pt-2 block mx-auto underline font-medium"
             >
               Close this window
             </button>
@@ -187,13 +187,13 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
       ) : (
         <form onSubmit={handleSubmit} className="space-y-5">
           
-          <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <div>
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-400" />
+              <h3 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+                <Sparkles className="w-5 h-5 text-[#155EEF]" />
                 <span>Start Your Custom Project</span>
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5">
                 Tell us about your digital requirements and receive an engineering proposal.
               </p>
             </div>
@@ -201,7 +201,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
+                className="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -209,8 +209,8 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
           </div>
 
           {errorMessage && (
-            <div className="p-3 bg-red-950/60 border border-red-800/80 rounded-xl text-xs text-red-300 flex items-center gap-2">
-              <AlertCircle className="w-4 h-4 text-red-400 shrink-0" />
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-[#E53935] flex items-center gap-2 font-medium">
+              <AlertCircle className="w-4 h-4 text-[#E53935] shrink-0" />
               <span>{errorMessage}</span>
             </div>
           )}
@@ -218,8 +218,8 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
           {/* Customer Details */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Customer Name <span className="text-red-400">*</span>
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
+                Customer Name <span className="text-[#E53935]">*</span>
               </label>
               <input
                 type="text"
@@ -227,12 +227,12 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 placeholder="e.g. John Doe"
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-[#155EEF] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
                 Business / Company Name
               </label>
               <input
@@ -240,13 +240,13 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
                 value={businessName}
                 onChange={(e) => setBusinessName(e.target.value)}
                 placeholder="e.g. Acme Innovations"
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-[#155EEF] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Email Address <span className="text-red-400">*</span>
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
+                Email Address <span className="text-[#E53935]">*</span>
               </label>
               <input
                 type="email"
@@ -254,13 +254,13 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
                 value={customerEmail}
                 onChange={(e) => setCustomerEmail(e.target.value)}
                 placeholder="john@example.com"
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-[#155EEF] focus:bg-white"
               />
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
-                Phone Number (WhatsApp) <span className="text-red-400">*</span>
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
+                Phone Number (WhatsApp) <span className="text-[#E53935]">*</span>
               </label>
               <input
                 type="tel"
@@ -268,14 +268,14 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
                 placeholder="+91 97914 95418"
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:outline-none focus:border-[#155EEF] focus:bg-white"
               />
             </div>
           </div>
 
           {/* Services Required (Multi-Select Chips) */}
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1.5">
+            <label className="text-xs font-semibold text-slate-700 block mb-1.5">
               Services Required (Select all that apply)
             </label>
             <div className="flex flex-wrap gap-1.5">
@@ -284,10 +284,10 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
                   key={srv}
                   type="button"
                   onClick={() => handleToggleService(srv)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                     selectedServices.includes(srv)
-                      ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                      : 'bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200'
+                      ? 'bg-[#155EEF] text-white shadow-sm'
+                      : 'bg-slate-50 text-slate-600 border border-slate-200 hover:text-slate-900'
                   }`}
                 >
                   {selectedServices.includes(srv) && <span className="mr-1">✓</span>}
@@ -299,8 +299,8 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
 
           {/* Project Description */}
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
-              Project Description & Requirements <span className="text-red-400">*</span>
+            <label className="text-xs font-semibold text-slate-700 block mb-1">
+              Project Description & Requirements <span className="text-[#E53935]">*</span>
             </label>
             <textarea
               required
@@ -308,20 +308,20 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
               value={projectDescription}
               onChange={(e) => setProjectDescription(e.target.value)}
               placeholder="Outline what you want to build, user goals, feature ideas, and any reference websites..."
-              className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-blue-500 resize-none"
+              className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900 focus:outline-none focus:border-[#155EEF] focus:bg-white resize-none"
             />
           </div>
 
           {/* Budget, Timeline & Preferred Contact */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
                 Estimated Budget
               </label>
               <select
                 value={estimatedBudget}
                 onChange={(e) => setEstimatedBudget(e.target.value)}
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900"
               >
                 <option value="Under ₹5,000">Under ₹5,000</option>
                 <option value="₹5,000 – ₹15,000">₹5,000 – ₹15,000</option>
@@ -332,13 +332,13 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
                 Expected Timeline
               </label>
               <select
                 value={timeline}
                 onChange={(e) => setTimeline(e.target.value)}
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900"
               >
                 <option value="Urgent (< 1 Week)">Urgent (&lt; 1 Week)</option>
                 <option value="Standard (2-4 Weeks)">Standard (2-4 Weeks)</option>
@@ -348,13 +348,13 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
             </div>
 
             <div>
-              <label className="text-xs font-semibold text-slate-300 block mb-1">
+              <label className="text-xs font-semibold text-slate-700 block mb-1">
                 Preferred Channel
               </label>
               <select
                 value={preferredCommunication}
                 onChange={(e: any) => setPreferredCommunication(e.target.value)}
-                className="w-full p-2.5 bg-slate-900 border border-slate-700/80 rounded-xl text-xs text-slate-200"
+                className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-900"
               >
                 <option value="WhatsApp">WhatsApp</option>
                 <option value="Email">Email</option>
@@ -365,11 +365,11 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
 
           {/* Reference File Upload */}
           <div>
-            <label className="text-xs font-semibold text-slate-300 block mb-1">
+            <label className="text-xs font-semibold text-slate-700 block mb-1">
               Attach Reference Document / Wireframes (Optional)
             </label>
-            <label className="flex items-center justify-center gap-2 p-2.5 bg-slate-900 border border-dashed border-slate-700 hover:border-blue-500 rounded-xl cursor-pointer text-xs text-slate-400">
-              <Upload className="w-4 h-4 text-blue-400" />
+            <label className="flex items-center justify-center gap-2 p-2.5 bg-slate-50 border border-dashed border-slate-300 hover:border-[#155EEF] rounded-xl cursor-pointer text-xs text-slate-600">
+              <Upload className="w-4 h-4 text-[#155EEF]" />
               <span>{isUploading ? 'Uploading file...' : referenceFile ? 'File Uploaded Successfully ✓' : 'Upload PDF, DOC, or Image (Max 15MB)'}</span>
               <input
                 type="file"
@@ -384,7 +384,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-3.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-bold text-sm flex items-center justify-center gap-2 shadow-xl shadow-blue-600/30 transition-all transform active:scale-98 disabled:opacity-50"
+            className="w-full py-3.5 rounded-xl bg-[#155EEF] hover:bg-[#1049B8] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-lg shadow-[#155EEF]/20 transition-all transform active:scale-98 disabled:opacity-50"
           >
             {isSubmitting ? (
               <span>Submitting Enquiry...</span>
@@ -404,7 +404,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
 
   if (isOpen) {
     return (
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-black/80 backdrop-blur-md flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div className="relative w-full max-w-2xl my-8">
           {content}
         </div>
@@ -413,7 +413,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
   }
 
   return (
-    <section id="custom-project" className="py-20 bg-[#070c18] relative">
+    <section id="custom-project" className="py-20 bg-white relative border-b border-slate-200">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         {content}
       </div>

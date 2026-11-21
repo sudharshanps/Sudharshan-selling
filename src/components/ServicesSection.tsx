@@ -15,9 +15,10 @@ import {
   MessageSquare, 
   Sparkles,
   Search,
-  Filter,
   CheckCircle,
-  HelpCircle
+  Heart,
+  Eye,
+  ArrowRight
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
 import { useCart } from '../context/CartContext';
@@ -34,19 +35,20 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedPackages, setSelectedPackages] = useState<{ [serviceId: string]: ServicePackage }>({});
   const [addedAnimation, setAddedAnimation] = useState<{ [serviceId: string]: boolean }>({});
+  const [wishlist, setWishlist] = useState<string[]>([]);
+  const [activeDetailService, setActiveDetailService] = useState<Service | null>(null);
 
-  const iconMap: { [key: string]: React.ReactNode } = {
-    Globe: <Globe className="w-6 h-6 text-blue-400" />,
-    Smartphone: <Smartphone className="w-6 h-6 text-cyan-400" />,
-    Cpu: <Cpu className="w-6 h-6 text-purple-400" />,
-    Layers: <Layers className="w-6 h-6 text-indigo-400" />,
-    ShieldCheck: <ShieldCheck className="w-6 h-6 text-emerald-400" />,
-    Cloud: <Cloud className="w-6 h-6 text-sky-400" />,
-    Rocket: <Rocket className="w-6 h-6 text-amber-400" />,
-    Wrench: <Wrench className="w-6 h-6 text-teal-400" />,
-  };
-
-  const categories = ['All', 'Web & Digital', 'Mobile', 'Artificial Intelligence', 'Enterprise Software', 'Security', 'Infrastructure', 'Cloud Products', 'Ongoing Support'];
+  const categories = [
+    'All', 
+    'Web & Digital', 
+    'Mobile', 
+    'Artificial Intelligence', 
+    'Enterprise Software', 
+    'Security', 
+    'Infrastructure', 
+    'Cloud Products', 
+    'Ongoing Support'
+  ];
 
   const filteredServices = (services || []).filter(service => {
     const matchesCat = selectedCategory === 'All' || service.category === selectedCategory;
@@ -63,14 +65,19 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
     const chosenPkg = selectedPackages[service.id] || (service.packages && service.packages[0]);
     addToCart(service, chosenPkg);
 
-    // Trigger visual check animation
+    // Trigger visual feedback animation
     setAddedAnimation(prev => ({ ...prev, [service.id]: true }));
     setTimeout(() => {
       setAddedAnimation(prev => ({ ...prev, [service.id]: false }));
     }, 1800);
   };
 
-  // WhatsApp enquiry for specific service
+  const toggleWishlist = (serviceId: string) => {
+    setWishlist(prev => 
+      prev.includes(serviceId) ? prev.filter(id => id !== serviceId) : [...prev, serviceId]
+    );
+  };
+
   const getServiceWhatsAppUrl = (service: Service) => {
     let msg = `Hello SUDHARSHAN_TECH! I am interested in your ${service.title} service. Please share details and pricing for my project.`;
     if (service.title.includes("Web")) {
@@ -84,27 +91,27 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
   };
 
   return (
-    <section id="services" className="py-20 bg-[#080e1e] relative">
+    <section id="services" className="py-20 bg-white relative border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Section Header */}
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-xs font-semibold mb-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#EFF4FF] border border-[#155EEF]/20 text-[#155EEF] text-xs font-bold tracking-tight mb-3">
             <Sparkles className="w-3.5 h-3.5" />
             <span>OFFICIAL SERVICES MARKETPLACE</span>
           </div>
-          <h2 className="text-2xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+          <h2 className="text-2xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">
             Browse, Customise & Order Digital Solutions
           </h2>
-          <p className="text-slate-300 text-sm sm:text-base leading-relaxed">
+          <p className="text-slate-600 text-sm sm:text-base leading-relaxed">
             Select high-impact engineering services for your business. Choose a standard starting tier, add custom features, or request a full bespoke quotation.
           </p>
 
           {/* Pricing Disclaimer Note */}
-          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900/90 border border-slate-700/80 text-xs text-slate-300">
-            <Info className="w-4 h-4 text-blue-400 shrink-0" />
+          <div className="mt-4 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600">
+            <Info className="w-4 h-4 text-[#155EEF] shrink-0" />
             <span>
-              <strong>Note:</strong> Starting prices shown. Final pricing depends on project scope, custom integrations and timeline requirements.
+              <strong>Transparent Pricing:</strong> "Starting from" rates shown. Final quote is customized according to features, integrations, and delivery SLA.
             </span>
           </div>
         </div>
@@ -112,16 +119,16 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
         {/* Search & Category Filter Controls */}
         <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
           
-          {/* Category Chips */}
+          {/* Category Filter Chips */}
           <div className="flex items-center gap-1.5 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 scrollbar-none">
             {categories.map(cat => (
               <button
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all ${
                   selectedCategory === cat
-                    ? 'bg-blue-600 text-white font-semibold shadow-md shadow-blue-600/20'
-                    : 'bg-slate-900/80 text-slate-400 hover:text-slate-200 hover:bg-slate-800 border border-slate-800'
+                    ? 'bg-[#155EEF] text-white shadow-sm'
+                    : 'bg-slate-50 text-slate-600 hover:text-slate-900 hover:bg-slate-100 border border-slate-200'
                 }`}
               >
                 {cat}
@@ -137,121 +144,149 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
               placeholder="Search services..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-900 border border-slate-700/80 rounded-xl text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-[#155EEF] focus:bg-white transition-all"
             />
           </div>
         </div>
 
-        {/* Services Grid */}
+        {/* 8 Distinct Service Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredServices.map((service) => {
             const currentPkg = selectedPackages[service.id] || (service.packages && service.packages[0]);
             const isAdded = addedAnimation[service.id];
             const inCartCount = cartItems.filter(i => i.serviceId === service.id).reduce((s, i) => s + i.quantity, 0);
+            const isWishlisted = wishlist.includes(service.id);
 
             return (
               <div 
                 key={service.id}
-                className="group relative bg-[#0c1527] border border-slate-800 hover:border-blue-500/50 rounded-2xl p-5 flex flex-col justify-between transition-all duration-300 hover:shadow-xl hover:shadow-blue-900/15"
+                className="group relative bg-white border border-slate-200 hover:border-[#155EEF] rounded-2xl overflow-hidden flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-card-hover"
               >
-                {/* Card Top: Category, Badge & Icon */}
+                {/* Top Section with Distinct Service Visual */}
                 <div>
-                  <div className="flex items-start justify-between gap-2 mb-3">
-                    <div className="p-2.5 rounded-xl bg-slate-900 border border-slate-800 group-hover:border-blue-500/30 transition-colors">
-                      {iconMap[service.icon] || <Layers className="w-6 h-6 text-blue-400" />}
-                    </div>
+                  
+                  {/* Service Visual Image */}
+                  <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
+                    <img 
+                      src={service.image || "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80"} 
+                      alt={`${service.title} Service Visual`} 
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      loading="lazy"
+                    />
+
+                    {/* Category Pill */}
+                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-white/95 backdrop-blur-md border border-slate-200 text-[10px] font-bold uppercase tracking-wider text-[#155EEF] shadow-sm">
+                      {service.category}
+                    </span>
+
+                    {/* Badge */}
                     {service.badge && (
-                      <span className="px-2 py-0.5 rounded-md bg-blue-500/10 border border-blue-500/30 text-blue-400 text-[10px] font-bold uppercase tracking-wider">
+                      <span className="absolute top-3 right-3 px-2 py-0.5 rounded-md bg-[#E53935] text-white text-[10px] font-bold shadow-sm">
                         {service.badge}
                       </span>
                     )}
+
+                    {/* Wishlist Button */}
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleWishlist(service.id);
+                      }}
+                      className="absolute bottom-3 right-3 p-1.5 rounded-full bg-white/90 text-slate-400 hover:text-[#E53935] transition-colors shadow-sm"
+                      title="Save to Wishlist"
+                    >
+                      <Heart className={`w-3.5 h-3.5 ${isWishlisted ? 'fill-[#E53935] text-[#E53935]' : ''}`} />
+                    </button>
                   </div>
 
-                  {/* Title & Short Desc */}
-                  <h3 className="text-base font-bold text-white mb-1.5 group-hover:text-blue-400 transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
-                    {service.short_description}
-                  </p>
-
-                  {/* Price Banner */}
-                  <div className="bg-slate-900/90 rounded-xl p-3 border border-slate-800/80 mb-4">
-                    <div className="flex items-baseline justify-between">
-                      <span className="text-[11px] text-slate-400">Starting from</span>
-                      <div className="text-right">
-                        <span className="text-lg font-black text-white text-blue-400">
-                          ₹{(currentPkg ? currentPkg.price : service.starting_price).toLocaleString('en-IN')}
-                        </span>
-                        <span className="text-[10px] text-slate-500 block">
-                          {service.unit}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400">
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3 h-3 text-cyan-400" />
-                        <span>Est: {currentPkg ? currentPkg.duration : service.turnaround}</span>
-                      </span>
-                      <span className="text-slate-500">•</span>
-                      <span>Verified Tech</span>
-                    </div>
-                  </div>
-
-                  {/* Package Selector Pills (if multiple packages available) */}
-                  {service.packages && service.packages.length > 1 && (
-                    <div className="mb-4">
-                      <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider block mb-1.5">
-                        Choose Tier / Scope:
-                      </label>
-                      <div className="grid grid-cols-3 gap-1 bg-slate-900/80 p-1 rounded-lg border border-slate-800">
-                        {service.packages.map((pkg) => (
-                          <button
-                            key={pkg.name}
-                            type="button"
-                            onClick={() => handleSelectPackage(service.id, pkg)}
-                            className={`py-1 px-1 rounded text-[10px] font-medium truncate transition-all ${
-                              currentPkg && currentPkg.name === pkg.name
-                                ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                                : 'text-slate-400 hover:text-slate-200'
-                            }`}
-                            title={`${pkg.name}: ₹${pkg.price.toLocaleString('en-IN')}`}
-                          >
-                            {pkg.name.split(' ')[0]}
-                          </button>
-                        ))}
-                      </div>
-                      <p className="text-[10px] text-slate-400 mt-1 italic">
-                        {currentPkg?.desc}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Key Deliverables */}
-                  <div className="space-y-1.5 mb-5">
-                    <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
-                      Included Deliverables:
+                  {/* Card Content */}
+                  <div className="p-5">
+                    <h3 className="text-base font-bold text-slate-900 mb-1.5 group-hover:text-[#155EEF] transition-colors">
+                      {service.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
+                      {service.short_description}
                     </p>
-                    {service.deliverables.slice(0, 3).map((item, idx) => (
-                      <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-300">
-                        <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0 mt-0.5" />
-                        <span className="leading-tight text-[11px]">{item}</span>
+
+                    {/* Price Banner */}
+                    <div className="bg-slate-50 rounded-xl p-3 border border-slate-200 mb-4">
+                      <div className="flex items-baseline justify-between">
+                        <span className="text-[11px] text-slate-500 font-medium">Starting from</span>
+                        <div className="text-right">
+                          <span className="text-xl font-black text-[#155EEF]">
+                            ₹{(currentPkg ? currentPkg.price : service.starting_price).toLocaleString('en-IN')}
+                          </span>
+                          <span className="text-[10px] text-slate-500 block font-medium">
+                            {service.unit}
+                          </span>
+                        </div>
                       </div>
-                    ))}
+
+                      <div className="mt-2 pt-2 border-t border-slate-200/80 flex items-center justify-between text-[11px] text-slate-500">
+                        <span className="flex items-center gap-1 font-medium">
+                          <Clock className="w-3.5 h-3.5 text-[#155EEF]" />
+                          <span>Est: {currentPkg ? currentPkg.duration : service.turnaround}</span>
+                        </span>
+                        <span className="text-slate-300">•</span>
+                        <span className="text-emerald-700 font-semibold">100% Quality SLA</span>
+                      </div>
+                    </div>
+
+                    {/* Package Selector Pills */}
+                    {service.packages && service.packages.length > 1 && (
+                      <div className="mb-4">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
+                          Choose Package Tier:
+                        </label>
+                        <div className="grid grid-cols-3 gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                          {service.packages.map((pkg) => (
+                            <button
+                              key={pkg.name}
+                              type="button"
+                              onClick={() => handleSelectPackage(service.id, pkg)}
+                              className={`py-1 px-1 rounded-lg text-[10px] font-bold truncate transition-all ${
+                                currentPkg && currentPkg.name === pkg.name
+                                  ? 'bg-[#155EEF] text-white shadow-sm'
+                                  : 'text-slate-600 hover:text-slate-900'
+                              }`}
+                              title={`${pkg.name}: ₹${pkg.price.toLocaleString('en-IN')}`}
+                            >
+                              {pkg.name.split(' ')[0]}
+                            </button>
+                          ))}
+                        </div>
+                        <p className="text-[10.5px] text-slate-500 mt-1 italic">
+                          {currentPkg?.desc}
+                        </p>
+                      </div>
+                    )}
+
+                    {/* Key Deliverables Checkmarks */}
+                    <div className="space-y-1.5 mb-2">
+                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        Key Features Included:
+                      </p>
+                      {service.deliverables.slice(0, 3).map((item, idx) => (
+                        <div key={idx} className="flex items-start gap-1.5 text-xs text-slate-700">
+                          <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0 mt-0.5" />
+                          <span className="leading-tight text-[11px]">{item}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
+
                 </div>
 
-                {/* Card Actions */}
-                <div className="space-y-2 pt-2 border-t border-slate-800/80">
+                {/* Card Action Buttons (Consistent Alignment & Spacing) */}
+                <div className="p-5 pt-0 space-y-2">
                   
                   {/* Add to Cart Button */}
                   <button
                     onClick={() => handleAddToCart(service)}
-                    className={`w-full py-2.5 px-3 rounded-xl font-semibold text-xs flex items-center justify-center gap-1.5 transition-all shadow-md active:scale-98 ${
+                    className={`w-full py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 transition-all shadow-sm active:scale-98 ${
                       isAdded
                         ? 'bg-emerald-600 text-white shadow-emerald-600/30'
-                        : 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/25'
+                        : 'bg-[#155EEF] hover:bg-[#1049B8] text-white shadow-[#155EEF]/20'
                     }`}
                   >
                     {isAdded ? (
@@ -267,12 +302,11 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
                     )}
                   </button>
 
-                  {/* Custom Quote & WhatsApp Row */}
+                  {/* View Details & Custom Quote & WhatsApp Row */}
                   <div className="grid grid-cols-2 gap-2">
-                    
                     <button
                       onClick={() => onCustomQuote(service.title)}
-                      className="py-1.5 px-2 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-[11px] font-medium text-slate-300 hover:text-white transition-colors truncate"
+                      className="py-1.5 px-2 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-[11px] font-semibold text-slate-700 hover:text-slate-900 transition-colors truncate"
                       title="Request a customized quote for this service"
                     >
                       Custom Quote
@@ -282,14 +316,14 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
                       href={getServiceWhatsAppUrl(service)}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="py-1.5 px-2 rounded-lg bg-emerald-950/40 hover:bg-emerald-900/60 border border-emerald-800/40 text-[11px] font-medium text-emerald-400 hover:text-emerald-300 flex items-center justify-center gap-1 transition-colors"
+                      className="py-1.5 px-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[11px] font-bold text-emerald-700 flex items-center justify-center gap-1 transition-colors"
                       title="Enquire on WhatsApp with pre-filled message"
                     >
                       <MessageSquare className="w-3 h-3" />
                       <span>WhatsApp</span>
                     </a>
-
                   </div>
+
                 </div>
 
               </div>

@@ -667,6 +667,43 @@
   ],
   "orders": [
     {
+      "id": "ST-ORD-524908-862",
+      "customer_name": "Sudharshan",
+      "customer_email": "sudharshanthemagnet@gmail.com",
+      "customer_phone": "9791495418",
+      "business_name": "Sudharshan_tech",
+      "billing_address": "India",
+      "items": [
+        {
+          "service_id": "srv-web",
+          "service_title": "Web Development",
+          "package_name": "Starter Landing Page",
+          "price": 1199,
+          "quantity": 1,
+          "custom_notes": ""
+        },
+        {
+          "service_id": "srv-mobile",
+          "service_title": "Mobile App Development",
+          "package_name": "Prototype / MVP App",
+          "price": 4999,
+          "quantity": 2,
+          "custom_notes": ""
+        }
+      ],
+      "total_amount": 11197,
+      "payment_method": "quote_request",
+      "payment_status": "Quotation Pending",
+      "order_status": "Quote Required",
+      "custom_requirements": "",
+      "reference_files": [],
+      "transaction_ref": null,
+      "payment_proof": null,
+      "admin_notes": "",
+      "created_at": "2026-11-21T17:02:04.908Z",
+      "updated_at": "2026-11-21T17:02:04.908Z"
+    },
+    {
       "id": "ST-ORD-131545-382",
       "customer_name": "Rahul Sharma",
       "customer_email": "rahul.test@example.com",
@@ -719,6 +756,28 @@
   "quotations": [],
   "payment_submissions": [],
   "notification_logs": [
+    {
+      "id": "notif-1795280524937-q5mgd",
+      "event_type": "ORDER_PLACED_CUSTOMER",
+      "recipient": "sudharshanthemagnet@gmail.com",
+      "subject": "Your Service Order Confirmation – SUDHARSHAN_TECH | #ST-ORD-524908-862",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         Thank you for your order, Sudharshan!",
+      "status": "simulated_logged",
+      "error_message": "SMTP credentials not configured. Email logged safely to admin audit history.",
+      "related_id": "ST-ORD-524908-862",
+      "created_at": "2026-11-21T17:02:04.937Z"
+    },
+    {
+      "id": "notif-1795280524923-q6f80",
+      "event_type": "ORDER_PLACED_OWNER",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "New Service Order Received – SUDHARSHAN_TECH | Order #ST-ORD-524908-862",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         \n           🚀 A new customer order has been place",
+      "status": "simulated_logged",
+      "error_message": "SMTP credentials not configured. Email logged safely to admin audit history.",
+      "related_id": "ST-ORD-524908-862",
+      "created_at": "2026-11-21T17:02:04.923Z"
+    },
     {
       "id": "notif-1795279131587-cljpj",
       "event_type": "ORDER_STATUS_UPDATE",

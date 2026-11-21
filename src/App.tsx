@@ -3,10 +3,9 @@ import { SettingsProvider } from './context/SettingsContext';
 import { CartProvider } from './context/CartContext';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { ServicesSection } from './components/ServicesSection';
-import { CartDrawer } from './components/CartDrawer';
-import { CheckoutModal } from './components/CheckoutModal';
 import { ProjectShowcase } from './components/ProjectShowcase';
+import { ServicesSection } from './components/ServicesSection';
+import { FAQSection } from './components/FAQSection';
 import { GitHubShowcase } from './components/GitHubShowcase';
 import { FounderProfile } from './components/FounderProfile';
 import { CreativeServices } from './components/CreativeServices';
@@ -14,6 +13,8 @@ import { WhyChooseUs } from './components/WhyChooseUs';
 import { CustomProjectForm } from './components/CustomProjectForm';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
+import { CartDrawer } from './components/CartDrawer';
+import { CheckoutModal } from './components/CheckoutModal';
 import { MobileNav } from './components/MobileNav';
 import { FloatingWhatsApp } from './components/FloatingWhatsApp';
 import { AdminDashboard } from './pages/AdminDashboard';
@@ -74,9 +75,9 @@ export function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#070c18] text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-900 flex flex-col selection:bg-blue-600 selection:text-white antialiased">
       
-      {/* Top Navbar */}
+      {/* Top Sticky Navbar */}
       <Navbar 
         onOpenEnquiry={() => {
           setPresetServiceForEnquiry(undefined);
@@ -95,30 +96,33 @@ export function AppContent() {
           }}
         />
 
-        {/* 2. Official Services Marketplace */}
+        {/* 2. Flagship Projects Showcase - Featured immediately after Hero as requested */}
+        <ProjectShowcase />
+
+        {/* 3. Official 8 Services Marketplace with Swiggy-inspired card discovery */}
         <ServicesSection 
           onCustomQuote={handleCustomQuote}
         />
 
-        {/* 3. Flagship Projects Showcase */}
-        <ProjectShowcase />
+        {/* 4. Frequently Asked Questions (FAQ) Accordion */}
+        <FAQSection />
 
-        {/* 4. Live GitHub Ecosystem */}
+        {/* 5. Live GitHub Ecosystem */}
         <GitHubShowcase />
 
-        {/* 5. Founder Profile & Achievements */}
+        {/* 6. Founder Profile & Academic/Internship Achievements */}
         <FounderProfile />
 
-        {/* 6. Creative Digital Services & Posters */}
+        {/* 7. Creative Digital Services & Posters */}
         <CreativeServices />
 
-        {/* 7. Why Choose Us */}
+        {/* 8. Why Choose Us Technology Pillars */}
         <WhyChooseUs />
 
-        {/* 8. Dedicated Custom Project Request Form */}
+        {/* 9. Dedicated Custom Project Request Form */}
         <CustomProjectForm />
 
-        {/* 9. Contact Office & Interactive Map */}
+        {/* 10. Contact Office & Interactive Location */}
         <ContactSection />
       </main>
 

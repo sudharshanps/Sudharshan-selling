@@ -14,6 +14,7 @@ import {
   notifyCustomerOrderStatusUpdate,
   sendEmailNotification
 } from './email.js';
+import { notifyOwnerOrderSms, sendSmsNotification } from './sms.js';
 
 dotenv.config();
 
@@ -264,6 +265,9 @@ app.post('/api/orders', async (req, res) => {
     // Reliable email dispatches
     notifyOwnerNewOrder(newOrder).catch(e => console.error("Owner notification err:", e));
     notifyCustomerOrderConfirmation(newOrder).catch(e => console.error("Customer notification err:", e));
+
+    // Reliable independent SMS dispatch to company owner (+91 97914 95418)
+    notifyOwnerOrderSms(newOrder).catch(e => console.error("Owner SMS notification err:", e));
 
     res.status(201).json({
       success: true,
@@ -539,6 +543,12 @@ app.patch('/api/admin/enquiries/:id', requireAdmin, (req, res) => {
 app.get('/api/admin/notifications', requireAdmin, (req, res) => {
   const db = loadDatabase();
   res.json(db.notification_logs || []);
+});
+
+// Admin SMS Logs
+app.get('/api/admin/sms-logs', requireAdmin, (req, res) => {
+  const db = loadDatabase();
+  res.json(db.sms_logs || []);
 });
 
 // Admin Update Company Settings

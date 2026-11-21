@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 const DB_FILE = path.join(__dirname, '..', 'data', 'database.json');
 
 // Default initial state
-const getInitialData = () => ({
+export const getInitialData = () => ({
   company_settings: {
     name: "SUDHARSHAN_TECH",
     tagline: "Code. Create. Elevate.",
@@ -34,6 +34,7 @@ const getInitialData = () => ({
       category: "Web & Digital",
       icon: "Globe",
       badge: "Most Popular",
+      image: "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80", // Professional laptop showing modern website design
       starting_price: 1199,
       unit: "starting project",
       turnaround: "3 - 7 Days",
@@ -42,7 +43,7 @@ const getInitialData = () => ({
       deliverables: [
         "100% Mobile & Tablet Responsive",
         "SEO Optimization & Fast Core Web Vitals",
-        "Modern Glassmorphism & Clean UI Design",
+        "Modern Clean UI/UX Design Standards",
         "Lead Capture & Contact Form Integration",
         "Free SSL Setup & Custom Domain Configuration",
         "1 Month Post-Launch Maintenance Support"
@@ -61,6 +62,7 @@ const getInitialData = () => ({
       category: "Mobile",
       icon: "Smartphone",
       badge: "High Growth",
+      image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?auto=format&fit=crop&w=800&q=80", // Smartphone mockups showing Android and iOS screens
       starting_price: 4999,
       unit: "starting project",
       turnaround: "7 - 21 Days",
@@ -68,7 +70,7 @@ const getInitialData = () => ({
       full_description: "High-performance native and cross-platform applications built with React Native and Flutter. Designed with smooth micro-animations, offline storage, push notifications, and rock-solid REST API integrations.",
       deliverables: [
         "Cross-Platform Android & iOS Builds",
-        "Intuitive User Experience & Modern Material/Cupertino UI",
+        "Intuitive User Experience & Modern Cupertino/Material UI",
         "Secure Authentication & User Sessions",
         "Push Notifications & Cloud Storage Sync",
         "App Store & Play Store Deployment Assistance",
@@ -88,6 +90,7 @@ const getInitialData = () => ({
       category: "Artificial Intelligence",
       icon: "Cpu",
       badge: "Cutting-Edge",
+      image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=800&q=80", // AI assistant interface & chatbot workflow
       starting_price: 2999,
       unit: "starting project",
       turnaround: "4 - 10 Days",
@@ -115,6 +118,7 @@ const getInitialData = () => ({
       category: "Enterprise Software",
       icon: "Layers",
       badge: "Business Essential",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80", // Enterprise dashboard, CRM interface
       starting_price: 2999,
       unit: "starting project",
       turnaround: "7 - 14 Days",
@@ -142,6 +146,7 @@ const getInitialData = () => ({
       category: "Security",
       icon: "ShieldCheck",
       badge: "Founder Specialty",
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=800&q=80", // Cybersecurity shield, secure network dashboard
       starting_price: 1999,
       unit: "starting audit",
       turnaround: "2 - 5 Days",
@@ -169,6 +174,7 @@ const getInitialData = () => ({
       category: "Infrastructure",
       icon: "Cloud",
       badge: "High Performance",
+      image: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=800&q=80", // Cloud infrastructure, AWS architecture, CI/CD
       starting_price: 1999,
       unit: "starting setup",
       turnaround: "2 - 5 Days",
@@ -196,6 +202,7 @@ const getInitialData = () => ({
       category: "Cloud Products",
       icon: "Rocket",
       badge: "Full Product",
+      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80", // SaaS analytics & subscription dashboard
       starting_price: 8999,
       unit: "starting platform",
       turnaround: "14 - 30 Days",
@@ -223,6 +230,7 @@ const getInitialData = () => ({
       category: "Ongoing Support",
       icon: "Wrench",
       badge: "Peace of Mind",
+      image: "https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80", // Technical support dashboard & monitoring
       starting_price: 299,
       unit: "starting per month",
       turnaround: "Monthly Retainer",
@@ -414,7 +422,7 @@ const getInitialData = () => ({
       tech_stack: ["React", "Vite", "Tailwind CSS", "Render"],
       highlights: [
         "Live deployment on Render at sudharshan-tech.onrender.com",
-        "Clean modern aesthetic, dark navy themes, and seamless transitions"
+        "Clean modern aesthetic, royal blue highlights, and seamless transitions"
       ]
     }
   ],
@@ -501,12 +509,13 @@ const getInitialData = () => ({
   quotations: [],
   payment_submissions: [],
   notification_logs: [],
+  sms_logs: [],
   admin_users: [
     {
       id: "adm-1",
       email: "sudharshantech123@gmail.com",
       role: "Super Admin",
-      pin_hash: "admin123" // Editable via environment variable / settings
+      pin_hash: "admin123"
     }
   ]
 });
@@ -521,6 +530,22 @@ export function loadDatabase() {
     }
     const raw = fs.readFileSync(DB_FILE, 'utf8');
     const data = JSON.parse(raw);
+    
+    // Always merge in any updated service images and schema keys
+    const initial = getInitialData();
+    if (!data.sms_logs) data.sms_logs = [];
+    
+    // Ensure all 8 services have individual images
+    if (data.services && data.services.length) {
+      data.services = data.services.map(s => {
+        const matchingInit = initial.services.find(initS => initS.id === s.id);
+        if (matchingInit && (!s.image || s.image !== matchingInit.image)) {
+          return { ...s, image: matchingInit.image };
+        }
+        return s;
+      });
+    }
+
     return data;
   } catch (err) {
     console.error("Error reading database file, returning fallback:", err);
