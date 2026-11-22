@@ -675,6 +675,35 @@
   ],
   "orders": [
     {
+      "id": "ST-ORD-671064-257",
+      "customer_name": "Rahul Sharma",
+      "customer_email": "rahul.test@example.com",
+      "customer_phone": "+91 98765 43210",
+      "business_name": "Sharma Digital Retail",
+      "billing_address": "Coimbatore, Tamil Nadu",
+      "items": [
+        {
+          "service_id": "srv-web",
+          "service_title": "Web Development",
+          "package_name": "Starter Landing Page",
+          "price": 1199,
+          "quantity": 1,
+          "custom_notes": "Landing page for local retail store"
+        }
+      ],
+      "total_amount": 1199,
+      "payment_method": "upi_qr",
+      "payment_status": "Payment Verified",
+      "order_status": "In Progress",
+      "custom_requirements": "Need sleek mobile responsiveness and fast loading.",
+      "reference_files": [],
+      "transaction_ref": "UTR492810928374",
+      "payment_proof": "/uploads/sample-payment-screenshot.jpg",
+      "admin_notes": "UTR verified on bank statement. Kickoff meeting scheduled.",
+      "created_at": "2026-11-22T11:07:51.064Z",
+      "updated_at": "2026-11-22T11:07:51.149Z"
+    },
+    {
       "id": "ST-ORD-052675-430",
       "customer_name": "Sudharshan",
       "customer_email": "sudharshanthemagnet@gmail.com",
@@ -801,6 +830,24 @@
   ],
   "project_enquiries": [
     {
+      "id": "ST-ENQ-671104-350",
+      "customer_name": "Ananya Iyer",
+      "business_name": "Iyer AgriTech Solutions",
+      "customer_email": "ananya.agri@example.com",
+      "customer_phone": "+91 98450 11223",
+      "services_required": [
+        "AI & Automation",
+        "Custom Software Development"
+      ],
+      "project_description": "We require computer vision farm yield grading matching Drishti 360 concept.",
+      "estimated_budget": "₹25,000 – ₹50,000",
+      "timeline": "Standard (2-4 Weeks)",
+      "reference_file": null,
+      "preferred_communication": "WhatsApp",
+      "status": "New Enquiry",
+      "created_at": "2026-11-22T11:07:51.104Z"
+    },
+    {
       "id": "ST-ENQ-131569-648",
       "customer_name": "Ananya Iyer",
       "business_name": "Iyer AgriTech Solutions",
@@ -867,6 +914,84 @@
   ],
   "payment_submissions": [],
   "notification_logs": [
+    {
+      "id": "notif-1795345671154-4tujy",
+      "event_type": "ORDER_STATUS_UPDATE",
+      "recipient": "rahul.test@example.com",
+      "subject": "Payment Confirmed – SUDHARSHAN_TECH | Order #ST-ORD-671064-257",
+      "body_preview": "SUDHARSHAN_TECH \n         Status Notification \n       \n       \n         Order Status Update \n         Hello  Rahul Sharma ,",
+      "status": "simulated_logged",
+      "message_id": "sim-1795345671151",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-671064-257",
+      "created_at": "2026-11-22T11:07:51.154Z"
+    },
+    {
+      "id": "notif-1795345671133-c6dp1",
+      "event_type": "PAYMENT_SUBMITTED_VERIFICATION",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "Payment Verification Required: Order #ST-ORD-671064-257 – SUDHARSHAN_TECH",
+      "body_preview": "Customer Rahul Sharma uploaded payment proof for Order #ST-ORD-671064-257. UTR: UTR492810928374. Please verify in Admin Dashboard.",
+      "status": "simulated_logged",
+      "message_id": "sim-1795345671129",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-671064-257",
+      "created_at": "2026-11-22T11:07:51.133Z"
+    },
+    {
+      "id": "notif-1795345671118-fcfwr",
+      "event_type": "PROJECT_ENQUIRY_CUSTOMER",
+      "recipient": "ananya.agri@example.com",
+      "subject": "We Received Your Project Enquiry – SUDHARSHAN_TECH | #ST-ENQ-671104-350",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n       \n         We have received your custom project request!",
+      "status": "simulated_logged",
+      "message_id": "sim-1795345671115",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ENQ-671104-350",
+      "created_at": "2026-11-22T11:07:51.118Z"
+    },
+    {
+      "id": "notif-1795345671113-2zsq9",
+      "event_type": "PROJECT_ENQUIRY_OWNER",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "New Project Enquiry: ST-ENQ-671104-350 – SUDHARSHAN_TECH",
+      "body_preview": "SUDHARSHAN_TECH \n         Custom Project Enquiry \n       \n       \n         New Custom Project Request (#ST-ENQ-671104-350)",
+      "status": "simulated_logged",
+      "message_id": "sim-1795345671109",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ENQ-671104-350",
+      "created_at": "2026-11-22T11:07:51.113Z"
+    },
+    {
+      "id": "notif-1795345671094-qslxf",
+      "event_type": "ORDER_PLACED_CUSTOMER",
+      "recipient": "rahul.test@example.com",
+      "subject": "Your Service Order Confirmation – SUDHARSHAN_TECH | #ST-ORD-671064-257",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         Thank you for your order, Rahul Sharma!",
+      "status": "simulated_logged",
+      "message_id": "sim-1795345671091",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-671064-257",
+      "created_at": "2026-11-22T11:07:51.094Z"
+    },
+    {
+      "id": "notif-1795345671089-nbn08",
+      "event_type": "ORDER_PLACED_OWNER",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "New Service Order Received – SUDHARSHAN_TECH | Order #ST-ORD-671064-257",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         \n           🚀 A new customer order has been place",
+      "status": "simulated_logged",
+      "message_id": "sim-1795345671086",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-671064-257",
+      "created_at": "2026-11-22T11:07:51.089Z"
+    },
     {
       "id": "notif-1795317636866-0l43k",
       "event_type": "NEW_INQUIRY_OWNER",
@@ -1030,6 +1155,16 @@
     }
   ],
   "sms_logs": [
+    {
+      "id": "sms-1795345671099-6n1ug",
+      "recipient": "+919791495418",
+      "message": "SUDHARSHAN_TECH: New order received. Order ID: ST-ORD-671064-257. Customer: Rahul Sharma. Services: Web Development. Amount: Rs.1199. Check your admin dashboard.",
+      "status": "simulated_logged",
+      "provider": "Console Sandbox",
+      "error_message": "Twilio/MSG91 SMS credentials not yet provided in .env. Logged safely to admin audit history.",
+      "related_id": "ST-ORD-671064-257",
+      "created_at": "2026-11-22T11:07:51.099Z"
+    },
     {
       "id": "sms-1795317055389-q21ig",
       "recipient": "+919791495418",
@@ -1200,8 +1335,37 @@
       "active": true
     }
   ],
-  "inquiries": [],
+  "inquiries": [
+    {
+      "id": "ST-INQ-671139",
+      "full_name": "Ananya Iyer",
+      "email": "ananya.agri@example.com",
+      "phone": "+91 98450 11223",
+      "company_name": "Iyer AgriTech Solutions",
+      "service": "AI & Automation, Custom Software Development",
+      "project_budget": "₹25,000 – ₹50,000",
+      "message": "We require computer vision farm yield grading matching Drishti 360 concept.\n[Timeline: Standard (2-4 Weeks)]",
+      "source": "custom_project_modal",
+      "status": "New",
+      "email_notification_status": "Pending",
+      "whatsapp_notification_status": "Pending",
+      "admin_notes": null,
+      "created_at": "2026-11-22T11:07:51.139Z",
+      "updated_at": "2026-11-22T11:07:51.139Z"
+    }
+  ],
   "whatsapp_logs": [
+    {
+      "id": "wa-1795345671144-9tx8u",
+      "recipient": "919791495418",
+      "message": "🔔 *NEW WEBSITE ENQUIRY*\n*Enquiry ID:* #ST-INQ-671139\n*Name:* Ananya Iyer\n*Phone:* +91 98450 11223\n*Email:* ananya.agri@example.com\n*Company:* Iyer AgriTech Solutions\n*Service:* AI & Automation, Custom Software Development\n*Budget:* ₹25,000 – ₹50,000\n*Message:*\nWe require computer vision farm yield grading matching Drishti 360 concept.\n[Timeline: Standard (2-4 Weeks)]\n👉 _Please check the SUDHARSHAN_TECH admin dashboard for full details._",
+      "status": "simulated_logged",
+      "provider": "Meta WhatsApp Cloud API",
+      "message_id": null,
+      "error_message": "Meta WhatsApp Cloud API credentials not yet set in .env. Logged safely to admin audit history.",
+      "related_id": "ST-INQ-671139",
+      "created_at": "2026-11-22T11:07:51.144Z"
+    },
     {
       "id": "wa-1795317636870-tahr9",
       "recipient": "919791495418",

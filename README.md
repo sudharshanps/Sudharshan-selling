@@ -16,7 +16,9 @@
 - **Official Email:** [sudharshantech123@gmail.com](mailto:sudharshantech123@gmail.com)
 - **UPI ID for GPay:** `sudharshanthemagnet@okaxis`
 - **GitHub Profile:** [https://github.com/sudharshanps](https://github.com/sudharshanps)
-- **Official Portfolio:** [https://sudharshan-tech.onrender.com/](https://sudharshan-tech.onrender.com/)
+- **Source Repository:** [https://github.com/sudharshanps/Sudharshan-selling](https://github.com/sudharshanps/Sudharshan-selling)
+- **Live Web App (GitHub Pages):** [https://sudharshanps.github.io/Sudharshan-selling/](https://sudharshanps.github.io/Sudharshan-selling/)
+- **Official Cloud Deployment (Render):** [https://sudharshan-tech.onrender.com/](https://sudharshan-tech.onrender.com/)
 - **Instagram:** [https://www.instagram.com/sudharshan_tech/](https://www.instagram.com/sudharshan_tech/)
 - **Office Address:**
   ```text
@@ -187,21 +189,20 @@ To apply directly to Supabase:
 
 ## 🌐 Production Deployment Guide
 
-### Deploying Frontend to Vercel
-1. Import repository into [Vercel](https://vercel.com).
-2. Set Framework Preset to **Vite**.
-3. Set Build Command to `npm run build` and Output Directory to `dist`.
-4. Add environment variable `VITE_API_URL` pointing to your deployed Render backend.
+### 1. Continuous Deployment to GitHub Pages (Automated CI/CD)
+The repository includes a GitHub Actions workflow (`.github/workflows/deploy.yml`):
+- **Trigger**: Every push or merge to the `main` branch, plus manual `workflow_dispatch`.
+- **Pipeline**: Installs dependencies with `npm ci`, verifies TypeScript, builds with Vite configured for `/Sudharshan-selling/`, generates `404.html` for SPA routing, and deploys to GitHub Pages automatically.
+- **Enabling GitHub Pages in Repo Settings**:
+  1. Go to repository **Settings** > **Pages**.
+  2. Under **Build and deployment** > **Source**, choose **GitHub Actions**.
+  3. Subsequent pushes to `main` deploy in ~60 seconds to `https://sudharshanps.github.io/Sudharshan-selling/`.
 
-### Deploying Backend to Render
-1. Create a **Web Service** on [Render](https://render.com).
-2. Connect your repository.
-3. Set Build Command: `npm install`
-4. Set Start Command: `node server/index.js`
-5. Add environment variables:
-   - `ADMIN_SECRET`: your secret admin PIN
-   - `OWNER_EMAIL`: `sudharshantech123@gmail.com`
-   - `SMTP_USER` & `SMTP_PASS` (optional for live Gmail dispatch)
+### 2. Full-Stack Cloud Deployment to Render (Automatic via `render.yaml`)
+1. Create a **Blueprint / Web Service** on [Render](https://render.com).
+2. Connect `https://github.com/sudharshanps/Sudharshan-selling`.
+3. Render automatically reads `render.yaml` to configure the Node service, build command (`npm ci && npm run build`), and start command (`npm start`).
+4. In production, Node serves the built React frontend while powering all REST API endpoints (`/api/projects`, `/api/services`, `/api/orders`, `/api/quotations`).
 
 ---
 

@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { GithubIcon, LinkedinIcon } from './Icons';
 import { useSettings } from '../context/SettingsContext';
+import { getAssetPath } from '../utils/assetHelper';
 
 export const FounderProfile: React.FC = () => {
   const { settings } = useSettings();
@@ -71,7 +72,7 @@ export const FounderProfile: React.FC = () => {
             <div className="flex flex-col items-center text-center lg:items-start lg:text-left shrink-0">
               <div className="relative w-32 h-32 sm:w-40 sm:h-40 rounded-2xl overflow-hidden border-2 border-slate-200 p-1 bg-white shadow-sm mb-4">
                 <img 
-                  src={settings.logo_image || "/assets/logo.jpg"} 
+                  src={getAssetPath(settings.logo_image || "/assets/logo.jpg")} 
                   alt="Sudharshan P S - Founder" 
                   className="w-full h-full object-cover rounded-xl"
                 />

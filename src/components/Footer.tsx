@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { GithubIcon, InstagramIcon } from './Icons';
 import { useSettings } from '../context/SettingsContext';
+import { getAssetPath } from '../utils/assetHelper';
 
 interface FooterProps {
   onOpenAdmin: () => void;
@@ -31,7 +32,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl overflow-hidden border border-slate-200 p-0.5 bg-white shadow-sm">
                 <img 
-                  src={settings.logo_image || "/assets/logo.jpg"} 
+                  src={getAssetPath(settings.logo_image || "/assets/logo.jpg")} 
                   alt="SUDHARSHAN_TECH Logo" 
                   className="w-full h-full object-cover rounded-lg"
                 />

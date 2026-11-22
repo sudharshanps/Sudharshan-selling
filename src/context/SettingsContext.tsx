@@ -1,5 +1,13 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CompanySettings, Service, PortfolioProject, FounderAchievement, PosterItem, SpecialOffer } from '../types';
+import { 
+  initialCompanySettings, 
+  initialServices, 
+  initialProjects, 
+  initialAchievements, 
+  initialPosters, 
+  initialOffers 
+} from '../data/initialData';
 
 interface SettingsContextType {
   settings: CompanySettings;
@@ -35,13 +43,13 @@ const defaultSettings: CompanySettings = {
 const SettingsContext = createContext<SettingsContextType | undefined>(undefined);
 
 export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [settings, setSettings] = useState<CompanySettings>(defaultSettings);
-  const [services, setServices] = useState<Service[]>([]);
-  const [projects, setProjects] = useState<PortfolioProject[]>([]);
-  const [achievements, setAchievements] = useState<FounderAchievement[]>([]);
-  const [posters, setPosters] = useState<PosterItem[]>([]);
-  const [offers, setOffers] = useState<SpecialOffer[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState<CompanySettings>(initialCompanySettings || defaultSettings);
+  const [services, setServices] = useState<Service[]>(initialServices || []);
+  const [projects, setProjects] = useState<PortfolioProject[]>(initialProjects || []);
+  const [achievements, setAchievements] = useState<FounderAchievement[]>(initialAchievements || []);
+  const [posters, setPosters] = useState<PosterItem[]>(initialPosters || []);
+  const [offers, setOffers] = useState<SpecialOffer[]>(initialOffers || []);
+  const [loading, setLoading] = useState(false);
 
   const fetchData = async () => {
     try {

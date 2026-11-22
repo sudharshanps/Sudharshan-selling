@@ -8,6 +8,7 @@ import {
   ExternalLink,
   Laptop
 } from 'lucide-react';
+import { getAssetPath } from '../utils/assetHelper';
 
 interface BrandedProjectImageProps {
   src?: string;
@@ -34,7 +35,13 @@ export const BrandedProjectImage: React.FC<BrandedProjectImageProps> = ({
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(!src);
-  const [currentSrc, setCurrentSrc] = useState<string | undefined>(src);
+  const resolvedSrc = getAssetPath(src);
+  const [currentSrc, setCurrentSrc] = useState<string | undefined>(resolvedSrc);
+
+  React.useEffect(() => {
+    setCurrentSrc(getAssetPath(src));
+    setHasError(!src);
+  }, [src]);
 
   // Pick a contextual icon based on category
   const getCategoryIcon = () => {

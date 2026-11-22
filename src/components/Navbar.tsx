@@ -17,6 +17,7 @@ import { useCart } from '../context/CartContext';
 import { useSettings } from '../context/SettingsContext';
 import { ProductsMegaMenu } from './ProductsMegaMenu';
 import { ProductItem } from '../types';
+import { getAssetPath } from '../utils/assetHelper';
 
 interface NavbarProps {
   onOpenEnquiry: (preset?: string) => void;
@@ -198,7 +199,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           <a href="#" className="flex items-center gap-2.5 sm:gap-3 shrink-0 group select-none">
             <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl overflow-hidden border border-slate-200 p-0.5 bg-white shadow-sm group-hover:border-[#155EEF] group-hover:shadow-md transition-all shrink-0">
               <img 
-                src={settings.logo_image || "/assets/logo.jpg"} 
+                src={getAssetPath(settings.logo_image || "/assets/logo.jpg")} 
                 alt="SUDHARSHAN_TECH Logo" 
                 className="w-full h-full object-cover rounded-lg"
               />

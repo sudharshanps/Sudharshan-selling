@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { productsData } from '../data/products';
 import { ProductItem, ProductCategory } from '../types';
+import { getAssetPath } from '../utils/assetHelper';
 
 interface ProductsMegaMenuProps {
   isOpen: boolean;
@@ -187,7 +188,7 @@ export const ProductsMegaMenu: React.FC<ProductsMegaMenuProps> = ({
                       <div className="flex items-center gap-2 min-w-0">
                         <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
                           <img 
-                            src={product.thumbnail} 
+                            src={getAssetPath(product.thumbnail)} 
                             alt={`${product.name} icon`} 
                             className="w-4 h-4 object-contain"
                             onError={(e: any) => {
@@ -262,7 +263,7 @@ export const ProductsMegaMenu: React.FC<ProductsMegaMenuProps> = ({
               <div className="mt-1.5">
                 <div className="relative h-20 w-full bg-slate-900 rounded-lg overflow-hidden border border-slate-200/80 mb-1.5 shadow-sm">
                   <img 
-                    src={spotlightProduct.preview_image || spotlightProduct.thumbnail} 
+                    src={getAssetPath(spotlightProduct.preview_image || spotlightProduct.thumbnail)} 
                     alt={`${spotlightProduct.name} Preview`} 
                     className="w-full h-full object-cover"
                   />

@@ -14,6 +14,7 @@ import {
 import { useSettings } from '../context/SettingsContext';
 import { useCart } from '../context/CartContext';
 import { SpecialOffer } from '../types';
+import { getAssetPath } from '../utils/assetHelper';
 
 interface OffersSectionProps {
   onCustomQuote: (serviceTitle: string) => void;
@@ -88,12 +89,12 @@ export const OffersSection: React.FC<OffersSectionProps> = ({ onCustomQuote }) =
                 {/* Banner Visual Top */}
                 <div className="h-44 bg-slate-50 relative overflow-hidden border-b border-slate-100 flex items-center justify-center">
                   <img 
-                    src={offer.banner_image} 
+                    src={getAssetPath(offer.banner_image)} 
                     alt={offer.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
                     onError={(e: any) => {
-                      e.target.src = "/assets/offers/website-launch-offer.svg";
+                      e.target.src = getAssetPath("/assets/offers/website-launch-offer.svg");
                     }}
                   />
                   <div className="absolute top-3 left-3">

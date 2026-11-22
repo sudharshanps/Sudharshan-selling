@@ -23,6 +23,7 @@ import {
 import { useSettings } from '../context/SettingsContext';
 import { useCart } from '../context/CartContext';
 import { Service, ServicePackage } from '../types';
+import { getAssetPath } from '../utils/assetHelper';
 
 interface ServicesSectionProps {
   onCustomQuote: (serviceTitle: string) => void;
@@ -168,7 +169,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
                   {/* Service Visual Image */}
                   <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
                     <img 
-                      src={service.image || "/assets/services/web-development.svg"} 
+                      src={getAssetPath(service.image || "/assets/services/web-development.svg")} 
                       alt={`${service.title} Service Visual`} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"

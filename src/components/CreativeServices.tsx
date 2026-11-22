@@ -11,6 +11,7 @@ import {
   CheckCircle2 
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
+import { getAssetPath } from '../utils/assetHelper';
 
 export const CreativeServices: React.FC = () => {
   const { posters, settings } = useSettings();
@@ -145,11 +146,11 @@ export const CreativeServices: React.FC = () => {
             >
               <div className="relative h-56 w-full bg-slate-100 overflow-hidden">
                 <img 
-                  src={item.image} 
+                  src={getAssetPath(item.image)} 
                   alt={item.title} 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e: any) => {
-                    e.target.src = "/assets/creatives/startup-launch.svg";
+                    e.target.src = getAssetPath("/assets/creatives/startup-launch.svg");
                   }}
                 />
                 <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-white/95 text-purple-700 text-[10px] font-bold uppercase tracking-wider border border-purple-200 shadow-sm">
