@@ -433,7 +433,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({
                       {/* Exact Uploaded GPay QR Image with Crisp White Quiet Zone */}
                       <div className="w-48 h-48 sm:w-44 sm:h-44 bg-white p-2.5 rounded-2xl shadow-md border border-slate-200 flex items-center justify-center shrink-0">
                         <img 
-                          src="/assets/gpay-qr.jpg" 
+                          src={settings.qr_image || "/assets/gpay-qr.jpg"} 
                           alt="Official SUDHARSHAN P S GPay QR Code" 
                           className="w-full h-full object-contain"
                         />
