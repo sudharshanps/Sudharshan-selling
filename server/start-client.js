@@ -1,6 +1,20 @@
-import { createServer } from 'vite';
+// Set CI to true BEFORE importing Vite to prevent Vite from binding stdin "end" to SIGTERM
+process.env.CI = 'true';
+
+const { createServer } = await import('vite');
 
 async function start() {
+  // Keep event loop permanently active
+  setInterval(() => {}, 60000);
+
+  // Prevent stdin disconnect from triggering exit
+  if (process.stdin && process.stdin.removeAllListeners) {
+    process.stdin.removeAllListeners('end');
+    try {
+      process.stdin.resume();
+    } catch (e) {}
+  }
+
   const server = await createServer({
     configFile: './vite.config.ts',
     server: {
@@ -10,8 +24,14 @@ async function start() {
   });
 
   await server.listen();
+
+  // Ensure no stdin end listeners persist
+  if (process.stdin && process.stdin.removeAllListeners) {
+    process.stdin.removeAllListeners('end');
+  }
+
   server.printUrls();
-  console.log('🚀 Vite dev server running programmatically on port 5173');
+  console.log('🚀 SUDHARSHAN_TECH Vite dev server running stably on port 5173');
 }
 
 start().catch((err) => {
