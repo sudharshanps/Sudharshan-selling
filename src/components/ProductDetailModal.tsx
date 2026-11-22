@@ -16,6 +16,7 @@ import {
 import { GithubIcon } from './Icons';
 import { ProductItem } from '../types';
 import { useSettings } from '../context/SettingsContext';
+import { BrandedProjectImage } from './BrandedProjectImage';
 
 interface ProductDetailModalProps {
   product: ProductItem | null;
@@ -122,10 +123,14 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
           
           {/* High-Fidelity UI Interface Preview Banner */}
           <div className="relative h-52 sm:h-72 w-full bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 shadow-md">
-            <img 
+            <BrandedProjectImage 
               src={product.preview_image || product.thumbnail} 
               alt={`${product.name} Architecture Preview`} 
-              className="w-full h-full object-cover"
+              title={product.name}
+              category={product.category}
+              tagline={product.tagline}
+              objectFit="cover"
+              priority={true}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
             <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-white">

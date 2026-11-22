@@ -50,7 +50,7 @@
     <text x="36" y="23" font-family="sans-serif" font-size="11" font-weight="800" fill="#172033">24/7 Production System Health</text>
     <text x="300" y="23" font-family="sans-serif" font-size="9" font-weight="800" fill="#10B981" text-anchor="end">ONLINE</text>
 
-    <!-- Gauges & Dials -->
+    <!-- Gauges &amp; Dials -->
     <g transform="translate(30, 60)">
       <circle cx="45" cy="45" r="35" fill="none" stroke="#E2E8F0" stroke-width="6" />
       <circle cx="45" cy="45" r="35" fill="none" stroke="#155EEF" stroke-width="6" stroke-dasharray="160 220" />
@@ -69,7 +69,7 @@
     <text x="160" y="191" font-family="sans-serif" font-size="10" font-weight="700" fill="#166534" text-anchor="middle">Daily Automated Backups Configured</text>
   </g>
 
-  <!-- Left: Wrench & Tools Card -->
+  <!-- Left: Wrench &amp; Tools Card -->
   <g transform="translate(90, 140)" filter="url(#shadow)">
     <rect width="130" height="130" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
     <circle cx="65" cy="50" r="24" fill="#EFF4FF" />
@@ -79,7 +79,7 @@
     <text x="65" y="106" font-family="sans-serif" font-size="10" font-weight="800" fill="#155EEF" text-anchor="middle">Patch Updates</text>
   </g>
 
-  <!-- Right: Security & Monitoring -->
+  <!-- Right: Security &amp; Monitoring -->
   <g transform="translate(580, 140)" filter="url(#shadow)">
     <rect width="130" height="130" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
     <circle cx="65" cy="50" r="24" fill="#FFF1F0" />
@@ -95,7 +95,7 @@
     <rect width="720" height="38" rx="10" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)" />
     <rect x="12" y="10" width="8" height="18" rx="4" fill="#10B981" />
     <text x="30" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="800" fill="#172033">SUDHARSHAN_TECH</text>
-    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• IT Maintenance & Support (Software Patches, Backups, Monitoring & Performance Optimisation)</text>
+    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• IT Maintenance &amp; Support (Software Patches, Backups, Monitoring &amp; Performance Optimisation)</text>
     <text x="690" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#10B981" text-anchor="end">PRO VERIFIED</text>
   </g>
 </svg>

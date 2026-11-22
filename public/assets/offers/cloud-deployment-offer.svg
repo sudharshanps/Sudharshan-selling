@@ -32,7 +32,7 @@
 
   <!-- Offer Title -->
   <text x="40" y="105" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="24" font-weight="900" fill="#172033">Cloud Deployment Offer</text>
-  <text x="40" y="130" font-family="sans-serif" font-size="12" font-weight="600" fill="#64748B">Docker setup & cloud deployment configuration</text>
+  <text x="40" y="130" font-family="sans-serif" font-size="12" font-weight="600" fill="#64748B">Docker setup &amp; cloud deployment configuration</text>
 
   <!-- Pricing Highlight Card -->
   <g transform="translate(40, 160)" filter="url(#cardShadow)">

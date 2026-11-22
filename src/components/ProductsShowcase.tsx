@@ -17,6 +17,7 @@ import {
 import { GithubIcon } from './Icons';
 import { productsData } from '../data/products';
 import { ProductItem, ProductCategory } from '../types';
+import { BrandedProjectImage } from './BrandedProjectImage';
 
 interface ProductsShowcaseProps {
   onSelectProduct: (product: ProductItem) => void;
@@ -137,11 +138,13 @@ export const ProductsShowcase: React.FC<ProductsShowcaseProps> = ({
                   onClick={() => onSelectProduct(product)}
                   className="relative h-44 sm:h-48 w-full bg-slate-900 rounded-xl overflow-hidden mb-4 border border-slate-200 cursor-pointer group-hover:border-[#155EEF]/50 shadow-sm"
                 >
-                  <img 
+                  <BrandedProjectImage 
                     src={product.preview_image || product.thumbnail} 
                     alt={`${product.name} Architecture Preview`} 
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                    loading="lazy"
+                    title={product.name}
+                    category={product.category}
+                    tagline={product.tagline}
+                    objectFit="cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
                   <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md bg-white/95 backdrop-blur-sm border border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-[#155EEF] shadow-sm">

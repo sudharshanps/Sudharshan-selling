@@ -1,27 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
   <defs>
-    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+    <linearGradient id="bgG_EC4899" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" stop-color="#0B132B" />
       <stop offset="100%" stop-color="#1C2541" />
-    </linearGradient>
-    <linearGradient id="panelG" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
-      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.03" />
-    </linearGradient>
-    <linearGradient id="accentG" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#EC4899" />
-      <stop offset="100%" stop-color="#00D2FF" />
     </linearGradient>
     <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
     </filter>
   </defs>
 
-  <!-- Dark Tech Canvas -->
-  <rect width="800" height="450" fill="url(#bgG)" />
+  <!-- Background Canvas -->
+  <rect width="800" height="450" fill="url(#bgG_EC4899)" />
 
   <!-- Ambient Grid -->
-  <g opacity="0.12">
+  <g opacity="0.10">
     <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
       <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
     </pattern>
@@ -32,7 +24,7 @@
   <circle cx="680" cy="90" r="140" fill="#EC4899" opacity="0.18" />
   <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
 
-  <!-- Software Window Container -->
+  <!-- Software Window Container (16:9 inner frame) -->
   <g transform="translate(40, 30)" filter="url(#cardShadow)">
     <!-- Window Outer Shell -->
     <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
@@ -48,46 +40,73 @@
     <circle cx="60" cy="21" r="5" fill="#10B981" />
 
     <!-- Window Title -->
-    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">Sizora • D2C Apparel Size Recommendation & Fit Analytics</text>
-    <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
-    <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">ECOMMERCE SAAS</text>
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">Sizora • Fashion E-Commerce AI Size Recommendation &amp; Measurement Engine</text>
+    <rect x="560" y="11" width="144" height="22" rx="6" fill="#EC4899" fill-opacity="0.25" stroke="#EC4899" stroke-width="1" />
+    <text x="632" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">AI E-COMMERCE</text>
 
     <!-- App Body Content -->
     
+  <!-- Left Side: Apparel E-Commerce Product Card Simulation -->
   <g transform="translate(24, 55)">
-    <!-- Customer Fit Modal Simulation -->
-    <rect width="360" height="295" rx="10" fill="#1E293B" stroke="#334155" />
-    <text x="16" y="24" font-family="sans-serif" font-size="11" font-weight="800" fill="#F8FAFC">CUSTOMER FIT FINDER (3 STEPS)</text>
+    <rect width="330" height="295" rx="10" fill="#1E293B" stroke="#334155" />
     
-    <rect x="14" y="38" width="332" height="130" rx="8" fill="#0F172A" stroke="#334155" />
-    <text x="24" y="62" font-family="sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">Recommended Size: <tspan fill="#10B981" font-weight="900">LARGE (L)</tspan></text>
-    <text x="24" y="82" font-family="sans-serif" font-size="9.5" fill="#94A3B8">Confidence Score: 94.8% (Chest: 40in, Fit: Slim)</text>
+    <!-- Garment Visual Box -->
+    <rect x="14" y="14" width="302" height="135" rx="8" fill="#0F172A" stroke="#334155" />
     
-    <!-- Visual Fit Slider -->
-    <text x="24" y="110" font-family="sans-serif" font-size="9" fill="#94A3B8">Tight Fit</text>
-    <text x="160" y="110" font-family="sans-serif" font-size="9" font-weight="700" fill="#10B981">Optimal Fit</text>
-    <text x="300" y="110" font-family="sans-serif" font-size="9" fill="#94A3B8">Loose</text>
-    <rect x="24" y="118" width="310" height="6" rx="3" fill="#334155" />
-    <circle cx="180" cy="121" r="7" fill="#10B981" stroke="#FFFFFF" stroke-width="2" />
+    <!-- Shirt Outline Vector Graphic -->
+    <path d="M 130 35 L 145 48 L 165 48 L 180 35 L 215 50 L 195 85 L 180 75 L 180 135 L 130 135 L 130 75 L 115 85 L 95 50 Z" 
+          fill="#EC4899" fill-opacity="0.2" stroke="#EC4899" stroke-width="1.8" />
+    <path d="M 155 48 L 155 135" stroke="#EC4899" stroke-width="1" stroke-dasharray="3,3" opacity="0.6" />
+    
+    <!-- Garment Details -->
+    <text x="24" y="166" font-family="sans-serif" font-size="12" font-weight="800" fill="#FFFFFF">Tailored Oxford Cotton Shirt</text>
+    <text x="24" y="182" font-family="sans-serif" font-size="10" font-weight="600" fill="#EC4899">₹1,899 • Regular / Slim Fit</text>
 
-    <rect x="14" y="180" width="332" height="95" rx="8" fill="#0F172A" stroke="#10B981" />
-    <text x="24" y="204" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#10B981">CART RETURN RISK: VERY LOW</text>
-    <text x="24" y="224" font-family="sans-serif" font-size="9.5" fill="#E2E8F0">Saves ₹450 in roundtrip courier return costs</text>
-    <text x="24" y="244" font-family="sans-serif" font-size="9" fill="#60A5FA">Shopify &amp; React E-Commerce Plugin Embedded</text>
+    <!-- SIZORA EMBEDDED RECOMMENDER BADGE -->
+    <rect x="14" y="194" width="302" height="85" rx="8" fill="#0F172A" stroke="#10B981" stroke-width="1.2" />
+    <circle cx="28" cy="214" r="6" fill="#10B981" />
+    <text x="40" y="218" font-family="sans-serif" font-size="10" font-weight="800" fill="#10B981">SIZORA AI RECOMMENDED FIT: SIZE M</text>
+    <text x="24" y="238" font-family="sans-serif" font-size="9" fill="#E2E8F0">Confidence Score: 98.2% (Chest: 39.5in, Shoulder: 17.5in)</text>
+    <text x="24" y="254" font-family="sans-serif" font-size="8.5" fill="#94A3B8">Cross-Brand Delta: Fits like H&amp;M (M) and Zara (L)</text>
+    <text x="24" y="268" font-family="sans-serif" font-size="8.5" font-weight="700" fill="#60A5FA">Estimated Return Risk: Very Low (&lt;2%)</text>
   </g>
 
-  <!-- Store Return Analytics -->
-  <g transform="translate(400, 55)">
-    <rect width="296" height="295" rx="10" fill="#1E293B" stroke="#334155" />
-    <text x="16" y="24" font-family="sans-serif" font-size="11" font-weight="800" fill="#F8FAFC">MERCHANT METRICS DASHBOARD</text>
+  <!-- Right Side: Body Measurement Intelligence &amp; Cross-Brand Fit Analytics -->
+  <g transform="translate(370, 55)">
+    <rect width="326" height="295" rx="10" fill="#1E293B" stroke="#334155" />
+    <text x="16" y="26" font-family="sans-serif" font-size="11" font-weight="800" fill="#F8FAFC">BODY DIMENSION &amp; BRAND COMPARISON</text>
+    
+    <!-- User Measurement Inputs -->
+    <rect x="14" y="38" width="298" height="66" rx="8" fill="#0F172A" />
+    <text x="24" y="58" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">ACTIVE MEASUREMENT PROFILE</text>
+    <text x="24" y="78" font-family="sans-serif" font-size="10" font-weight="700" fill="#E2E8F0">Chest: 39.5" | Waist: 32" | Shoulders: 17.5"</text>
+    <text x="24" y="92" font-family="sans-serif" font-size="8.5" fill="#10B981">Unit System: Inches (Imperial) ✓ Verified</text>
 
-    <rect x="14" y="38" width="268" height="74" rx="8" fill="#0F172A" stroke="#334155" />
-    <text x="24" y="60" font-family="sans-serif" font-size="9.5" fill="#94A3B8">RETURN RATE REDUCTION</text>
-    <text x="24" y="86" font-family="sans-serif" font-size="20" font-weight="900" fill="#10B981">-35.4%</text>
+    <!-- Cross-Brand Size Chart Matrix -->
+    <rect x="14" y="114" width="298" height="98" rx="8" fill="#0F172A" />
+    <text x="24" y="132" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">CROSS-BRAND PREDICTED SIZES</text>
+    
+    <g transform="translate(24, 142)">
+      <rect width="84" height="26" rx="4" fill="#1E293B" stroke="#334155" />
+      <text x="42" y="152" font-family="sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">ZARA</text>
+      <text x="42" y="164" font-family="sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">Size L</text>
 
-    <rect x="14" y="122" width="268" height="74" rx="8" fill="#0F172A" stroke="#334155" />
-    <text x="24" y="144" font-family="sans-serif" font-size="9.5" fill="#94A3B8">CHECKOUT CONVERSION</text>
-    <text x="24" y="170" font-family="sans-serif" font-size="20" font-weight="900" fill="#60A5FA">+18.2%</text>
+      <rect x="94" width="84" height="26" rx="4" fill="#1E293B" stroke="#10B981" />
+      <text x="136" y="152" font-family="sans-serif" font-size="8" fill="#10B981" text-anchor="middle">H&amp;M</text>
+      <text x="136" y="164" font-family="sans-serif" font-size="9" font-weight="800" fill="#10B981" text-anchor="middle">Size M (Best)</text>
+
+      <rect x="188" width="84" height="26" rx="4" fill="#1E293B" stroke="#334155" />
+      <text x="230" y="152" font-family="sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">UNIQLO</text>
+      <text x="230" y="164" font-family="sans-serif" font-size="9" font-weight="800" fill="#FFFFFF" text-anchor="middle">Size M</text>
+    </g>
+    <text x="24" y="196" font-family="sans-serif" font-size="8.5" fill="#60A5FA">Garment Ease Formula: +1.5" chest breathing room</text>
+
+    <!-- Merchant Benefits -->
+    <rect x="14" y="222" width="298" height="60" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="24" y="242" font-family="sans-serif" font-size="10" font-weight="800" fill="#EC4899">ECOMMERCE CONVERSION METRICS</text>
+    <text x="24" y="258" font-family="sans-serif" font-size="9" fill="#10B981">↓ 35% Courier Returns Saved</text>
+    <text x="160" y="258" font-family="sans-serif" font-size="9" fill="#60A5FA">↑ 18.2% Cart Checkout Lift</text>
+    <text x="24" y="272" font-family="sans-serif" font-size="8" fill="#94A3B8">Supports Shopify, WooCommerce &amp; Custom React D2C</text>
   </g>
   
   </g>

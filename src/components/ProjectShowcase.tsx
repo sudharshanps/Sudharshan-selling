@@ -14,6 +14,7 @@ import {
 import { GithubIcon } from './Icons';
 import { useSettings } from '../context/SettingsContext';
 import { PortfolioProject } from '../types';
+import { BrandedProjectImage } from './BrandedProjectImage';
 
 export const ProjectShowcase: React.FC = () => {
   const { projects } = useSettings();
@@ -130,14 +131,14 @@ export const ProjectShowcase: React.FC = () => {
               className="w-[320px] sm:w-[380px] shrink-0 snap-start bg-white border border-slate-200 hover:border-[#155EEF] rounded-2xl overflow-hidden flex flex-col justify-between cursor-pointer group transition-all duration-300 shadow-sm hover:shadow-card-hover"
             >
               {/* Project Image Container */}
-              <div className="relative h-48 w-full bg-slate-100 overflow-hidden">
-                <img 
+              <div className="relative h-48 w-full bg-slate-900 overflow-hidden">
+                <BrandedProjectImage 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  onError={(e: any) => {
-                    e.target.src = "/assets/products/drishti-360.svg";
-                  }}
+                  title={project.title}
+                  category={project.category}
+                  tagline={project.tagline}
+                  objectFit="cover"
                 />
                 
                 <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-white/95 backdrop-blur-md border border-slate-200 text-[10.5px] font-bold uppercase tracking-wider text-[#155EEF] shadow-sm">
@@ -232,14 +233,15 @@ export const ProjectShowcase: React.FC = () => {
           <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl text-slate-900 overflow-hidden my-8">
             
             {/* Modal Image Header */}
-            <div className="relative h-64 w-full bg-slate-100">
-              <img 
+            <div className="relative h-64 w-full bg-slate-900 overflow-hidden">
+              <BrandedProjectImage 
                 src={activeProject.image} 
                 alt={activeProject.title} 
-                className="w-full h-full object-cover"
-                onError={(e: any) => {
-                  e.target.src = "/assets/products/taskguard.svg";
-                }}
+                title={activeProject.title}
+                category={activeProject.category}
+                tagline={activeProject.tagline}
+                objectFit="cover"
+                priority={true}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
               

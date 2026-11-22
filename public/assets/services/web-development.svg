@@ -97,7 +97,7 @@
     <rect width="720" height="38" rx="10" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)" />
     <rect x="12" y="10" width="8" height="18" rx="4" fill="#155EEF" />
     <text x="30" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="800" fill="#172033">SUDHARSHAN_TECH</text>
-    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• Web Development (Responsive UI/UX & Web Applications)</text>
+    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• Web Development (Responsive UI/UX &amp; Web Applications)</text>
     <text x="690" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#155EEF" text-anchor="end">PRO VERIFIED</text>
   </g>
 </svg>

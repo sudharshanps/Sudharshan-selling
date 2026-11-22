@@ -30,7 +30,7 @@
 
     <!-- Title and Subtitle -->
     <text x="24" y="270" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="19" font-weight="900" fill="#FFFFFF">Cybersecurity Shield Campaign</text>
-    <text x="24" y="295" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#94A3B8">Infographics covering zero-trust security & defense protocols</text>
+    <text x="24" y="295" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#94A3B8">Infographics covering zero-trust security &amp; defense protocols</text>
     <text x="496" y="320" font-family="monospace" font-size="9" font-weight="700" fill="#EF4444" text-anchor="end">SUDHARSHAN_TECH CREATIVE LAB</text>
   </g>
 </svg>

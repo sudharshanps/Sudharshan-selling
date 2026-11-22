@@ -48,7 +48,7 @@
     <circle cx="60" cy="21" r="5" fill="#10B981" />
 
     <!-- Window Title -->
-    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">CurriculumSuite • Syllabus Progress & Faculty Allocation System</text>
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">CurriculumSuite • Syllabus Progress &amp; Faculty Allocation System</text>
     <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
     <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">ENTERPRISE JAVA</text>
 
