@@ -129,37 +129,41 @@ export const ProductsShowcase: React.FC<ProductsShowcaseProps> = ({
           {filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="group bg-white rounded-2xl border border-slate-200 hover:border-[#155EEF] p-6 flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 relative"
+              className="group bg-white rounded-2xl border border-slate-200 hover:border-[#155EEF] p-5 sm:p-6 flex flex-col justify-between transition-all duration-300 shadow-sm hover:shadow-xl hover:shadow-blue-500/10 hover:-translate-y-1 relative"
             >
-              {/* Top Accent & Status Badges */}
+              {/* Product Preview Image & Status Badges */}
               <div>
-                <div className="flex items-center justify-between gap-2 mb-4">
-                  <div className="flex items-center gap-2">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
-                      <img 
-                        src={product.thumbnail} 
-                        alt="" 
-                        className="w-5 h-5 object-contain"
-                        onError={(e: any) => {
-                          e.target.style.display = 'none';
-                        }}
-                      />
-                    </div>
-                    <div>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">
-                        {product.category}
-                      </span>
-                      {product.badge && (
-                        <span className="text-[10px] font-bold text-[#155EEF]">
-                          {product.badge}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  <span className={`text-[9.5px] font-black uppercase px-2 py-0.5 rounded-full border whitespace-nowrap ${getStatusBadge(product.status)}`}>
+                <div 
+                  onClick={() => onSelectProduct(product)}
+                  className="relative h-44 sm:h-48 w-full bg-slate-900 rounded-xl overflow-hidden mb-4 border border-slate-200 cursor-pointer group-hover:border-[#155EEF]/50 shadow-sm"
+                >
+                  <img 
+                    src={product.preview_image || product.thumbnail} 
+                    alt={`${product.name} Architecture Preview`} 
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/40 via-transparent to-transparent pointer-events-none" />
+                  <span className="absolute top-2.5 left-2.5 px-2.5 py-1 rounded-md bg-white/95 backdrop-blur-sm border border-slate-200 text-[10px] font-extrabold uppercase tracking-wider text-[#155EEF] shadow-sm">
+                    {product.category}
+                  </span>
+                  <span className={`absolute top-2.5 right-2.5 text-[9px] font-black uppercase px-2 py-0.5 rounded-full border shadow-sm ${getStatusBadge(product.status)}`}>
                     {product.status}
                   </span>
+                </div>
+
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#155EEF]" />
+                    <span className="text-[10.5px] font-bold text-slate-500 uppercase tracking-wider">
+                      {product.category}
+                    </span>
+                  </div>
+                  {product.badge && (
+                    <span className="text-[10px] font-bold text-[#155EEF] bg-blue-50 px-2 py-0.5 rounded-md border border-blue-100">
+                      {product.badge}
+                    </span>
+                  )}
                 </div>
 
                 {/* Title and Tagline */}
@@ -171,7 +175,7 @@ export const ProductsShowcase: React.FC<ProductsShowcaseProps> = ({
                 </p>
 
                 {/* Short Description */}
-                <p className="text-xs sm:text-sm text-slate-600 mt-3 leading-relaxed">
+                <p className="text-xs sm:text-sm text-slate-600 mt-2.5 leading-relaxed">
                   {product.short_description}
                 </p>
 

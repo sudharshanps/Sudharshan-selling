@@ -39,6 +39,22 @@ export const GitHubShowcase: React.FC = () => {
     fetchRepos();
   }, []);
 
+  const getRepoDescription = (repo: GitHubRepo) => {
+    if (repo.description && repo.description.trim()) return repo.description;
+    const name = repo.name.toLowerCase();
+    if (name.includes('book-portfolio') || name.includes('book')) return 'Interactive digital portfolio and book reader web application with responsive reader controls.';
+    if (name.includes('securepay') || name.includes('banking')) return 'Mock online banking and payment gateway interface demonstrating secure financial transactions.';
+    if (name.includes('doctor') || name.includes('appointment')) return 'Healthcare consultation scheduling and doctor appointment booking platform with patient dashboard.';
+    if (name.includes('delivery') || name.includes('e-commerce') || name.includes('ecommerce')) return 'Logistics dispatch dashboard with real-time order tracking and route status visualization.';
+    if (name.includes('drishti')) return 'AI-powered visual crop quality inspection and automated grading system using computer vision.';
+    if (name.includes('portfolio')) return 'Production digital portfolio and company portal showcasing digital services and technical capabilities.';
+    if (name.includes('nidhi')) return 'AI-enabled grant recommendation and discovery platform pairing innovators with funding opportunities.';
+    if (name.includes('teacher')) return 'AI-assisted interactive learning platform with automated subject tutoring and student feedback.';
+    if (name.includes('docker')) return 'Containerized full-stack deployment pipeline with Docker Compose and production orchestration.';
+    if (name.includes('devops')) return 'Continuous integration and infrastructure automation scripts for cloud deployments.';
+    return 'Public engineering repository authored by Sudharshan P S for full-stack algorithms and architecture.';
+  };
+
   return (
     <section id="github" className="py-20 bg-white relative border-b border-slate-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -102,7 +118,7 @@ export const GitHubShowcase: React.FC = () => {
                 </div>
 
                 <p className="text-xs text-slate-600 line-clamp-2 leading-relaxed mb-4">
-                  {repo.description || "Public repository for engineering architecture, algorithms, and application source code."}
+                  {getRepoDescription(repo)}
                 </p>
               </div>
 

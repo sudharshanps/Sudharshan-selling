@@ -39,6 +39,7 @@ export const MobileNav: React.FC = () => {
         {/* Cart with Swiggy Badge */}
         <button 
           onClick={openCart}
+          aria-label={`Open Shopping Cart, ${totalItems} items`}
           className="relative flex flex-col items-center justify-center py-1 text-slate-500 hover:text-[#155EEF] active:text-[#155EEF] transition-colors"
         >
           <div className="relative">

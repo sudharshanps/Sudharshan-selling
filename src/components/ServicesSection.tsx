@@ -168,7 +168,7 @@ export const ServicesSection: React.FC<ServicesSectionProps> = ({ onCustomQuote 
                   {/* Service Visual Image */}
                   <div className="relative h-44 w-full bg-slate-100 overflow-hidden">
                     <img 
-                      src={service.image || "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80"} 
+                      src={service.image || "/assets/services/web-development.svg"} 
                       alt={`${service.title} Service Visual`} 
                       className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       loading="lazy"

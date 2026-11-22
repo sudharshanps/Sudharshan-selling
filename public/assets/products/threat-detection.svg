@@ -1,0 +1,94 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <linearGradient id="panelG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.03" />
+    </linearGradient>
+    <linearGradient id="accentG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#EF4444" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Dark Tech Canvas -->
+  <rect width="800" height="450" fill="url(#bgG)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.12">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#EF4444" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">ThreatHunter AI • Real-Time Phishing & Heuristic Network Monitor</text>
+    <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
+    <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">CYBER DEFENCE</text>
+
+    <!-- App Body Content -->
+    
+  <g transform="translate(24, 55)">
+    <!-- Metric 1 -->
+    <rect width="214" height="66" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="14" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">PAYLOADS INSPECTED</text>
+    <text x="14" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#F8FAFC">284,910</text>
+
+    <!-- Metric 2 -->
+    <rect x="228" width="214" height="66" rx="8" fill="#1E293B" stroke="#EF4444" />
+    <text x="242" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#EF4444">THREATS INTERCEPTED</text>
+    <text x="242" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#EF4444">1,418 BLOCKED</text>
+
+    <!-- Metric 3 -->
+    <rect x="456" width="216" height="66" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="470" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">HEURISTIC ACCURACY</text>
+    <text x="470" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#10B981">99.78%</text>
+  </g>
+
+  <!-- Threat Stream Console -->
+  <g transform="translate(24, 135)">
+    <rect width="672" height="220" rx="10" fill="#0A0F1D" stroke="#334155" />
+    
+    <!-- Terminal Header -->
+    <rect width="672" height="28" rx="10" fill="#1E293B" />
+    <text x="14" y="18" font-family="monospace" font-size="10.5" fill="#94A3B8">console://threat-hunter.engine/live-stream</text>
+
+    <!-- Log items -->
+    <text x="14" y="54" font-family="monospace" font-size="10" fill="#EF4444">[ALERT] High-Entropy Suspicious Domain: hxxp://secure-login-account-update[.]xyz</text>
+    <text x="14" y="74" font-family="monospace" font-size="9.5" fill="#94A3B8">  ↳ Heuristic Model: Random Forest Classification | Risk Score: 98.6% | Action: DROP &amp; BLACKLIST</text>
+
+    <text x="14" y="104" font-family="monospace" font-size="10" fill="#10B981">[CLEAN] Valid REST API Webhook Call: POST /api/v2/orders/verify (IP: 52.88.14.22)</text>
+    <text x="14" y="124" font-family="monospace" font-size="9.5" fill="#94A3B8">  ↳ TLS 1.3 | SHA256 Signature Valid | OWASP Payload Clean</text>
+
+    <text x="14" y="154" font-family="monospace" font-size="10" fill="#F59E0B">[WARN] Port Scan Pattern Detected from 185.220.101.44 (42 probes / sec)</text>
+    <text x="14" y="174" font-family="monospace" font-size="9.5" fill="#94A3B8">  ↳ CloudFlare Gateway Rate-Limiting engaged | Firewall state active</text>
+  </g>
+  
+  </g>
+</svg>

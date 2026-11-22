@@ -10,7 +10,8 @@ export const productsData: ProductItem[] = [
     category: "AI Solutions",
     badge: "Flagship Innovation",
     status: "Live Prototype",
-    thumbnail: "/assets/services/ai-automation.svg",
+    thumbnail: "/assets/products/drishti-360.svg",
+    preview_image: "/assets/products/drishti-360.svg",
     short_description: "Computer vision platform for automated crop quality grading, export packaging compliance, and fair price determination.",
     full_description: "Drishti 360 is an intelligent agricultural intelligence platform engineered to eliminate subjective manual crop inspection. Using deep learning and OpenCV edge inference, it computes instant defect and maturity grades, evaluates export compliance benchmarks, and issues cryptographic Digital Quality Passports for tamper-evident supply chain traceability.",
     features: [
@@ -46,7 +47,8 @@ export const productsData: ProductItem[] = [
     category: "SaaS Platforms",
     badge: "Enterprise SaaS",
     status: "Production Ready",
-    thumbnail: "/assets/services/saas-development.svg",
+    thumbnail: "/assets/products/taskguard.svg",
+    preview_image: "/assets/products/taskguard.svg",
     short_description: "Modular project management platform with real-time sprint tracking, burndown metrics, and role-based access control.",
     full_description: "TaskGuard is a multi-tenant agile sprint execution platform built for high-throughput software and engineering teams. It features interactive drag-and-drop Kanban boards, team dependency mapping, automated velocity forecasting, and granular role-based permissions.",
     features: [
@@ -81,7 +83,8 @@ export const productsData: ProductItem[] = [
     category: "Business Management",
     badge: "Institutional GovTech",
     status: "Live Prototype",
-    thumbnail: "/assets/services/custom-software.svg",
+    thumbnail: "/assets/products/aicte-dashboard.svg",
+    preview_image: "/assets/products/aicte-dashboard.svg",
     short_description: "Centralized case tracking system with 360° institution profiles and automated regulatory overlap detection.",
     full_description: "Built to streamline higher education grievance monitoring across hundreds of institutions. The platform incorporates smart overlap detection between Regulatory Boards (RB) and Public Grievance Redressal Committees (PGRC), tracking cases from submission to verified resolution with tamper-resistant audit logs.",
     features: [
@@ -116,7 +119,8 @@ export const productsData: ProductItem[] = [
     category: "AI Solutions",
     badge: "Top 50 National Finalist",
     status: "Top 50 Finalist",
-    thumbnail: "/assets/services/ai-automation.svg",
+    thumbnail: "/assets/products/hackademia.svg",
+    preview_image: "/assets/products/hackademia.svg",
     short_description: "Real-time AI proctoring system with face tracking, gaze estimation, and automated candidate violation logging.",
     full_description: "Selected as a Top 50 Finalist among 500+ national competing engineering teams at the Hackademia National AI Hackathon. Hackademia leverages low-latency OpenCV and MediaPipe pipelines to monitor exam environments, detect unauthorized persons or devices, track eye gaze anomalies, and compile automated compliance reports.",
     features: [
@@ -151,7 +155,8 @@ export const productsData: ProductItem[] = [
     category: "Cybersecurity Tools",
     badge: "Security Specialty",
     status: "Enterprise MVP",
-    thumbnail: "/assets/services/cybersecurity.svg",
+    thumbnail: "/assets/products/threat-detection.svg",
+    preview_image: "/assets/products/threat-detection.svg",
     short_description: "Real-time network security engine for phishing URL classification and anomalous traffic threat scoring.",
     full_description: "Engineered under the leadership of founder Sudharshan P S (Cybersecurity Specialist at SKCET). The system inspects incoming web traffic, dissects lexical and structural indicators of phishing URLs, and flags suspicious payload anomalies before endpoints are compromised.",
     features: [
@@ -186,7 +191,8 @@ export const productsData: ProductItem[] = [
     category: "Automation Products",
     badge: "Innovation Grant AI",
     status: "Live Prototype",
-    thumbnail: "/assets/services/cloud-devops.svg",
+    thumbnail: "/assets/products/nidhi-setu.svg",
+    preview_image: "/assets/products/nidhi-setu.svg",
     short_description: "Intelligent matching engine pairing academic researchers and innovators with public & private grants using Gemini embeddings.",
     full_description: "Nidhi Setu automates the complex task of funding discovery for early-stage engineering innovators. It ingests research abstracts and project specifications, comparing them against hundreds of government grants (NIDHI, DST, AICTE, MSME) to suggest highest-probability funding tracks.",
     features: [
@@ -221,7 +227,8 @@ export const productsData: ProductItem[] = [
     category: "SaaS Platforms",
     badge: "E-Commerce Tech",
     status: "Production Ready",
-    thumbnail: "/assets/services/web-development.svg",
+    thumbnail: "/assets/products/sizora.svg",
+    preview_image: "/assets/products/sizora.svg",
     short_description: "AI-assisted sizing engine for apparel e-commerce that drastically minimizes return rates and boosts conversion.",
     full_description: "Sizora bridges the gap between varying brand measurement standards and customer body profiles. It embeds directly onto checkout pages to give shoppers definitive sizing confidence, cutting costly wardrobe returns for online apparel brands.",
     features: [
@@ -256,7 +263,8 @@ export const productsData: ProductItem[] = [
     category: "Business Management",
     badge: "Enterprise Java",
     status: "Enterprise MVP",
-    thumbnail: "/assets/services/custom-software.svg",
+    thumbnail: "/assets/products/syllabus-system.svg",
+    preview_image: "/assets/products/syllabus-system.svg",
     short_description: "Enterprise Java MVC system for managing department course prerequisites, faculty workload, and syllabus tracking.",
     full_description: "A production-grade academic management system designed to eliminate scheduling collisions and track syllabus completion benchmarks across multi-discipline institutions.",
     features: [
@@ -291,7 +299,8 @@ export const productsData: ProductItem[] = [
     category: "Coming Soon",
     badge: "Roadmap 2027",
     status: "In Development",
-    thumbnail: "/assets/services/cloud-devops.svg",
+    thumbnail: "/assets/products/cloudguard.svg",
+    preview_image: "/assets/products/cloudguard.svg",
     short_description: "Micro-perimeter access gateway verifying every connection dynamically before granting infrastructure access.",
     full_description: "Currently in active research and prototyping by the SUDHARSHAN_TECH security lab. CloudGuard enforces contextual zero-trust network access (ZTNA) without requiring cumbersome VPN clients.",
     features: [

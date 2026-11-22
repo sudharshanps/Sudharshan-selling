@@ -136,7 +136,7 @@ export const ProjectShowcase: React.FC = () => {
                   alt={project.title} 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e: any) => {
-                    e.target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
+                    e.target.src = "/assets/products/drishti-360.svg";
                   }}
                 />
                 
@@ -228,7 +228,7 @@ export const ProjectShowcase: React.FC = () => {
 
       {/* Detailed Project Modal with Deep Technical Case Study */}
       {activeProject && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] overflow-y-auto bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="relative w-full max-w-2xl bg-white border border-slate-200 rounded-2xl shadow-2xl text-slate-900 overflow-hidden my-8">
             
             {/* Modal Image Header */}
@@ -238,7 +238,7 @@ export const ProjectShowcase: React.FC = () => {
                 alt={activeProject.title} 
                 className="w-full h-full object-cover"
                 onError={(e: any) => {
-                  e.target.src = "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80";
+                  e.target.src = "/assets/products/taskguard.svg";
                 }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>

@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <linearGradient id="panelG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.03" />
+    </linearGradient>
+    <linearGradient id="accentG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#155EEF" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Dark Tech Canvas -->
+  <rect width="800" height="450" fill="url(#bgG)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.12">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#155EEF" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">TaskGuard • Agile Sprint Execution & Engineering Velocity Platform</text>
+    <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
+    <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">ENTERPRISE READY</text>
+
+    <!-- App Body Content -->
+    
+  <!-- Top Sprint Bar -->
+  <g transform="translate(24, 55)">
+    <rect width="672" height="42" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="16" y="25" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#F8FAFC">Sprint 24: Core Architecture (Days 8/14)</text>
+    <rect x="360" y="13" width="160" height="16" rx="8" fill="#0F172A" />
+    <rect x="360" y="13" width="115" height="16" rx="8" fill="#155EEF" />
+    <text x="530" y="25" font-family="sans-serif" font-size="10" font-weight="700" fill="#60A5FA">72% Completed</text>
+    <text x="615" y="25" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#10B981">On Track ✓</text>
+  </g>
+
+  <!-- Kanban 3 Columns -->
+  <!-- Column 1: Backlog -->
+  <g transform="translate(24, 110)">
+    <rect width="214" height="250" rx="10" fill="#1E293B" stroke="#334155" />
+    <rect x="14" y="14" width="8" height="8" rx="2" fill="#94A3B8" />
+    <text x="30" y="22" font-family="sans-serif" font-size="11" font-weight="800" fill="#E2E8F0">TO DO (4)</text>
+
+    <!-- Card 1 -->
+    <rect x="12" y="38" width="190" height="62" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="22" y="58" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#F8FAFC">FastAPI OAuth2 Proxy</text>
+    <rect x="22" y="70" width="45" height="16" rx="4" fill="#3B82F6" fill-opacity="0.2" />
+    <text x="44" y="82" font-family="sans-serif" font-size="9" font-weight="700" fill="#60A5FA" text-anchor="middle">API</text>
+    <text x="180" y="83" font-family="sans-serif" font-size="10" font-weight="800" fill="#EF4444">P1</text>
+
+    <!-- Card 2 -->
+    <rect x="12" y="110" width="190" height="62" rx="8" fill="#0F172A" stroke="#334155" />
+    <text x="22" y="130" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#F8FAFC">Docker Compose Staging</text>
+    <rect x="22" y="142" width="58" height="16" rx="4" fill="#10B981" fill-opacity="0.2" />
+    <text x="51" y="154" font-family="sans-serif" font-size="9" font-weight="700" fill="#34D399" text-anchor="middle">DevOps</text>
+  </g>
+
+  <!-- Column 2: In Progress -->
+  <g transform="translate(253, 110)">
+    <rect width="214" height="250" rx="10" fill="#1E293B" stroke="#155EEF" />
+    <rect x="14" y="14" width="8" height="8" rx="2" fill="#3B82F6" />
+    <text x="30" y="22" font-family="sans-serif" font-size="11" font-weight="800" fill="#60A5FA">IN PROGRESS (3)</text>
+
+    <!-- Active Card -->
+    <rect x="12" y="38" width="190" height="80" rx="8" fill="#0F172A" stroke="#155EEF" stroke-width="1.5" />
+    <text x="22" y="58" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF">Real-Time Burndown Velocity</text>
+    <text x="22" y="73" font-family="sans-serif" font-size="9.5" fill="#94A3B8">Auto-calculate sprint scope</text>
+    <rect x="22" y="86" width="60" height="16" rx="4" fill="#6366F1" fill-opacity="0.25" />
+    <text x="52" y="98" font-family="sans-serif" font-size="9" font-weight="700" fill="#818CF8" text-anchor="middle">Analytics</text>
+    <circle cx="180" cy="94" r="9" fill="#155EEF" />
+    <text x="180" y="97" font-family="sans-serif" font-size="8" font-weight="900" fill="#FFFFFF" text-anchor="middle">ST</text>
+  </g>
+
+  <!-- Column 3: Completed / Done -->
+  <g transform="translate(482, 110)">
+    <rect width="214" height="250" rx="10" fill="#1E293B" stroke="#334155" />
+    <rect x="14" y="14" width="8" height="8" rx="2" fill="#10B981" />
+    <text x="30" y="22" font-family="sans-serif" font-size="11" font-weight="800" fill="#34D399">RESOLVED (18)</text>
+
+    <!-- Card 1 -->
+    <rect x="12" y="38" width="190" height="62" rx="8" fill="#0F172A" stroke="#10B981" stroke-opacity="0.4" />
+    <text x="22" y="58" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#94A3B8" text-decoration="line-through">RBAC Permission Matrix</text>
+    <text x="175" y="82" font-family="sans-serif" font-size="11" fill="#10B981">✓</text>
+  </g>
+  
+  </g>
+</svg>

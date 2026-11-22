@@ -112,6 +112,7 @@ export interface ProductItem {
   badge: string;
   status: 'Live Production' | 'Live Prototype' | 'Enterprise MVP' | 'Top 50 Finalist' | 'In Development';
   thumbnail: string;
+  preview_image?: string;
   short_description: string;
   full_description: string;
   features: string[];

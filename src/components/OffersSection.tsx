@@ -92,6 +92,9 @@ export const OffersSection: React.FC<OffersSectionProps> = ({ onCustomQuote }) =
                     alt={offer.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
+                    onError={(e: any) => {
+                      e.target.src = "/assets/offers/website-launch-offer.svg";
+                    }}
                   />
                   <div className="absolute top-3 left-3">
                     <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-white/95 text-[#155EEF] shadow-sm border border-slate-200">

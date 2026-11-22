@@ -563,6 +563,41 @@ export const Navbar: React.FC<NavbarProps> = ({
                 >
                   • AICTE Grievance Dashboard
                 </a>
+                <a
+                  href="#products-showcase"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-[#155EEF]"
+                >
+                  • ThreatHunter (Cybersecurity AI)
+                </a>
+                <a
+                  href="#products-showcase"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-[#155EEF]"
+                >
+                  • Nidhi Setu (Grant Intelligence)
+                </a>
+                <a
+                  href="#products-showcase"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-[#155EEF]"
+                >
+                  • Sizora (E-Commerce Fit Engine)
+                </a>
+                <a
+                  href="#products-showcase"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-[#155EEF]"
+                >
+                  • Curriculum Suite (Syllabus System)
+                </a>
+                <a
+                  href="#products-showcase"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-[#155EEF]"
+                >
+                  • CloudGuard (Zero-Trust Gateway)
+                </a>
               </div>
             )}
           </div>

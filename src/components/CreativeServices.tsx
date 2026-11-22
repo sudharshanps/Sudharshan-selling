@@ -149,7 +149,7 @@ export const CreativeServices: React.FC = () => {
                   alt={item.title} 
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   onError={(e: any) => {
-                    e.target.src = "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80";
+                    e.target.src = "/assets/creatives/startup-launch.svg";
                   }}
                 />
                 <span className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-white/95 text-purple-700 text-[10px] font-bold uppercase tracking-wider border border-purple-200 shadow-sm">
@@ -189,7 +189,7 @@ export const CreativeServices: React.FC = () => {
 
       {/* Order Custom Design Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[60] overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
           <div className="relative w-full max-w-lg bg-white border border-slate-200 rounded-2xl shadow-2xl text-slate-900 overflow-hidden my-8">
             
             <div className="px-5 py-4 border-b border-slate-200 bg-slate-50 flex items-center justify-between">

@@ -120,6 +120,25 @@ export const ProductDetailModal: React.FC<ProductDetailModalProps> = ({
             ======================================================== */}
         <div className="p-6 sm:p-8 space-y-6 overflow-y-auto flex-1">
           
+          {/* High-Fidelity UI Interface Preview Banner */}
+          <div className="relative h-52 sm:h-72 w-full bg-slate-900 rounded-2xl overflow-hidden border border-slate-200 shadow-md">
+            <img 
+              src={product.preview_image || product.thumbnail} 
+              alt={`${product.name} Architecture Preview`} 
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/60 via-transparent to-transparent pointer-events-none" />
+            <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-xs text-white">
+              <span className="font-mono bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 text-[10.5px]">
+                {product.name} • Architecture Preview
+              </span>
+              <span className="font-bold text-emerald-400 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-md border border-white/10 text-[10px] flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Verified Interface
+              </span>
+            </div>
+          </div>
+
           {/* Executive Overview */}
           <div>
             <h4 className="text-xs font-black uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1.5">

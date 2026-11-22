@@ -258,7 +258,7 @@ export const getInitialData = () => ({
       title: "Drishti 360",
       tagline: "AI-Powered Visual Crop & Farm Quality Intelligence",
       category: "AI & AgriTech",
-      image: "https://images.unsplash.com/photo-1574943320219-553eb213f72d?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/drishti-360.svg",
       github: "https://github.com/sudharshanps/Drishti-360",
       demo_url: "",
       featured: true,
@@ -276,7 +276,7 @@ export const getInitialData = () => ({
       title: "Nidhi Setu",
       tagline: "AI-Enabled Hackathon & Grant Intelligence Prototype",
       category: "AI & Full-Stack",
-      image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/nidhi-setu.svg",
       github: "https://github.com/sudharshanps/NidhiVizh",
       demo_url: "",
       featured: true,
@@ -294,7 +294,7 @@ export const getInitialData = () => ({
       title: "AICTE Integrated Institution Complaint Dashboard",
       tagline: "Centralised Case Tracking & Academic Grievance Monitoring",
       category: "Enterprise Software",
-      image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/aicte-dashboard.svg",
       github: "https://github.com/sudharshanps/Frontend",
       demo_url: "",
       featured: true,
@@ -312,7 +312,7 @@ export const getInitialData = () => ({
       title: "TaskGuard",
       tagline: "Enterprise Task & Sprint Management Platform",
       category: "Enterprise Software",
-      image: "https://images.unsplash.com/photo-1507925921958-8a62f3d1a50d?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/taskguard.svg",
       github: "https://github.com/sudharshanps",
       demo_url: "",
       featured: true,
@@ -329,7 +329,7 @@ export const getInitialData = () => ({
       title: "School Subject & Syllabus Management System",
       tagline: "Academic Curriculum & Faculty Allocation Architecture",
       category: "Education & Java",
-      image: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/syllabus-system.svg",
       github: "https://github.com/sudharshanps/School-Subject-Syllabus-Management-System",
       demo_url: "",
       featured: false,
@@ -346,7 +346,7 @@ export const getInitialData = () => ({
       title: "Sizora",
       tagline: "Smart Apparel Size Recommendation Platform",
       category: "E-Commerce & AI",
-      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/sizora.svg",
       github: "https://github.com/sudharshanps",
       demo_url: "",
       featured: false,
@@ -363,7 +363,7 @@ export const getInitialData = () => ({
       title: "Technico Website",
       tagline: "Corporate Portal for Laboratory Products Manufacturer",
       category: "Web Development",
-      image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/services/web-development.svg",
       github: "https://github.com/sudharshanps/technico-laboratory-products",
       demo_url: "",
       featured: true,
@@ -380,7 +380,7 @@ export const getInitialData = () => ({
       title: "Hackademia — AI Online Exam Invigilation",
       tagline: "Computer Vision Proctoring System | Top 50 National Finalist",
       category: "AI & Computer Vision",
-      image: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/hackademia.svg",
       github: "https://github.com/sudharshanps/hackademia-ai-invigilation",
       demo_url: "",
       featured: true,
@@ -397,7 +397,7 @@ export const getInitialData = () => ({
       title: "AI-Powered Cybersecurity Threat Detection Platform",
       tagline: "Phishing & Anomaly Detection Pipeline",
       category: "Cybersecurity & AI",
-      image: "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/products/threat-detection.svg",
       github: "https://github.com/sudharshanps",
       demo_url: "",
       featured: false,
@@ -414,7 +414,7 @@ export const getInitialData = () => ({
       title: "Official SUDHARSHAN_TECH Digital Showcase",
       tagline: "Live Company Portal & Digital Solutions Hub",
       category: "Web Development",
-      image: "/assets/logo.jpg",
+      image: "/assets/services/web-development.svg",
       github: "https://github.com/sudharshanps/Sudharshan_tech-Portfolio",
       demo_url: "https://sudharshan-tech.onrender.com/",
       featured: true,
@@ -431,42 +431,42 @@ export const getInitialData = () => ({
       id: "post-1",
       title: "Modern Tech Startup Launch Poster",
       category: "Business Posters",
-      image: "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/creatives/startup-launch.svg",
       description: "High-impact visual branding for product launches and investor pitch presentations."
     },
     {
       id: "post-2",
       title: "Cybersecurity Awareness & Shield Campaign",
       category: "Social Media Creatives",
-      image: "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/creatives/cybersecurity-shield.svg",
       description: "Engaging educational infographics covering zero-trust architecture and threat prevention."
     },
     {
       id: "post-3",
       title: "Minimalist Brand Identity & Logo Suite",
       category: "Branding",
-      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/creatives/brand-identity.svg",
       description: "Clean vector geometry, typography guidelines, and digital brand styleguides."
     },
     {
       id: "post-4",
       title: "SaaS Application Landing Page Mockup",
       category: "Website Designs",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/creatives/saas-landing.svg",
       description: "Conversion-optimized hero headers, feature matrices, and interactive pricing tables."
     },
     {
       id: "post-5",
       title: "FinTech Mobile App UI/UX Concept",
       category: "UI/UX Designs",
-      image: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/creatives/fintech-app.svg",
       description: "Figma wireframes with user journey mapping and responsive design systems."
     },
     {
       id: "post-6",
       title: "AI Product Feature Banner & Ads",
       category: "Advertisements",
-      image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+      image: "/assets/creatives/ai-banner.svg",
       description: "Targeted digital marketing creatives engineered for high click-through rates."
     }
   ],
@@ -742,6 +742,31 @@ export function loadDatabase() {
         return s;
       });
     }
+
+    // Ensure all portfolio projects have updated local SVG previews
+    if (data.portfolio_projects && data.portfolio_projects.length) {
+      data.portfolio_projects = data.portfolio_projects.map(p => {
+        const matchingInit = initial.portfolio_projects.find(initP => initP.id === p.id);
+        if (matchingInit && matchingInit.image) {
+          return { ...p, image: matchingInit.image };
+        }
+        return p;
+      });
+    }
+
+    // Ensure all posters have updated local SVG creatives
+    if (data.poster_gallery && data.poster_gallery.length) {
+      data.poster_gallery = data.poster_gallery.map(post => {
+        const matchingInit = initial.poster_gallery.find(initPost => initPost.id === post.id);
+        if (matchingInit && matchingInit.image) {
+          return { ...post, image: matchingInit.image };
+        }
+        return post;
+      });
+    }
+
+    // Persist updated images to database.json
+    saveDatabase(data);
 
     return data;
   } catch (err) {

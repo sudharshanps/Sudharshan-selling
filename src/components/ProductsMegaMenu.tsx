@@ -188,7 +188,7 @@ export const ProductsMegaMenu: React.FC<ProductsMegaMenuProps> = ({
                         <div className="w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 flex items-center justify-center shrink-0">
                           <img 
                             src={product.thumbnail} 
-                            alt="" 
+                            alt={`${product.name} icon`} 
                             className="w-4 h-4 object-contain"
                             onError={(e: any) => {
                               e.target.style.display = 'none';
@@ -259,14 +259,21 @@ export const ProductsMegaMenu: React.FC<ProductsMegaMenuProps> = ({
                 </span>
               </div>
 
-              <div className="mt-2">
+              <div className="mt-1.5">
+                <div className="relative h-20 w-full bg-slate-900 rounded-lg overflow-hidden border border-slate-200/80 mb-1.5 shadow-sm">
+                  <img 
+                    src={spotlightProduct.preview_image || spotlightProduct.thumbnail} 
+                    alt={`${spotlightProduct.name} Preview`} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
                 <h3 className="text-sm font-black text-slate-900 tracking-tight leading-snug">
                   {spotlightProduct.name}
                 </h3>
-                <p className="text-[11px] font-semibold text-[#155EEF] mt-0.5 line-clamp-1">
+                <p className="text-[10.5px] font-semibold text-[#155EEF] mt-0.5 line-clamp-1">
                   {spotlightProduct.tagline}
                 </p>
-                <p className="text-[11px] text-slate-600 line-clamp-2 mt-1.5 leading-relaxed">
+                <p className="text-[10.5px] text-slate-600 line-clamp-2 mt-1 leading-relaxed">
                   {spotlightProduct.full_description}
                 </p>
               </div>

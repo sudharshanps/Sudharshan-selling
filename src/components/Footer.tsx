@@ -88,10 +88,12 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin }) => {
             </h4>
             <ul className="space-y-2">
               <li><a href="#" className="hover:text-[#155EEF] transition-colors">Home</a></li>
-              <li><a href="#projects" className="hover:text-[#155EEF] transition-colors">Our Work & Projects</a></li>
+              <li><a href="#products-showcase" className="hover:text-[#155EEF] transition-colors">Software &amp; AI Products</a></li>
+              <li><a href="#projects" className="hover:text-[#155EEF] transition-colors">Our Work &amp; Projects</a></li>
               <li><a href="#services" className="hover:text-[#155EEF] transition-colors">Services Marketplace</a></li>
+              <li><a href="#offers" className="hover:text-[#155EEF] transition-colors">Exclusive Offers &amp; Bundles</a></li>
               <li><a href="#github" className="hover:text-[#155EEF] transition-colors">GitHub Repositories</a></li>
-              <li><a href="#founder" className="hover:text-[#155EEF] transition-colors">Founder & Profile</a></li>
+              <li><a href="#founder" className="hover:text-[#155EEF] transition-colors">Founder &amp; Profile</a></li>
               <li><a href="#creatives" className="hover:text-[#155EEF] transition-colors">Creative Designs</a></li>
               <li><a href="#contact" className="hover:text-[#155EEF] transition-colors">Contact Office</a></li>
             </ul>
