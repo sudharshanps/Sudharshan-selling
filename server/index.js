@@ -970,8 +970,13 @@ app.delete('/api/admin/projects/:id', requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
+// 404 for unmatched API routes
+app.all('/api/*', (req, res) => {
+  res.status(404).json({ error: 'API endpoint not found' });
+});
+
 // Serve frontend build in production
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production' || fs.existsSync(path.join(__dirname, '..', 'dist'))) {
   app.use(express.static(path.join(__dirname, '..', 'dist')));
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
@@ -979,7 +984,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Start Server and initialize MySQL
-app.listen(PORT, async () => {
+app.listen(PORT, '0.0.0.0', async () => {
   console.log(`\n======================================================`);
   console.log(`🚀 SUDHARSHAN_TECH API Server listening on port ${PORT}`);
   console.log(`📡 Company: SUDHARSHAN_TECH | Tagline: Code. Create. Elevate.`);
