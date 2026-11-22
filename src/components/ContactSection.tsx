@@ -27,24 +27,37 @@ export const ContactSection: React.FC = () => {
   });
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [submittedInquiryId, setSubmittedInquiryId] = useState<string | number | null>(null);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitting(true);
+    setSubmitError(null);
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch('/api/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          full_name: formData.name,
+          email: formData.email,
+          phone: formData.phone || '+91 97914 95418',
+          service: formData.subject || 'General Inquiry',
+          message: formData.message,
+          source: 'contact_section_form'
+        })
       });
-      if (res.ok) {
-        setSubmitted(true);
-        setFormData({ name: '', email: '', phone: '', subject: 'New Project Collaboration', message: '' });
-      }
-    } catch (err) {
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Failed to submit inquiry');
+      
+      setSubmitted(true);
+      setSubmittedInquiryId(data.inquiryId || data.inquiry?.id);
+      setFormData({ name: '', email: '', phone: '', subject: 'New Project Collaboration', message: '' });
+    } catch (err: any) {
       console.error(err);
+      setSubmitError(err.message || 'Error transmitting your message. Please try again.');
     } finally {
       setSubmitting(false);
     }
@@ -237,19 +250,31 @@ export const ContactSection: React.FC = () => {
                 <div className="w-14 h-14 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
-                <h4 className="text-xl font-bold text-slate-900">Message Delivered!</h4>
+                <h4 className="text-xl font-bold text-slate-900">Inquiry Delivered!</h4>
+                {submittedInquiryId && (
+                  <p className="text-xs font-mono font-bold text-[#155EEF] bg-blue-50 py-1 px-3 rounded-full inline-block">
+                    Reference ID: #{submittedInquiryId}
+                  </p>
+                )}
                 <p className="text-xs text-slate-600 max-w-sm mx-auto">
-                  Thank you for reaching out. We have received your inquiry and will reply to your email shortly.
+                  Thank you for reaching out. Your inquiry has been securely stored. Founder Sudharshan P S will review your requirements and reply shortly.
                 </p>
-                <button
-                  onClick={() => setSubmitted(false)}
-                  className="px-4 py-2 rounded-xl bg-slate-200 text-slate-800 text-xs font-bold hover:bg-slate-300"
-                >
-                  Send Another Message
-                </button>
+                <div>
+                  <button
+                    onClick={() => setSubmitted(false)}
+                    className="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition-all shadow-sm"
+                  >
+                    Send Another Message
+                  </button>
+                </div>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {submitError && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-700 font-semibold">
+                    {submitError}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="text-xs font-semibold text-slate-700 block mb-1">

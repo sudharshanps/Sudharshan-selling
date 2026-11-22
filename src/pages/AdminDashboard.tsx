@@ -33,7 +33,7 @@ import {
   Tag
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
-import { Order, ProjectEnquiry, NotificationLog, SmsLog, Quotation, SpecialOffer } from '../types';
+import { Order, ProjectEnquiry, NotificationLog, SmsLog, Quotation, SpecialOffer, Inquiry } from '../types';
 
 interface AdminDashboardProps {
   onBackToSite: () => void;
@@ -50,16 +50,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
   // Active Admin Tab
   const [activeTab, setActiveTab] = useState<'overview' | 'orders' | 'enquiries' | 'quotations' | 'offers' | 'services' | 'projects' | 'notifications' | 'settings'>('overview');
-  const [notifSubTab, setNotifSubTab] = useState<'email' | 'sms'>('email');
+  const [notifSubTab, setNotifSubTab] = useState<'email' | 'sms' | 'whatsapp'>('email');
 
   // Data States
   const [metrics, setMetrics] = useState<any>(null);
   const [orders, setOrders] = useState<Order[]>([]);
-  const [enquiries, setEnquiries] = useState<ProjectEnquiry[]>([]);
+  const [enquiries, setEnquiries] = useState<Inquiry[]>([]);
+  const [inquiryMetrics, setInquiryMetrics] = useState<any>(null);
   const [quotations, setQuotations] = useState<Quotation[]>([]);
   const [notifications, setNotifications] = useState<NotificationLog[]>([]);
   const [smsLogs, setSmsLogs] = useState<SmsLog[]>([]);
+  const [whatsappLogs, setWhatsappLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
+
+  // Inquiries Filter & Selected State
+  const [inquirySearch, setInquirySearch] = useState('');
+  const [inquiryStatusFilter, setInquiryStatusFilter] = useState('All');
+  const [inquiryServiceFilter, setInquiryServiceFilter] = useState('All');
+  const [selectedInquiry, setSelectedInquiry] = useState<Inquiry | null>(null);
+  const [inquiryAdminNotes, setInquiryAdminNotes] = useState('');
+  const [isUpdatingInquiry, setIsUpdatingInquiry] = useState(false);
 
   // Filters & Selected State
   const [orderSearch, setOrderSearch] = useState('');
@@ -127,18 +137,21 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
 
     try {
       const headers = { 'x-admin-token': token };
-      const [metricsRes, ordersRes, enquiriesRes, quotesRes, notifsRes, smsRes] = await Promise.all([
+      const [metricsRes, ordersRes, inquiriesRes, inqMetricsRes, quotesRes, notifsRes, smsRes, waRes] = await Promise.all([
         fetch('/api/admin/overview', { headers }).then(r => r.json()).catch(() => null),
         fetch('/api/admin/orders', { headers }).then(r => r.json()).catch(() => []),
-        fetch('/api/admin/enquiries', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/inquiries', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/inquiries/metrics', { headers }).then(r => r.json()).catch(() => null),
         fetch('/api/admin/quotations', { headers }).then(r => r.json()).catch(() => []),
         fetch('/api/admin/notifications', { headers }).then(r => r.json()).catch(() => []),
-        fetch('/api/admin/sms-logs', { headers }).then(r => r.json()).catch(() => [])
+        fetch('/api/admin/sms-logs', { headers }).then(r => r.json()).catch(() => []),
+        fetch('/api/admin/whatsapp-logs', { headers }).then(r => r.json()).catch(() => [])
       ]);
 
       if (metricsRes) setMetrics(metricsRes);
       if (Array.isArray(ordersRes)) setOrders(ordersRes);
-      if (Array.isArray(enquiriesRes)) setEnquiries(enquiriesRes);
+      if (Array.isArray(inquiriesRes)) setEnquiries(inquiriesRes);
+      if (inqMetricsRes) setInquiryMetrics(inqMetricsRes);
       if (Array.isArray(quotesRes)) {
         setQuotations(quotesRes);
         if (quotesRes.length > 0 && !selectedQuoteForPreview) {
@@ -147,10 +160,70 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToSite }) 
       }
       if (Array.isArray(notifsRes)) setNotifications(notifsRes);
       if (Array.isArray(smsRes)) setSmsLogs(smsRes);
+      if (Array.isArray(waRes)) setWhatsappLogs(waRes);
     } catch (err) {
       console.error("Error fetching admin data:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // Inquiry Status & Notes Update
+  const handleUpdateInquiryStatus = async (inquiryId: string | number, newStatus: string, notes?: string) => {
+    if (!token) return;
+    setIsUpdatingInquiry(true);
+    try {
+      const res = await fetch(`/api/admin/inquiries/${inquiryId}/status`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-admin-token': token
+        },
+        body: JSON.stringify({
+          status: newStatus,
+          admin_notes: notes !== undefined ? notes : inquiryAdminNotes
+        })
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setEnquiries(prev => prev.map(item => String(item.id) === String(inquiryId) ? data.inquiry : item));
+        if (selectedInquiry && String(selectedInquiry.id) === String(inquiryId)) {
+          setSelectedInquiry(data.inquiry);
+        }
+        // Refresh metrics
+        fetch('/api/admin/inquiries/metrics', { headers: { 'x-admin-token': token } })
+          .then(r => r.json())
+          .then(m => setInquiryMetrics(m))
+          .catch(() => {});
+      }
+    } catch (err) {
+      console.error("Error updating inquiry status:", err);
+    } finally {
+      setIsUpdatingInquiry(false);
+    }
+  };
+
+  // Delete Inquiry
+  const handleDeleteInquiry = async (inquiryId: string | number) => {
+    if (!token) return;
+    if (!window.confirm(`Are you sure you want to permanently delete Inquiry #${inquiryId}? This action cannot be undone.`)) {
+      return;
+    }
+
+    try {
+      const res = await fetch(`/api/admin/inquiries/${inquiryId}`, {
+        method: 'DELETE',
+        headers: { 'x-admin-token': token }
+      });
+      if (res.ok) {
+        setEnquiries(prev => prev.filter(item => String(item.id) !== String(inquiryId)));
+        if (selectedInquiry && String(selectedInquiry.id) === String(inquiryId)) {
+          setSelectedInquiry(null);
+        }
+      }
+    } catch (err) {
+      console.error("Error deleting inquiry:", err);
     }
   };
 
@@ -1272,76 +1345,396 @@ Download PDF: ${settings.website}api/quotations/${selectedQuoteForPreview.id}/pd
             </div>
           )}
 
-          {/* TAB 6: CUSTOM PROJECT ENQUIRIES */}
+          {/* TAB 6: CUSTOM PROJECT ENQUIRIES (MYSQL DATABASE POWERED) */}
           {activeTab === 'enquiries' && (
             <div className="space-y-6">
-              <div>
-                <h2 className="text-xl font-black text-[#172033]">Custom Project Requests</h2>
-                <p className="text-xs text-slate-500">Bespoke technical inquiries requiring customized scoping and proposals.</p>
+              
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-xl font-black text-[#172033]">Customer Inquiries &amp; Leads</h2>
+                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-100 text-[#155EEF] uppercase">
+                      MySQL Stored
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-500 mt-0.5">
+                    Permanent relational database records with multi-channel Resend email and Meta WhatsApp delivery tracking.
+                  </p>
+                </div>
+
+                <button
+                  onClick={fetchAdminData}
+                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-200 shadow-sm transition-all"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 text-[#155EEF] ${loading ? 'animate-spin' : ''}`} />
+                  <span>Refresh Data</span>
+                </button>
               </div>
 
-              <div className="space-y-4">
-                {enquiries.length === 0 ? (
-                  <div className="bg-white border border-slate-200 rounded-2xl p-12 text-center text-slate-500 text-xs shadow-sm">
-                    No custom project enquiries submitted yet.
-                  </div>
-                ) : (
-                  enquiries.map((enq) => (
-                    <div key={enq.id} className="bg-white border border-slate-200 rounded-2xl p-5 space-y-3 shadow-sm">
-                      <div className="flex flex-col sm:flex-row justify-between items-start gap-2">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-mono font-bold text-[#155EEF] text-xs">{enq.id}</span>
-                            <span className="text-xs px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-bold">
-                              {enq.status}
-                            </span>
-                          </div>
-                          <h3 className="text-base font-extrabold text-[#172033] mt-1">{enq.customer_name} {enq.business_name && `(${enq.business_name})`}</h3>
-                        </div>
+              {/* 5 Summary KPI Cards */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                <div className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-slate-400 block">Total Inquiries</span>
+                  <span className="text-2xl font-black text-slate-900 mt-1 block">
+                    {inquiryMetrics?.total ?? enquiries.length}
+                  </span>
+                  <span className="text-[10px] text-slate-500 font-medium mt-0.5 block">All time submissions</span>
+                </div>
 
-                        <div className="flex items-center gap-2 text-xs">
-                          <a
-                            href={`https://wa.me/${enq.customer_phone.replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(enq.customer_name)},%20inquiring%20about%20your%20SUDHARSHAN_TECH%20project.`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="p-2 rounded-xl bg-emerald-50 text-emerald-700 hover:bg-emerald-100 border border-emerald-200 font-bold flex items-center gap-1.5 transition-colors"
-                          >
-                            <MessageSquare className="w-3.5 h-3.5" />
-                            <span>WhatsApp</span>
-                          </a>
-                          <a
-                            href={`mailto:${enq.customer_email}`}
-                            className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold flex items-center gap-1.5 transition-colors"
-                          >
-                            <Mail className="w-3.5 h-3.5" />
-                            <span>Email</span>
-                          </a>
-                          <a
-                            href={`tel:${enq.customer_phone}`}
-                            className="p-2 rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 font-bold flex items-center gap-1.5 transition-colors"
-                          >
-                            <Phone className="w-3.5 h-3.5" />
-                            <span>Call</span>
-                          </a>
+                <div className="bg-blue-50/60 border border-blue-200 rounded-2xl p-4 shadow-sm">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 block">New Leads</span>
+                  <span className="text-2xl font-black text-blue-700 mt-1 block">
+                    {inquiryMetrics?.new ?? enquiries.filter(e => e.status === 'New').length}
+                  </span>
+                  <span className="text-[10px] text-blue-600/80 font-medium mt-0.5 block">Awaiting review</span>
+                </div>
+
+                <div className="bg-amber-50/60 border border-amber-200 rounded-2xl p-4 shadow-sm">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-amber-700 block">Reviewing</span>
+                  <span className="text-2xl font-black text-amber-800 mt-1 block">
+                    {inquiryMetrics?.reviewing ?? enquiries.filter(e => e.status === 'Reviewing').length}
+                  </span>
+                  <span className="text-[10px] text-amber-700/80 font-medium mt-0.5 block">Scoping in progress</span>
+                </div>
+
+                <div className="bg-indigo-50/60 border border-indigo-200 rounded-2xl p-4 shadow-sm">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-indigo-700 block">Quoted</span>
+                  <span className="text-2xl font-black text-indigo-800 mt-1 block">
+                    {inquiryMetrics?.quoted ?? enquiries.filter(e => e.status === 'Quoted').length}
+                  </span>
+                  <span className="text-[10px] text-indigo-700/80 font-medium mt-0.5 block">Proposal delivered</span>
+                </div>
+
+                <div className="bg-emerald-50/60 border border-emerald-200 rounded-2xl p-4 shadow-sm col-span-2 sm:col-span-1">
+                  <span className="text-[10px] font-black uppercase tracking-wider text-emerald-700 block">Completed</span>
+                  <span className="text-2xl font-black text-emerald-800 mt-1 block">
+                    {inquiryMetrics?.completed ?? enquiries.filter(e => e.status === 'Completed').length}
+                  </span>
+                  <span className="text-[10px] text-emerald-700/80 font-medium mt-0.5 block">Successfully resolved</span>
+                </div>
+              </div>
+
+              {/* Search & Filters */}
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Search by customer name, email, phone, company, or Inquiry ID..."
+                    value={inquirySearch}
+                    onChange={(e) => setInquirySearch(e.target.value)}
+                    className="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-[#155EEF]/20 focus:border-[#155EEF] shadow-sm"
+                  />
+                </div>
+
+                <select
+                  value={inquiryServiceFilter}
+                  onChange={(e) => setInquiryServiceFilter(e.target.value)}
+                  className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:border-[#155EEF]"
+                >
+                  <option value="All">All Services</option>
+                  <option value="Web Development">Web Development</option>
+                  <option value="Mobile App Development">Mobile App Development</option>
+                  <option value="AI Solutions & Automation">AI Solutions &amp; Automation</option>
+                  <option value="Custom Software & ERP">Custom Software &amp; ERP</option>
+                  <option value="Cybersecurity & Hardening">Cybersecurity &amp; Hardening</option>
+                  <option value="Cloud & DevOps">Cloud &amp; DevOps</option>
+                  <option value="SaaS Development">SaaS Development</option>
+                  <option value="IT Maintenance & Support">IT Maintenance &amp; Support</option>
+                </select>
+
+                <select
+                  value={inquiryStatusFilter}
+                  onChange={(e) => setInquiryStatusFilter(e.target.value)}
+                  className="p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-700 shadow-sm focus:outline-none focus:border-[#155EEF]"
+                >
+                  <option value="All">All Statuses</option>
+                  <option value="New">New</option>
+                  <option value="Reviewing">Reviewing</option>
+                  <option value="Contacted">Contacted</option>
+                  <option value="Quoted">Quoted</option>
+                  <option value="In Progress">In Progress</option>
+                  <option value="Completed">Completed</option>
+                  <option value="Rejected">Rejected</option>
+                </select>
+              </div>
+
+              {/* Inquiries Table */}
+              <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs text-slate-700">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 text-[10px] uppercase font-bold tracking-wider">
+                      <tr>
+                        <th className="p-3.5">ID</th>
+                        <th className="p-3.5">Customer &amp; Company</th>
+                        <th className="p-3.5">Service &amp; Budget</th>
+                        <th className="p-3.5">Status</th>
+                        <th className="p-3.5">Resend Email</th>
+                        <th className="p-3.5">Meta WhatsApp</th>
+                        <th className="p-3.5">Created At</th>
+                        <th className="p-3.5 text-right">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {enquiries
+                        .filter(item => {
+                          if (inquiryStatusFilter !== 'All' && item.status !== inquiryStatusFilter) return false;
+                          if (inquiryServiceFilter !== 'All' && !item.service.toLowerCase().includes(inquiryServiceFilter.toLowerCase())) return false;
+                          if (inquirySearch.trim()) {
+                            const term = inquirySearch.trim().toLowerCase();
+                            const matchName = item.full_name?.toLowerCase().includes(term);
+                            const matchEmail = item.email?.toLowerCase().includes(term);
+                            const matchPhone = item.phone?.toLowerCase().includes(term);
+                            const matchCompany = item.company_name?.toLowerCase().includes(term);
+                            const matchId = String(item.id).toLowerCase().includes(term);
+                            if (!matchName && !matchEmail && !matchPhone && !matchCompany && !matchId) return false;
+                          }
+                          return true;
+                        })
+                        .map((inq) => (
+                          <tr key={inq.id} className="hover:bg-slate-50/70 transition-colors">
+                            <td className="p-3.5 font-mono font-bold text-[#155EEF]">
+                              #{inq.id}
+                            </td>
+
+                            <td className="p-3.5">
+                              <span className="font-bold text-slate-900 block">{inq.full_name}</span>
+                              {inq.company_name && (
+                                <span className="text-[11px] text-slate-500 block">{inq.company_name}</span>
+                              )}
+                              <span className="text-[11px] text-slate-400">{inq.email}</span>
+                            </td>
+
+                            <td className="p-3.5">
+                              <span className="font-semibold text-slate-800 block truncate max-w-[180px]">
+                                {inq.service}
+                              </span>
+                              <span className="text-[11px] text-slate-500">
+                                {inq.project_budget || 'Flexible'}
+                              </span>
+                            </td>
+
+                            <td className="p-3.5">
+                              <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                                inq.status === 'New' ? 'bg-blue-50 text-[#155EEF] border border-blue-200' :
+                                inq.status === 'Reviewing' ? 'bg-amber-50 text-amber-700 border border-amber-200' :
+                                inq.status === 'Quoted' ? 'bg-indigo-50 text-indigo-700 border border-indigo-200' :
+                                inq.status === 'In Progress' ? 'bg-cyan-50 text-cyan-700 border border-cyan-200' :
+                                inq.status === 'Completed' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                                inq.status === 'Rejected' ? 'bg-red-50 text-red-700 border border-red-200' :
+                                'bg-purple-50 text-purple-700 border border-purple-200'
+                              }`}>
+                                {inq.status}
+                              </span>
+                            </td>
+
+                            <td className="p-3.5">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                inq.email_notification_status === 'sent' ? 'bg-emerald-50 text-emerald-700' :
+                                inq.email_notification_status === 'failed' ? 'bg-red-50 text-red-600' :
+                                'bg-slate-100 text-slate-600'
+                              }`}>
+                                {inq.email_notification_status || 'Pending'}
+                              </span>
+                            </td>
+
+                            <td className="p-3.5">
+                              <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${
+                                inq.whatsapp_notification_status === 'sent' ? 'bg-emerald-50 text-emerald-700' :
+                                inq.whatsapp_notification_status === 'simulated_logged' ? 'bg-blue-50 text-[#155EEF]' :
+                                inq.whatsapp_notification_status === 'failed' ? 'bg-red-50 text-red-600' :
+                                'bg-slate-100 text-slate-600'
+                              }`}>
+                                {inq.whatsapp_notification_status || 'Pending'}
+                              </span>
+                            </td>
+
+                            <td className="p-3.5 text-slate-500 text-[11px] whitespace-nowrap">
+                              {new Date(inq.created_at).toLocaleDateString('en-IN', {
+                                day: '2-digit',
+                                month: 'short',
+                                year: 'numeric'
+                              })}
+                            </td>
+
+                            <td className="p-3.5 text-right space-x-1.5 whitespace-nowrap">
+                              <button
+                                onClick={() => {
+                                  setSelectedInquiry(inq);
+                                  setInquiryAdminNotes(inq.admin_notes || '');
+                                }}
+                                className="px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-[#155EEF] text-slate-700 hover:text-white font-bold transition-all inline-flex items-center gap-1"
+                              >
+                                <Eye className="w-3.5 h-3.5" />
+                                <span>Inspect</span>
+                              </button>
+
+                              <a
+                                href={`https://wa.me/${String(inq.phone).replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(inq.full_name)},%20inquiring%20about%20your%20SUDHARSHAN_TECH%20project%20inquiry%20%23${inq.id}.`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="px-2.5 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold transition-all inline-flex items-center gap-1"
+                                title="Chat on WhatsApp"
+                              >
+                                <MessageSquare className="w-3.5 h-3.5" />
+                              </a>
+
+                              <button
+                                onClick={() => handleDeleteInquiry(inq.id)}
+                                className="px-2.5 py-1.5 rounded-lg bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 font-bold transition-all inline-flex items-center"
+                                title="Delete Inquiry"
+                              >
+                                <X className="w-3.5 h-3.5" />
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+
+                  {enquiries.length === 0 && (
+                    <div className="p-12 text-center text-slate-500 text-xs">
+                      No inquiries currently recorded in MySQL database.
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* DETAILED INQUIRY INSPECTOR MODAL */}
+              {selectedInquiry && (
+                <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-6 overflow-y-auto animate-in fade-in duration-150">
+                  <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-2xl w-full p-6 sm:p-8 space-y-6 my-auto max-h-[90vh] overflow-y-auto">
+                    
+                    <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <span className="font-mono font-black text-sm text-[#155EEF]">
+                            INQUIRY #{selectedInquiry.id}
+                          </span>
+                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 uppercase">
+                            Source: {selectedInquiry.source}
+                          </span>
                         </div>
+                        <h3 className="text-xl font-black text-slate-900 mt-1">
+                          {selectedInquiry.full_name}
+                        </h3>
                       </div>
 
-                      <div className="bg-slate-50 rounded-xl p-3.5 border border-slate-200 text-xs text-slate-700 space-y-1.5">
-                        <p><strong>Required Services:</strong> <span className="text-[#155EEF] font-semibold">{Array.isArray(enq.services_required) ? enq.services_required.join(', ') : enq.services_required}</span></p>
-                        <p><strong>Budget / Timeline:</strong> {enq.estimated_budget || 'Flexible'} | {enq.timeline || 'Standard'}</p>
-                        <p className="mt-2 text-slate-800"><strong>Description:</strong> {enq.project_description}</p>
-                        {enq.reference_file && (
-                          <p className="pt-2">
-                            <a href={enq.reference_file} target="_blank" rel="noopener noreferrer" className="text-[#155EEF] hover:underline font-bold flex items-center gap-1">
-                              <span>📎 Download Attached Reference File</span>
-                            </a>
-                          </p>
-                        )}
+                      <button
+                        onClick={() => setSelectedInquiry(null)}
+                        className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {/* Customer Profile Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs bg-slate-50 p-4 rounded-2xl border border-slate-200/80">
+                      <div>
+                        <span className="text-slate-400 uppercase font-black tracking-wider text-[10px] block">Email</span>
+                        <a href={`mailto:${selectedInquiry.email}`} className="text-[#155EEF] font-bold hover:underline">
+                          {selectedInquiry.email}
+                        </a>
+                      </div>
+                      <div>
+                        <span className="text-slate-400 uppercase font-black tracking-wider text-[10px] block">Phone Number</span>
+                        <a href={`tel:${selectedInquiry.phone}`} className="text-slate-900 font-bold hover:underline">
+                          {selectedInquiry.phone}
+                        </a>
+                      </div>
+                      {selectedInquiry.company_name && (
+                        <div>
+                          <span className="text-slate-400 uppercase font-black tracking-wider text-[10px] block">Company</span>
+                          <span className="text-slate-800 font-semibold">{selectedInquiry.company_name}</span>
+                        </div>
+                      )}
+                      <div>
+                        <span className="text-slate-400 uppercase font-black tracking-wider text-[10px] block">Estimated Budget</span>
+                        <span className="text-slate-800 font-bold">{selectedInquiry.project_budget || 'Flexible'}</span>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <span className="text-slate-400 uppercase font-black tracking-wider text-[10px] block">Service Requested</span>
+                        <span className="text-[#155EEF] font-extrabold">{selectedInquiry.service}</span>
                       </div>
                     </div>
-                  ))
-                )}
-              </div>
+
+                    {/* Project Message */}
+                    <div>
+                      <span className="text-slate-400 uppercase font-black tracking-wider text-[10px] block mb-1.5">
+                        Project Description &amp; Requirements
+                      </span>
+                      <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-xs sm:text-sm text-slate-800 leading-relaxed whitespace-pre-wrap">
+                        {selectedInquiry.message}
+                      </div>
+                    </div>
+
+                    {/* Delivery Status Summary */}
+                    <div className="grid grid-cols-2 gap-3 text-xs">
+                      <div className="p-3 rounded-xl border border-slate-200 bg-white">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 block">Resend Email Status</span>
+                        <span className="font-extrabold text-slate-900 mt-0.5 block capitalize">
+                          {selectedInquiry.email_notification_status || 'Pending'}
+                        </span>
+                      </div>
+                      <div className="p-3 rounded-xl border border-slate-200 bg-white">
+                        <span className="text-[10px] uppercase font-bold text-slate-400 block">Meta WhatsApp Status</span>
+                        <span className="font-extrabold text-slate-900 mt-0.5 block capitalize">
+                          {selectedInquiry.whatsapp_notification_status || 'Pending'}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Status & Admin Notes Form */}
+                    <div className="space-y-3 pt-3 border-t border-slate-100">
+                      <div>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">
+                          Update Inquiry Status
+                        </label>
+                        <select
+                          value={selectedInquiry.status}
+                          onChange={(e) => handleUpdateInquiryStatus(selectedInquiry.id, e.target.value)}
+                          disabled={isUpdatingInquiry}
+                          className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-800 focus:outline-none focus:border-[#155EEF]"
+                        >
+                          <option value="New">New</option>
+                          <option value="Reviewing">Reviewing</option>
+                          <option value="Contacted">Contacted</option>
+                          <option value="Quoted">Quoted</option>
+                          <option value="In Progress">In Progress</option>
+                          <option value="Completed">Completed</option>
+                          <option value="Rejected">Rejected</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label className="text-xs font-bold text-slate-700 block mb-1">
+                          Internal Admin Notes
+                        </label>
+                        <textarea
+                          rows={3}
+                          value={inquiryAdminNotes}
+                          onChange={(e) => setInquiryAdminNotes(e.target.value)}
+                          placeholder="Add internal notes about phone calls, quotes sent, scope nuances..."
+                          className="w-full p-3 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 focus:outline-none focus:border-[#155EEF] resize-none"
+                        />
+                      </div>
+
+                      <div className="flex items-center justify-end gap-2 pt-2">
+                        <button
+                          onClick={() => handleUpdateInquiryStatus(selectedInquiry.id, selectedInquiry.status, inquiryAdminNotes)}
+                          disabled={isUpdatingInquiry}
+                          className="px-5 py-2.5 rounded-xl bg-[#155EEF] hover:bg-[#1049B8] text-white font-bold text-xs shadow-md shadow-blue-500/20 transition-all disabled:opacity-50"
+                        >
+                          {isUpdatingInquiry ? 'Saving Changes...' : 'Save Notes & Status'}
+                        </button>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              )}
+
             </div>
           )}
 
@@ -1400,6 +1793,14 @@ Download PDF: ${settings.website}api/quotations/${selectedQuoteForPreview.id}/pd
                     }`}
                   >
                     Mobile SMS Logs ({smsLogs.length})
+                  </button>
+                  <button
+                    onClick={() => setNotifSubTab('whatsapp')}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+                      notifSubTab === 'whatsapp' ? 'bg-white text-[#155EEF] shadow-sm' : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    Meta WhatsApp Logs ({whatsappLogs.length})
                   </button>
                 </div>
               </div>
@@ -1492,6 +1893,60 @@ Download PDF: ${settings.website}api/quotations/${selectedQuoteForPreview.id}/pd
                                   : 'bg-blue-50 text-[#155EEF] border border-blue-200'
                               }`}>
                                 {s.status}
+                              </span>
+                            </td>
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+
+              {/* Meta WhatsApp Logs Table */}
+              {notifSubTab === 'whatsapp' && (
+                <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                  <table className="w-full text-left text-xs text-slate-700">
+                    <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase text-slate-500 font-bold">
+                      <tr>
+                        <th className="p-3.5">Time</th>
+                        <th className="p-3.5">Recipient</th>
+                        <th className="p-3.5">Provider</th>
+                        <th className="p-3.5">WhatsApp Message Preview</th>
+                        <th className="p-3.5">Delivery Status</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-slate-100">
+                      {whatsappLogs.length === 0 ? (
+                        <tr>
+                          <td colSpan={5} className="p-6 text-center text-slate-500">
+                            No Meta WhatsApp alerts logged yet. Submit an inquiry to trigger an alert.
+                          </td>
+                        </tr>
+                      ) : (
+                        whatsappLogs.map(wa => (
+                          <tr key={wa.id} className="hover:bg-slate-50/60">
+                            <td className="p-3.5 text-slate-500 whitespace-nowrap">
+                              {new Date(wa.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                            </td>
+                            <td className="p-3.5 font-mono font-bold text-slate-900">+{wa.recipient}</td>
+                            <td className="p-3.5">
+                              <span className="px-2 py-0.5 bg-slate-100 rounded text-[10px] font-semibold text-slate-700">
+                                {wa.provider}
+                              </span>
+                            </td>
+                            <td className="p-3.5 max-w-[280px] truncate text-slate-600 font-mono text-[11px]">
+                              {wa.message}
+                            </td>
+                            <td className="p-3.5">
+                              <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold ${
+                                wa.status === 'sent' 
+                                  ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' :
+                                wa.status === 'simulated_logged'
+                                  ? 'bg-blue-50 text-[#155EEF] border border-blue-200'
+                                  : 'bg-red-50 text-red-600 border border-red-200'
+                              }`}>
+                                {wa.status}
                               </span>
                             </td>
                           </tr>

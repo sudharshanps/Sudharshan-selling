@@ -95,27 +95,25 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
     setIsSubmitting(true);
 
     try {
-      const res = await fetch('/api/enquiries', {
+      const res = await fetch('/api/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          customer_name: customerName,
-          business_name: businessName,
-          customer_email: customerEmail,
-          customer_phone: customerPhone,
-          services_required: selectedServices,
-          project_description: projectDescription,
-          estimated_budget: estimatedBudget,
-          timeline,
-          reference_file: referenceFile,
-          preferred_communication: preferredCommunication
+          full_name: customerName,
+          email: customerEmail,
+          phone: customerPhone,
+          company_name: businessName || null,
+          service: selectedServices.join(', '),
+          project_budget: estimatedBudget,
+          message: projectDescription + (timeline ? `\n[Timeline: ${timeline}]` : '') + (referenceFile ? `\n[Reference File: ${referenceFile}]` : ''),
+          source: 'custom_project_modal'
         })
       });
 
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Submission failed');
 
-      setSubmittedEnquiry(data.enquiry);
+      setSubmittedEnquiry(data.inquiry || data.enquiry || { id: data.inquiryId, customer_name: customerName, customer_email: customerEmail });
       confetti({ particleCount: 70, spread: 50, origin: { y: 0.5 } });
     } catch (err: any) {
       setErrorMessage(err.message || 'Error sending enquiry');

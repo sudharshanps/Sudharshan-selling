@@ -57,10 +57,10 @@ function logNotification({ event_type, recipient, subject, body_preview, status,
 /**
  * Send an email notification with automatic fallback, reliable logging & attachment support
  */
-export async function sendEmailNotification({ to, subject, html, text, event_type, related_id, attachments = [] }) {
+export async function sendEmailNotification({ to, subject, html, text, event_type, related_id, reply_to, attachments = [] }) {
   const preview = text || (html ? html.replace(/<[^>]+>/g, ' ').substring(0, 150) : '');
-  const fromAddress = process.env.EMAIL_FROM || (SMTP_USER ? `"SUDHARSHAN_TECH" <${SMTP_USER}>` : `"SUDHARSHAN_TECH" <sudharshantech123@gmail.com>`);
-  const replyToAddress = process.env.REPLY_TO || 'sudharshantech123@gmail.com';
+  const fromAddress = process.env.RESEND_FROM_EMAIL || process.env.EMAIL_FROM || (SMTP_USER ? `"SUDHARSHAN_TECH" <${SMTP_USER}>` : `"SUDHARSHAN_TECH" <sudharshantech123@gmail.com>`);
+  const replyToAddress = reply_to || process.env.REPLY_TO || 'sudharshantech123@gmail.com';
 
   // Support Resend HTTP API if RESEND_API_KEY is configured
   if (process.env.RESEND_API_KEY) {
@@ -424,5 +424,130 @@ export async function notifyCustomerOrderStatusUpdate(order, previousStatus) {
     html,
     event_type: 'ORDER_STATUS_UPDATE',
     related_id: order.id
+  });
+}
+
+/**
+ * Notify Company Owner of New Customer Inquiry (via Resend / SMTP)
+ * Automatically sets Reply-To to the customer's email.
+ */
+export async function notifyOwnerNewInquiry(inquiry) {
+  const recipientEmail = process.env.NOTIFICATION_EMAIL || OWNER_EMAIL;
+  const subject = `New Project Inquiry: ${inquiry.full_name} – SUDHARSHAN_TECH (ID: #${inquiry.id})`;
+  const formattedDate = new Date(inquiry.created_at || Date.now()).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+
+  const html = `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 650px; margin: 0 auto; background: #ffffff; border: 1px solid #E2E8F0; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06);">
+      <!-- Header -->
+      <div style="background: #0B1736; padding: 28px 24px; text-align: center; border-bottom: 3px solid #155EEF;">
+        <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: 800; letter-spacing: 0.5px;">
+          SUDHARSHAN<span style="color: #155EEF;">_TECH</span>
+        </h1>
+        <p style="color: #94A3B8; margin: 6px 0 0; font-size: 12px; letter-spacing: 1px; text-transform: uppercase;">
+          Code. Create. Elevate.
+        </p>
+      </div>
+
+      <!-- Main Body -->
+      <div style="padding: 28px 24px;">
+        <!-- Alert Pill -->
+        <div style="background: #EFF6FF; border: 1px solid #BFDBFE; border-radius: 12px; padding: 14px 18px; margin-bottom: 24px;">
+          <h2 style="color: #155EEF; font-size: 16px; font-weight: 700; margin: 0 0 4px;">
+            🔔 New Customer Project Inquiry Received!
+          </h2>
+          <p style="color: #1E40AF; font-size: 13px; margin: 0;">
+            Enquiry ID: <strong>#${inquiry.id}</strong> &bull; Status: <span style="background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 9999px; font-weight: 700; font-size: 11px;">NEW</span>
+          </p>
+        </div>
+
+        <!-- Customer Profile Table -->
+        <h3 style="color: #0F172A; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid #F1F5F9;">
+          👤 Customer & Business Details
+        </h3>
+        <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 24px;">
+          <tr>
+            <td style="padding: 8px 0; color: #64748B; width: 140px; font-weight: 600;">Customer Name:</td>
+            <td style="padding: 8px 0; color: #0F172A; font-weight: 700;">${inquiry.full_name}</td>
+          </tr>
+          ${inquiry.company_name ? `
+          <tr>
+            <td style="padding: 8px 0; color: #64748B; font-weight: 600;">Company / Org:</td>
+            <td style="padding: 8px 0; color: #0F172A; font-weight: 600;">${inquiry.company_name}</td>
+          </tr>` : ''}
+          <tr>
+            <td style="padding: 8px 0; color: #64748B; font-weight: 600;">Email Address:</td>
+            <td style="padding: 8px 0;">
+              <a href="mailto:${inquiry.email}" style="color: #155EEF; text-decoration: none; font-weight: 600;">
+                ${inquiry.email}
+              </a>
+              <span style="font-size: 11px; color: #64748B; margin-left: 6px;">(Click reply to email customer directly)</span>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748B; font-weight: 600;">Phone Number:</td>
+            <td style="padding: 8px 0;">
+              <a href="tel:${inquiry.phone}" style="color: #0F172A; text-decoration: none; font-weight: 700;">
+                ${inquiry.phone}
+              </a>
+              <a href="https://wa.me/${String(inquiry.phone).replace(/[^0-9]/g, '')}?text=Hello%20${encodeURIComponent(inquiry.full_name)},%20thank%20you%20for%20contacting%20SUDHARSHAN_TECH%20regarding%20your%20inquiry%20%23${inquiry.id}." target="_blank" style="margin-left: 10px; display: inline-block; background: #DCFCE7; color: #15803D; padding: 2px 10px; border-radius: 6px; text-decoration: none; font-size: 11px; font-weight: 700;">
+                Chat on WhatsApp &rarr;
+              </a>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748B; font-weight: 600;">Submission Date:</td>
+            <td style="padding: 8px 0; color: #475569;">${formattedDate} (IST)</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; color: #64748B; font-weight: 600;">Acquisition Source:</td>
+            <td style="padding: 8px 0; color: #475569; font-weight: 600;">${inquiry.source || 'website'}</td>
+          </tr>
+        </table>
+
+        <!-- Service & Project Scope -->
+        <h3 style="color: #0F172A; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid #F1F5F9;">
+          🎯 Requested Service & Budget
+        </h3>
+        <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+          <p style="margin: 0 0 8px; font-size: 13px;">
+            <strong style="color: #64748B;">Requested Domain / Service:</strong>
+            <span style="color: #155EEF; font-weight: 800; margin-left: 8px; font-size: 14px;">${inquiry.service}</span>
+          </p>
+          <p style="margin: 0; font-size: 13px;">
+            <strong style="color: #64748B;">Estimated Budget:</strong>
+            <span style="color: #0F172A; font-weight: 700; margin-left: 8px;">${inquiry.project_budget || 'Flexible / To Be Quoted'}</span>
+          </p>
+        </div>
+
+        <!-- Project Description / Message -->
+        <h3 style="color: #0F172A; font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid #F1F5F9;">
+          📝 Project Description & Requirements
+        </h3>
+        <div style="background: #F8FAFC; border-left: 4px solid #155EEF; border-radius: 0 12px 12px 0; padding: 16px; margin-bottom: 28px;">
+          <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #334155; white-space: pre-wrap;">${inquiry.message}</p>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div style="text-align: center; padding-top: 10px;">
+          <a href="${APP_URL}/admin" style="background: #155EEF; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 12px; font-weight: 800; font-size: 13px; display: inline-block; box-shadow: 0 4px 14px rgba(21, 94, 239, 0.35);">
+            Open Admin Dashboard &amp; Manage Inquiry &rarr;
+          </a>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div style="background: #F8FAFC; padding: 16px; text-align: center; font-size: 11px; color: #94A3B8; border-top: 1px solid #E2E8F0;">
+        SUDHARSHAN_TECH &bull; No. 16A, Thendral Nagar, Veerakeralam, Coimbatore &ndash; 641007, Tamil Nadu, India &bull; Phone: +91 97914 95418
+      </div>
+    </div>
+  `;
+
+  return sendEmailNotification({
+    to: recipientEmail,
+    subject,
+    html,
+    reply_to: inquiry.email,
+    event_type: 'NEW_INQUIRY_OWNER',
+    related_id: String(inquiry.id)
   });
 }

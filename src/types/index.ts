@@ -94,6 +94,36 @@ export interface PortfolioProject {
   highlights: string[];
 }
 
+export type ProductCategory = 
+  | 'All Products'
+  | 'SaaS Platforms' 
+  | 'AI Solutions' 
+  | 'Business Management' 
+  | 'Cybersecurity Tools' 
+  | 'Automation Products' 
+  | 'Coming Soon';
+
+export interface ProductItem {
+  id: string;
+  slug: string;
+  name: string;
+  tagline: string;
+  category: 'SaaS Platforms' | 'AI Solutions' | 'Business Management' | 'Cybersecurity Tools' | 'Automation Products' | 'Coming Soon';
+  badge: string;
+  status: 'Live Production' | 'Live Prototype' | 'Enterprise MVP' | 'Top 50 Finalist' | 'In Development';
+  thumbnail: string;
+  short_description: string;
+  full_description: string;
+  features: string[];
+  benefits: string[];
+  target_users: string[];
+  tech_stack: string[];
+  github?: string;
+  demo_url?: string;
+  featured: boolean;
+  spotlight?: boolean;
+}
+
 export interface FounderAchievement {
   id: string;
   title: string;
@@ -197,5 +227,23 @@ export interface Quotation {
   pdf_path?: string;
   created_at: string;
   sent_at?: string;
+  updated_at: string;
+}
+
+export interface Inquiry {
+  id: number | string;
+  full_name: string;
+  email: string;
+  phone: string;
+  company_name?: string | null;
+  service: string;
+  project_budget?: string | null;
+  message: string;
+  source: string;
+  status: 'New' | 'Reviewing' | 'Contacted' | 'Quoted' | 'In Progress' | 'Completed' | 'Rejected';
+  email_notification_status: 'Pending' | 'sent' | 'failed' | 'simulated_logged';
+  whatsapp_notification_status: 'Pending' | 'sent' | 'failed' | 'simulated_logged';
+  admin_notes?: string | null;
+  created_at: string;
   updated_at: string;
 }

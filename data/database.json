@@ -675,6 +675,64 @@
   ],
   "orders": [
     {
+      "id": "ST-ORD-052675-430",
+      "customer_name": "Sudharshan",
+      "customer_email": "sudharshanthemagnet@gmail.com",
+      "customer_phone": "9791495418",
+      "business_name": "sudharshan tech",
+      "billing_address": "india",
+      "items": [
+        {
+          "service_id": "srv-cloud-devops",
+          "service_title": "Cloud & DevOps",
+          "package_name": "Cloud Deployment Offer",
+          "price": 1999,
+          "quantity": 1,
+          "custom_notes": 1
+        }
+      ],
+      "total_amount": 1999,
+      "payment_method": "upi_qr",
+      "payment_status": "Awaiting Payment",
+      "order_status": "Awaiting Payment",
+      "custom_requirements": "",
+      "reference_files": [],
+      "transaction_ref": null,
+      "payment_proof": null,
+      "admin_notes": "",
+      "created_at": "2026-11-22T03:10:52.675Z",
+      "updated_at": "2026-11-22T03:10:52.675Z"
+    },
+    {
+      "id": "ST-ORD-113118-554",
+      "customer_name": "sudharshan",
+      "customer_email": "727724eucy106@skcet.ac.in",
+      "customer_phone": "9791495418",
+      "business_name": "Sudharshan_tech",
+      "billing_address": "India",
+      "items": [
+        {
+          "service_id": "srv-web",
+          "service_title": "Web Development",
+          "package_name": "Starter Landing Page",
+          "price": 1199,
+          "quantity": 1,
+          "custom_notes": ""
+        }
+      ],
+      "total_amount": 1199,
+      "payment_method": "quote_request",
+      "payment_status": "Quotation Pending",
+      "order_status": "Quote Required",
+      "custom_requirements": "",
+      "reference_files": [],
+      "transaction_ref": null,
+      "payment_proof": null,
+      "admin_notes": "",
+      "created_at": "2026-11-21T17:28:33.119Z",
+      "updated_at": "2026-11-21T17:28:33.119Z"
+    },
+    {
       "id": "ST-ORD-524908-862",
       "customer_name": "Sudharshan",
       "customer_email": "sudharshanthemagnet@gmail.com",
@@ -810,6 +868,71 @@
   "payment_submissions": [],
   "notification_logs": [
     {
+      "id": "notif-1795317636866-0l43k",
+      "event_type": "NEW_INQUIRY_OWNER",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "New Project Inquiry: Karthik Raja – SUDHARSHAN_TECH (ID: #ST-INQ-636843)",
+      "body_preview": "SUDHARSHAN _TECH \n         \n         \n          Code. Create. Elevate.",
+      "status": "simulated_logged",
+      "message_id": "sim-1795317636864",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-INQ-636843",
+      "created_at": "2026-11-22T03:20:36.866Z"
+    },
+    {
+      "id": "notif-1795317054590-1iixt",
+      "event_type": "ORDER_PLACED_CUSTOMER",
+      "recipient": "sudharshanthemagnet@gmail.com",
+      "subject": "Your Service Order Confirmation – SUDHARSHAN_TECH | #ST-ORD-052675-430",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         Thank you for your order, Sudharshan!",
+      "status": "simulated_logged",
+      "message_id": "sim-1795317054574",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-052675-430",
+      "created_at": "2026-11-22T03:10:54.590Z"
+    },
+    {
+      "id": "notif-1795317054396-r4anl",
+      "event_type": "ORDER_PLACED_OWNER",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "New Service Order Received – SUDHARSHAN_TECH | Order #ST-ORD-052675-430",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         \n           🚀 A new customer order has been place",
+      "status": "simulated_logged",
+      "message_id": "sim-1795317054235",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-052675-430",
+      "created_at": "2026-11-22T03:10:54.396Z"
+    },
+    {
+      "id": "notif-1795282113140-oszfv",
+      "event_type": "ORDER_PLACED_CUSTOMER",
+      "recipient": "727724eucy106@skcet.ac.in",
+      "subject": "Your Service Order Confirmation – SUDHARSHAN_TECH | #ST-ORD-113118-554",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         Thank you for your order, sudharshan!",
+      "status": "simulated_logged",
+      "message_id": "sim-1795282113135",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-113118-554",
+      "created_at": "2026-11-21T17:28:33.140Z"
+    },
+    {
+      "id": "notif-1795282113129-xcut0",
+      "event_type": "ORDER_PLACED_OWNER",
+      "recipient": "sudharshantech123@gmail.com",
+      "subject": "New Service Order Received – SUDHARSHAN_TECH | Order #ST-ORD-113118-554",
+      "body_preview": "SUDHARSHAN_TECH \n         Code. Create. Elevate. \n       \n\n       \n         \n           🚀 A new customer order has been place",
+      "status": "simulated_logged",
+      "message_id": "sim-1795282113127",
+      "provider": "simulation_audit",
+      "error_message": "SMTP/Transactional API credentials not configured in environment. Logged securely to database audit trail.",
+      "related_id": "ST-ORD-113118-554",
+      "created_at": "2026-11-21T17:28:33.129Z"
+    },
+    {
       "id": "notif-1795280524937-q5mgd",
       "event_type": "ORDER_PLACED_CUSTOMER",
       "recipient": "sudharshanthemagnet@gmail.com",
@@ -906,7 +1029,28 @@
       "pin_hash": "admin123"
     }
   ],
-  "sms_logs": [],
+  "sms_logs": [
+    {
+      "id": "sms-1795317055389-q21ig",
+      "recipient": "+919791495418",
+      "message": "SUDHARSHAN_TECH: New order received. Order ID: ST-ORD-052675-430. Customer: Sudharshan. Services: Cloud & DevOps. Amount: Rs.1999. Check your admin dashboard.",
+      "status": "simulated_logged",
+      "provider": "Console Sandbox",
+      "error_message": "Twilio/MSG91 SMS credentials not yet provided in .env. Logged safely to admin audit history.",
+      "related_id": "ST-ORD-052675-430",
+      "created_at": "2026-11-22T03:10:55.389Z"
+    },
+    {
+      "id": "sms-1795282113149-8qlr5",
+      "recipient": "+919791495418",
+      "message": "SUDHARSHAN_TECH: New order received. Order ID: ST-ORD-113118-554. Customer: sudharshan. Services: Web Development. Amount: Rs.1199. Check your admin dashboard.",
+      "status": "simulated_logged",
+      "provider": "Console Sandbox",
+      "error_message": "Twilio/MSG91 SMS credentials not yet provided in .env. Logged safely to admin audit history.",
+      "related_id": "ST-ORD-113118-554",
+      "created_at": "2026-11-21T17:28:33.149Z"
+    }
+  ],
   "special_offers": [
     {
       "id": "off-web",
@@ -1054,6 +1198,20 @@
       ],
       "scope_limits": "Includes up to 2 hours of monthly active maintenance and minor tweaks. Major feature overhauls quoted separately.",
       "active": true
+    }
+  ],
+  "inquiries": [],
+  "whatsapp_logs": [
+    {
+      "id": "wa-1795317636870-tahr9",
+      "recipient": "919791495418",
+      "message": "🔔 *NEW WEBSITE ENQUIRY*\n*Enquiry ID:* #ST-INQ-636843\n*Name:* Karthik Raja\n*Phone:* +91 94433 22110\n*Email:* karthik.raja@example.com\n*Company:* Apex AI Systems\n*Service:* AI Solutions & Automation\n*Budget:* ?50,000 - ?1,00,000\n*Message:*\nInterested in integrating custom Gemini AI workflows into our customer support and ticket classification system.\n👉 _Please check the SUDHARSHAN_TECH admin dashboard for full details._",
+      "status": "simulated_logged",
+      "provider": "Meta WhatsApp Cloud API",
+      "message_id": null,
+      "error_message": "Meta WhatsApp Cloud API credentials not yet set in .env. Logged safely to admin audit history.",
+      "related_id": "ST-INQ-636843",
+      "created_at": "2026-11-22T03:20:36.870Z"
     }
   ]
 }

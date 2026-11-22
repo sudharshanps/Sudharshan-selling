@@ -12,7 +12,8 @@ import {
   notifyOwnerProjectEnquiry, 
   notifyCustomerEnquiryConfirmation,
   notifyCustomerOrderStatusUpdate,
-  sendEmailNotification
+  sendEmailNotification,
+  notifyOwnerNewInquiry
 } from './email.js';
 import { notifyOwnerOrderSms, sendSmsNotification } from './sms.js';
 import { 
@@ -22,6 +23,17 @@ import {
   generateQuotationPdf, 
   sendQuotationEmail 
 } from './quotation.js';
+import { initializeDatabase, checkDatabaseHealth } from './mysql.js';
+import { 
+  createInquiry, 
+  updateInquiryNotificationStatus, 
+  getAllInquiries, 
+  getInquiryById, 
+  updateInquiryStatus, 
+  deleteInquiry, 
+  getInquiryMetrics 
+} from './services/inquiryService.js';
+import { sendWhatsAppEnquiryAlert } from './whatsapp.js';
 
 dotenv.config();
 
@@ -83,14 +95,87 @@ const requireAdmin = (req, res, next) => {
    PUBLIC API ROUTES
    ======================================================== */
 
-// Health Check
-app.get('/api/health', (req, res) => {
+// Health Check with MySQL Database Connection Health Check
+app.get('/api/health', async (req, res) => {
+  const dbHealth = await checkDatabaseHealth();
   res.json({
     status: 'online',
     timestamp: new Date().toISOString(),
     service: 'SUDHARSHAN_TECH Digital Marketplace API',
-    uptime: process.uptime()
+    uptime: process.uptime(),
+    database: dbHealth
   });
+});
+
+// New Inquiry Submission (Saves to MySQL + Triggers Resend Email & Meta WhatsApp)
+app.post('/api/inquiries', async (req, res) => {
+  try {
+    const {
+      full_name,
+      email,
+      phone,
+      company_name,
+      service,
+      project_budget,
+      message,
+      source
+    } = req.body;
+
+    if (!full_name || !email || !phone || !message) {
+      return res.status(400).json({
+        error: 'Please complete all required fields: Full Name, Email, Phone, and Project Description.'
+      });
+    }
+
+    // 1. Permanent Storage in MySQL (executed before notifications)
+    const inquiry = await createInquiry({
+      full_name,
+      email,
+      phone,
+      company_name,
+      service: service || 'Custom Software Solution',
+      project_budget: project_budget || 'Flexible',
+      message,
+      source: source || 'website_inquiry'
+    });
+
+    // 2. Dual Notifications (Failures never lose the enquiry)
+    notifyOwnerNewInquiry(inquiry)
+      .then(result => {
+        updateInquiryNotificationStatus(inquiry.id, {
+          email_status: result?.status === 'sent' ? 'sent' : 'failed'
+        });
+      })
+      .catch(err => {
+        console.error('[EMAIL NOTIFICATION ERR]:', err.message);
+        updateInquiryNotificationStatus(inquiry.id, { email_status: 'failed' });
+      });
+
+    sendWhatsAppEnquiryAlert(inquiry)
+      .then(result => {
+        const status = result?.status === 'sent' ? 'sent' : (result?.status === 'simulated_logged' ? 'simulated_logged' : 'failed');
+        updateInquiryNotificationStatus(inquiry.id, {
+          whatsapp_status: status
+        });
+      })
+      .catch(err => {
+        console.error('[WHATSAPP NOTIFICATION ERR]:', err.message);
+        updateInquiryNotificationStatus(inquiry.id, { whatsapp_status: 'failed' });
+      });
+
+    // 3. Return Success Response
+    res.status(201).json({
+      success: true,
+      inquiryId: inquiry.id,
+      inquiry,
+      message: 'Your inquiry has been successfully received and saved. Founder Sudharshan P S will review your requirements and respond shortly.'
+    });
+  } catch (error) {
+    console.error('[INQUIRY SUBMISSION ERROR]:', error.message);
+    res.status(500).json({
+      error: error.message || 'An error occurred while saving your project inquiry.'
+    });
+  }
 });
 
 // Company Settings & Contact Details
@@ -372,6 +457,20 @@ app.post('/api/enquiries', async (req, res) => {
     db.project_enquiries.unshift(newEnquiry);
     saveDatabase(db);
 
+    // Save permanently in MySQL inquiries table
+    createInquiry({
+      full_name: customer_name,
+      email: customer_email,
+      phone: customer_phone,
+      company_name: business_name,
+      service: Array.isArray(services_required) ? services_required.join(', ') : (services_required || 'Custom Project'),
+      project_budget: estimated_budget,
+      message: project_description + (timeline ? `\n[Timeline: ${timeline}]` : '') + (reference_file ? `\n[Attachment: ${reference_file}]` : ''),
+      source: 'custom_project_modal'
+    }).then(mysqlRow => {
+      sendWhatsAppEnquiryAlert(mysqlRow).catch(e => console.error("WhatsApp notification err:", e));
+    }).catch(e => console.warn("MySQL mirror err:", e.message));
+
     notifyOwnerProjectEnquiry(newEnquiry).catch(e => console.error("Owner enquiry notification err:", e));
     notifyCustomerEnquiryConfirmation(newEnquiry).catch(e => console.error("Customer enquiry notification err:", e));
 
@@ -411,7 +510,19 @@ app.post('/api/contact', async (req, res) => {
     db.contact_messages.unshift(contactEntry);
     saveDatabase(db);
 
-    // Notify owner
+    // Save permanently in MySQL inquiries table
+    createInquiry({
+      full_name: name,
+      email: email,
+      phone: phone || '+91 97914 95418',
+      service: subject || 'General Contact',
+      message: message,
+      source: 'contact_section_form'
+    }).then(mysqlRow => {
+      sendWhatsAppEnquiryAlert(mysqlRow).catch(e => console.error("WhatsApp notification err:", e));
+    }).catch(e => console.warn("MySQL mirror err in contact:", e.message));
+
+    // Notify owner via Resend/SMTP
     sendEmailNotification({
       to: db.company_settings.email,
       subject: `New Contact Message from ${name} – SUDHARSHAN_TECH`,
@@ -617,13 +728,13 @@ app.patch('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   }
 });
 
-// Admin Enquiries List
+// Admin Enquiries List (Legacy JSON support)
 app.get('/api/admin/enquiries', requireAdmin, (req, res) => {
   const db = loadDatabase();
   res.json(db.project_enquiries || []);
 });
 
-// Admin Update Enquiry
+// Admin Update Enquiry (Legacy JSON support)
 app.patch('/api/admin/enquiries/:id', requireAdmin, (req, res) => {
   const { status, admin_notes } = req.body;
   const db = loadDatabase();
@@ -636,6 +747,70 @@ app.patch('/api/admin/enquiries/:id', requireAdmin, (req, res) => {
 
   saveDatabase(db);
   res.json({ success: true, enquiry: db.project_enquiries[index] });
+});
+
+/* ========================================================
+   ADMIN INQUIRIES API (MYSQL POWERED)
+   ======================================================== */
+
+// Admin Inquiries List with search, service & status filters
+app.get('/api/admin/inquiries', requireAdmin, async (req, res) => {
+  try {
+    const list = await getAllInquiries(req.query);
+    res.json(list);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch inquiries: ' + err.message });
+  }
+});
+
+// Admin Inquiries Summary Metrics
+app.get('/api/admin/inquiries/metrics', requireAdmin, async (req, res) => {
+  try {
+    const metrics = await getInquiryMetrics();
+    res.json(metrics);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch metrics: ' + err.message });
+  }
+});
+
+// Admin Single Inquiry Detail
+app.get('/api/admin/inquiries/:id', requireAdmin, async (req, res) => {
+  try {
+    const inquiry = await getInquiryById(req.params.id);
+    if (!inquiry) return res.status(404).json({ error: 'Inquiry not found' });
+    res.json(inquiry);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to fetch inquiry: ' + err.message });
+  }
+});
+
+// Admin Update Inquiry Status & Notes
+app.patch('/api/admin/inquiries/:id/status', requireAdmin, async (req, res) => {
+  try {
+    const { status, admin_notes } = req.body;
+    if (!status) return res.status(400).json({ error: 'Status is required' });
+
+    const updated = await updateInquiryStatus(req.params.id, status, admin_notes);
+    res.json({ success: true, inquiry: updated });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to update inquiry status: ' + err.message });
+  }
+});
+
+// Admin Delete Inquiry
+app.delete('/api/admin/inquiries/:id', requireAdmin, async (req, res) => {
+  try {
+    await deleteInquiry(req.params.id);
+    res.json({ success: true, message: 'Inquiry deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete inquiry: ' + err.message });
+  }
+});
+
+// Admin WhatsApp Logs
+app.get('/api/admin/whatsapp-logs', requireAdmin, (req, res) => {
+  const db = loadDatabase();
+  res.json(db.whatsapp_logs || []);
 });
 
 // Admin Notification Logs
@@ -803,11 +978,16 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-// Start Server
-app.listen(PORT, () => {
+// Start Server and initialize MySQL
+app.listen(PORT, async () => {
   console.log(`\n======================================================`);
   console.log(`🚀 SUDHARSHAN_TECH API Server listening on port ${PORT}`);
   console.log(`📡 Company: SUDHARSHAN_TECH | Tagline: Code. Create. Elevate.`);
   console.log(`💼 Admin Dashboard Endpoint: http://localhost:${PORT}/api/admin/overview`);
   console.log(`======================================================\n`);
+
+  // Initialize MySQL database & tables automatically
+  initializeDatabase().catch(err => {
+    console.warn('[MySQL AUTO-INIT WARNING]:', err.message);
+  });
 });
