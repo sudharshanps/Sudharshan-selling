@@ -13,7 +13,7 @@ export const FloatingWhatsApp: React.FC = () => {
   const waUrl = `https://wa.me/${cleanPhone}?text=${defaultMessage}`;
 
   return (
-    <div className="fixed bottom-20 md:bottom-6 right-5 z-40 flex items-end flex-col gap-2">
+    <div className="fixed bottom-20 md:bottom-6 right-5 z-30 flex items-end flex-col gap-2">
       
       {/* Floating Tooltip */}
       {showTooltip && (

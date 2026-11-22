@@ -42,12 +42,14 @@ export const Navbar: React.FC<NavbarProps> = ({
 
   const moreMenuRef = useRef<HTMLDivElement>(null);
   const productsNavRef = useRef<HTMLDivElement>(null);
+  const openTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Dynamic height & backdrop blur on scroll
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
+      setProductsMenuOpen(false); // Close mega-menu immediately on scroll so page content is never blocked
 
       // Simple active section scroll-spy
       const sections = [
@@ -84,9 +86,6 @@ export const Navbar: React.FC<NavbarProps> = ({
       if (moreMenuRef.current && !moreMenuRef.current.contains(e.target as Node)) {
         setMoreMenuOpen(false);
       }
-      if (productsNavRef.current && !productsNavRef.current.contains(e.target as Node)) {
-        setProductsMenuOpen(false);
-      }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -102,22 +101,49 @@ export const Navbar: React.FC<NavbarProps> = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       window.removeEventListener('keydown', handleKeyDown);
+      if (openTimeoutRef.current) clearTimeout(openTimeoutRef.current);
+      if (closeTimeoutRef.current) clearTimeout(closeTimeoutRef.current);
     };
   }, []);
 
-  // Hover-intent handlers for Mega-Menu
+  // Hover-intent handlers for Mega-Menu (220ms delay prevents accidental trigger when sweeping mouse)
   const handleMouseEnterProducts = () => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
       closeTimeoutRef.current = null;
     }
-    setProductsMenuOpen(true);
+    if (!productsMenuOpen && !openTimeoutRef.current) {
+      openTimeoutRef.current = setTimeout(() => {
+        setProductsMenuOpen(true);
+        openTimeoutRef.current = null;
+      }, 220);
+    }
   };
 
   const handleMouseLeaveProducts = () => {
+    if (openTimeoutRef.current) {
+      clearTimeout(openTimeoutRef.current);
+      openTimeoutRef.current = null;
+    }
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+    }
     closeTimeoutRef.current = setTimeout(() => {
       setProductsMenuOpen(false);
-    }, 180);
+      closeTimeoutRef.current = null;
+    }, 220);
+  };
+
+  const handleToggleProducts = () => {
+    if (openTimeoutRef.current) {
+      clearTimeout(openTimeoutRef.current);
+      openTimeoutRef.current = null;
+    }
+    if (closeTimeoutRef.current) {
+      clearTimeout(closeTimeoutRef.current);
+      closeTimeoutRef.current = null;
+    }
+    setProductsMenuOpen((prev) => !prev);
   };
 
   const primaryNavLinks = [
@@ -218,12 +244,14 @@ export const Navbar: React.FC<NavbarProps> = ({
               onMouseLeave={handleMouseLeaveProducts}
             >
               <button
-                onClick={() => setProductsMenuOpen(!productsMenuOpen)}
+                onClick={handleToggleProducts}
                 className={`flex items-center gap-1 text-[13px] 2xl:text-[14px] font-bold transition-colors whitespace-nowrap relative ${
                   isProductsActive ? 'text-[#155EEF]' : 'text-slate-600 hover:text-[#155EEF]'
                 } after:h-0.5 after:bg-[#155EEF] after:absolute after:bottom-[-4px] after:left-0 after:transition-all ${
                   isProductsActive ? 'after:w-full' : 'after:w-0 hover:after:w-full'
                 }`}
+                aria-expanded={productsMenuOpen}
+                aria-haspopup="true"
               >
                 <span>Products</span>
                 <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-200 ${
@@ -231,14 +259,6 @@ export const Navbar: React.FC<NavbarProps> = ({
                 }`} />
                 <span className="ml-0.5 inline-block w-1.5 h-1.5 rounded-full bg-[#155EEF] animate-pulse" />
               </button>
-
-              {/* Floating Mega-Menu Panel */}
-              <ProductsMegaMenu
-                isOpen={productsMenuOpen}
-                onClose={() => setProductsMenuOpen(false)}
-                onSelectProduct={onSelectProduct}
-                onRequestDemo={(productName) => onOpenEnquiry(`Demo Request: ${productName}`)}
-              />
             </div>
 
             {/* 3. Our Work */}
@@ -470,6 +490,21 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         </div>
       </div>
+
+      {/* Floating Mega-Menu Panel & Backdrop (Rendered directly under header, centered on viewport) */}
+      <ProductsMegaMenu
+        isOpen={productsMenuOpen}
+        onClose={() => setProductsMenuOpen(false)}
+        onSelectProduct={onSelectProduct}
+        onRequestDemo={(productName) => onOpenEnquiry(`Demo Request: ${productName}`)}
+        onMouseEnter={() => {
+          if (closeTimeoutRef.current) {
+            clearTimeout(closeTimeoutRef.current);
+            closeTimeoutRef.current = null;
+          }
+        }}
+        onMouseLeave={handleMouseLeaveProducts}
+      />
 
       {/* ========================================================
           MOBILE NAVIGATION DRAWER (<768px)

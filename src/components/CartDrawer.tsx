@@ -79,7 +79,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
+    <div className="fixed inset-0 z-[60] overflow-hidden">
       {/* Backdrop */}
       <div 
         className="absolute inset-0 bg-slate-900/50 backdrop-blur-xs transition-opacity"

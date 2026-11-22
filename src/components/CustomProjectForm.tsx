@@ -402,7 +402,7 @@ export const CustomProjectForm: React.FC<CustomProjectFormProps> = ({
 
   if (isOpen) {
     return (
-      <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+      <div className="fixed inset-0 z-[60] overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
         <div className="relative w-full max-w-2xl my-8">
           {content}
         </div>
