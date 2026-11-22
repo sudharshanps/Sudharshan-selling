@@ -1,9 +1,10 @@
 services:
   - type: web
-    name: sudharshan-tech
+    name: sudharshan-selling
     runtime: node
     plan: free
     region: singapore
+    autoDeploy: true
     buildCommand: npm install --include=dev && npm run build
     startCommand: npm start
     envVars:
