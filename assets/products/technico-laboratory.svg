@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG_06B6D4" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="450" fill="url(#bgG_06B6D4)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.10">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#06B6D4" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container (16:9 inner frame) -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">Technico Laboratory Products Pvt. Ltd. • Corporate Digital Catalog &amp; RFQ Portal</text>
+    <rect x="560" y="11" width="144" height="22" rx="6" fill="#06B6D4" fill-opacity="0.25" stroke="#06B6D4" stroke-width="1" />
+    <text x="632" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">CLIENT PRODUCTION</text>
+
+    <!-- App Body Content -->
+    
+  <!-- Top Navigation Bar of the Technico Website -->
+  <g transform="translate(20, 50)">
+    <rect width="680" height="34" rx="6" fill="#1E293B" stroke="#334155" />
+    <circle cx="20" cy="17" r="8" fill="#06B6D4" />
+    <text x="36" y="21" font-family="sans-serif" font-size="11" font-weight="900" fill="#FFFFFF">TECHNICO</text>
+    <text x="96" y="21" font-family="sans-serif" font-size="9" font-weight="500" fill="#94A3B8">| Laboratory Products Chennai</text>
+    
+    <text x="270" y="21" font-family="sans-serif" font-size="9.5" font-weight="600" fill="#F8FAFC">Glassware</text>
+    <text x="340" y="21" font-family="sans-serif" font-size="9.5" font-weight="600" fill="#94A3B8">Instruments</text>
+    <text x="420" y="21" font-family="sans-serif" font-size="9.5" font-weight="600" fill="#94A3B8">Cleanroom</text>
+    <text x="495" y="21" font-family="sans-serif" font-size="9.5" font-weight="600" fill="#94A3B8">Certifications</text>
+
+    <rect x="580" y="7" width="90" height="20" rx="4" fill="#06B6D4" />
+    <text x="625" y="20" font-family="sans-serif" font-size="9" font-weight="800" fill="#0B132B" text-anchor="middle">REQUEST RFQ</text>
+  </g>
+
+  <!-- Left: Featured Scientific Laboratory Catalog Cards -->
+  <g transform="translate(20, 94)">
+    <!-- Product Card 1: Precision Borosilicate Glassware -->
+    <rect width="330" height="126" rx="8" fill="#1E293B" stroke="#334155" />
+    <!-- Flask silhouette -->
+    <path d="M 38 30 L 48 30 L 48 55 L 62 85 L 24 85 L 38 55 Z" fill="#06B6D4" fill-opacity="0.3" stroke="#06B6D4" stroke-width="2" />
+    <circle cx="43" cy="72" r="3" fill="#06B6D4" />
+    <circle cx="50" cy="78" r="2" fill="#06B6D4" />
+    <text x="80" y="38" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#FFFFFF">Borosilicate 3.3 Glassware</text>
+    <text x="80" y="54" font-family="sans-serif" font-size="9.5" fill="#06B6D4">Class A Volumetric &amp; Interchangeable</text>
+    <text x="80" y="70" font-family="sans-serif" font-size="9" fill="#94A3B8">Thermal Shock Resistance: Up to 500°C</text>
+    <text x="80" y="84" font-family="sans-serif" font-size="9" fill="#94A3B8">Compliance: DIN EN ISO 1042 / Class A</text>
+    
+    <rect x="80" y="94" width="86" height="20" rx="4" fill="#0F172A" stroke="#06B6D4" stroke-width="1" />
+    <text x="123" y="107" font-family="sans-serif" font-size="8.5" font-weight="700" fill="#06B6D4" text-anchor="middle">View Specs</text>
+    <rect x="174" y="94" width="94" height="20" rx="4" fill="#06B6D4" />
+    <text x="221" y="107" font-family="sans-serif" font-size="8.5" font-weight="800" fill="#0B132B" text-anchor="middle">+ Add to RFQ</text>
+
+    <!-- Product Card 2: Digital Micro-Centrifuge -->
+    <g transform="translate(0, 134)">
+      <rect width="330" height="126" rx="8" fill="#1E293B" stroke="#334155" />
+      <!-- Centrifuge icon -->
+      <rect x="24" y="32" width="42" height="50" rx="6" fill="#0F172A" stroke="#3B82F6" stroke-width="1.5" />
+      <circle cx="45" cy="56" r="12" fill="none" stroke="#3B82F6" stroke-width="2" stroke-dasharray="4,2" />
+      <circle cx="45" cy="56" r="4" fill="#3B82F6" />
+      
+      <text x="80" y="38" font-family="sans-serif" font-size="11.5" font-weight="800" fill="#FFFFFF">Digital Micro-Centrifuge</text>
+      <text x="80" y="54" font-family="sans-serif" font-size="9.5" fill="#60A5FA">Brushless Induction • 15,000 RPM</text>
+      <text x="80" y="70" font-family="sans-serif" font-size="9" fill="#94A3B8">RCF: 21,380 x g | 24 x 1.5/2.0 mL Rotor</text>
+      <text x="80" y="84" font-family="sans-serif" font-size="9" fill="#94A3B8">Safety: Dual Lid Lock &amp; Imbalance Sensor</text>
+
+      <rect x="80" y="94" width="86" height="20" rx="4" fill="#0F172A" stroke="#3B82F6" stroke-width="1" />
+      <text x="123" y="107" font-family="sans-serif" font-size="8.5" font-weight="700" fill="#60A5FA" text-anchor="middle">Datasheet</text>
+      <rect x="174" y="94" width="94" height="20" rx="4" fill="#2563EB" />
+      <text x="221" y="107" font-family="sans-serif" font-size="8.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">+ Add to RFQ</text>
+    </g>
+  </g>
+
+  <!-- Right: Corporate Laboratory Showcase &amp; Inquiries -->
+  <g transform="translate(362, 94)">
+    <rect width="338" height="260" rx="8" fill="#1E293B" stroke="#334155" />
+    
+    <!-- Header banner -->
+    <rect x="14" y="14" width="310" height="58" rx="6" fill="#0F172A" stroke="#06B6D4" stroke-width="1" />
+    <text x="24" y="34" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#06B6D4">ESTABLISHED CHENNAI MANUFACTURER</text>
+    <text x="24" y="50" font-family="sans-serif" font-size="9.5" fill="#E2E8F0">Supplying Research Labs, Pharma &amp; Biotech Across India</text>
+    <text x="24" y="62" font-family="sans-serif" font-size="8.5" fill="#94A3B8">ISO 9001:2015 Certified Manufacturing Facility</text>
+
+    <!-- RFQ Quick Summary Box -->
+    <rect x="14" y="82" width="310" height="96" rx="6" fill="#0F172A" />
+    <text x="24" y="102" font-family="sans-serif" font-size="10" font-weight="800" fill="#F8FAFC">ACTIVE QUOTATION INQUIRIES</text>
+    
+    <rect x="24" y="112" width="290" height="26" rx="4" fill="#1E293B" />
+    <text x="32" y="128" font-family="sans-serif" font-size="9" font-weight="600" fill="#E2E8F0">Biotech Lab Chennai: 45 Volumetric Flasks</text>
+    <text x="250" y="128" font-family="sans-serif" font-size="8.5" fill="#10B981">Dispatched</text>
+
+    <rect x="24" y="144" width="290" height="26" rx="4" fill="#1E293B" />
+    <text x="32" y="160" font-family="sans-serif" font-size="9" font-weight="600" fill="#E2E8F0">Clinical Diagnostics: 2 Centrifuges</text>
+    <text x="250" y="160" font-family="sans-serif" font-size="8.5" fill="#60A5FA">Processing</text>
+
+    <!-- Industrial Stats -->
+    <g transform="translate(14, 190)">
+      <rect width="98" height="56" rx="6" fill="#0F172A" />
+      <text x="49" y="212" font-family="sans-serif" font-size="16" font-weight="900" fill="#06B6D4" text-anchor="middle">500+</text>
+      <text x="49" y="228" font-family="sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">Labs Supplied</text>
+
+      <rect x="106" width="98" height="56" rx="6" fill="#0F172A" />
+      <text x="155" y="212" font-family="sans-serif" font-size="16" font-weight="900" fill="#3B82F6" text-anchor="middle">100%</text>
+      <text x="155" y="228" font-family="sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">ISO Certified</text>
+
+      <rect x="212" width="98" height="56" rx="6" fill="#0F172A" />
+      <text x="261" y="212" font-family="sans-serif" font-size="16" font-weight="900" fill="#10B981" text-anchor="middle">48h</text>
+      <text x="261" y="228" font-family="sans-serif" font-size="8" fill="#94A3B8" text-anchor="middle">Fast Dispatch</text>
+    </g>
+  </g>
+  
+  </g>
+</svg>

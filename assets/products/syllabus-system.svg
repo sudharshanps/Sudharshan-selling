@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <linearGradient id="panelG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.03" />
+    </linearGradient>
+    <linearGradient id="accentG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Dark Tech Canvas -->
+  <rect width="800" height="450" fill="url(#bgG)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.12">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#F59E0B" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">CurriculumSuite • Syllabus Progress &amp; Faculty Allocation System</text>
+    <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
+    <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">ENTERPRISE JAVA</text>
+
+    <!-- App Body Content -->
+    
+  <g transform="translate(24, 55)">
+    <!-- Department Grid -->
+    <rect width="672" height="295" rx="10" fill="#1E293B" stroke="#334155" />
+    
+    <!-- Top Stats -->
+    <g transform="translate(14, 14)">
+      <rect width="150" height="55" rx="6" fill="#0F172A" />
+      <text x="12" y="20" font-family="sans-serif" font-size="9" fill="#94A3B8">DEPARTMENTS</text>
+      <text x="12" y="42" font-family="sans-serif" font-size="17" font-weight="900" fill="#F8FAFC">12 ACTIVE</text>
+
+      <rect x="160" width="150" height="55" rx="6" fill="#0F172A" />
+      <text x="172" y="20" font-family="sans-serif" font-size="9" fill="#94A3B8">COURSES TRACKED</text>
+      <text x="172" y="42" font-family="sans-serif" font-size="17" font-weight="900" fill="#60A5FA">148 SUBJECTS</text>
+
+      <rect x="320" width="150" height="55" rx="6" fill="#0F172A" />
+      <text x="332" y="20" font-family="sans-serif" font-size="9" fill="#94A3B8">FACULTY ALLOCATED</text>
+      <text x="332" y="42" font-family="sans-serif" font-size="17" font-weight="900" fill="#10B981">64 / 64 (100%)</text>
+
+      <rect x="480" width="164" height="55" rx="6" fill="#0F172A" />
+      <text x="492" y="20" font-family="sans-serif" font-size="9" fill="#94A3B8">SYLLABUS PROGRESS</text>
+      <text x="492" y="42" font-family="sans-serif" font-size="17" font-weight="900" fill="#F59E0B">78.4% ON TRACK</text>
+    </g>
+
+    <!-- Faculty Workload Progress Matrix -->
+    <g transform="translate(14, 85)">
+      <text x="6" y="16" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#E2E8F0">DEPARTMENT SYLLABUS BENCHMARK PROGRESS</text>
+      
+      <!-- Dept 1 -->
+      <text x="6" y="44" font-family="sans-serif" font-size="10" fill="#94A3B8">Dept of Computer Science &amp; Engineering</text>
+      <rect x="280" y="34" width="300" height="12" rx="6" fill="#0F172A" />
+      <rect x="280" y="34" width="250" height="12" rx="6" fill="#10B981" />
+      <text x="600" y="44" font-family="sans-serif" font-size="10" font-weight="700" fill="#10B981">83%</text>
+
+      <!-- Dept 2 -->
+      <text x="6" y="74" font-family="sans-serif" font-size="10" fill="#94A3B8">Dept of Cybersecurity &amp; Network Defense</text>
+      <rect x="280" y="64" width="300" height="12" rx="6" fill="#0F172A" />
+      <rect x="280" y="64" width="270" height="12" rx="6" fill="#155EEF" />
+      <text x="600" y="74" font-family="sans-serif" font-size="10" font-weight="700" fill="#60A5FA">90%</text>
+
+      <!-- Dept 3 -->
+      <text x="6" y="104" font-family="sans-serif" font-size="10" fill="#94A3B8">Dept of Artificial Intelligence &amp; Data Science</text>
+      <rect x="280" y="94" width="300" height="12" rx="6" fill="#0F172A" />
+      <rect x="280" y="94" width="225" height="12" rx="6" fill="#8B5CF6" />
+      <text x="600" y="104" font-family="sans-serif" font-size="10" font-weight="700" fill="#A78BFA">75%</text>
+    </g>
+  </g>
+  
+  </g>
+</svg>

@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <linearGradient id="panelG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.03" />
+    </linearGradient>
+    <linearGradient id="accentG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#10B981" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Dark Tech Canvas -->
+  <rect width="800" height="450" fill="url(#bgG)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.12">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#10B981" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">Drishti 360 • AI Visual Inspection &amp; Grading Engine</text>
+    <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
+    <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">LIVE PROTOTYPE</text>
+
+    <!-- App Body Content -->
+    
+  <!-- Left Side: Computer Vision Viewfinder -->
+  <g transform="translate(24, 60)">
+    <rect width="360" height="295" rx="10" fill="#090E17" stroke="#1E293B" />
+    <!-- Viewfinder Grid &amp; Target Reticle -->
+    <circle cx="180" cy="140" r="85" fill="none" stroke="#10B981" stroke-dasharray="6,4" stroke-width="1.5" />
+    <circle cx="180" cy="140" r="45" fill="none" stroke="#10B981" stroke-width="1" opacity="0.7" />
+    <line x1="80" y1="140" x2="280" y2="140" stroke="#10B981" stroke-width="1" opacity="0.3" />
+    <line x1="180" y1="40" x2="180" y2="240" stroke="#10B981" stroke-width="1" opacity="0.3" />
+
+    <!-- Bounding Box Annotation 1 -->
+    <rect x="110" y="75" width="140" height="125" rx="6" fill="none" stroke="#10B981" stroke-width="2" />
+    <rect x="110" y="55" width="115" height="18" rx="4" fill="#10B981" />
+    <text x="116" y="68" font-family="monospace" font-size="10" font-weight="700" fill="#090E17">GRADE A+ (98.4%)</text>
+
+    <!-- Viewfinder Telemetry -->
+    <rect x="12" y="255" width="336" height="28" rx="6" fill="#1E293B" />
+    <text x="24" y="273" font-family="monospace" font-size="10" fill="#94A3B8">FPS: 42.6 | SENSOR: 4K OPTICAL | DEFECT: 0.02%</text>
+  </g>
+
+  <!-- Right Side: Intelligence &amp; Passport Metrics -->
+  <g transform="translate(404, 60)">
+    <!-- Metric 1: Quality Grade -->
+    <rect width="292" height="70" rx="10" fill="#1E293B" stroke="#334155" />
+    <text x="18" y="28" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#94A3B8">AI HARVEST MATURITY INDEX</text>
+    <text x="18" y="54" font-family="sans-serif" font-size="20" font-weight="900" fill="#10B981">98.4% PREMIUM</text>
+    <rect x="200" y="22" width="76" height="26" rx="6" fill="#10B981" fill-opacity="0.15" stroke="#10B981" />
+    <text x="238" y="38" font-family="sans-serif" font-size="10" font-weight="800" fill="#10B981" text-anchor="middle">PASSED ✓</text>
+
+    <!-- Metric 2: Export Compliance -->
+    <rect y="84" width="292" height="70" rx="10" fill="#1E293B" stroke="#334155" />
+    <text x="18" y="112" font-family="sans-serif" font-size="10.5" font-weight="700" fill="#94A3B8">EXPORT LABELLING COMPLIANCE</text>
+    <text x="18" y="138" font-family="sans-serif" font-size="17" font-weight="900" fill="#60A5FA">ISO 22000 / APEDA</text>
+    <text x="225" y="138" font-family="sans-serif" font-size="11" font-weight="700" fill="#10B981">100% MATCH</text>
+
+    <!-- Metric 3: Digital Quality Passport -->
+    <rect y="168" width="292" height="127" rx="10" fill="#0B1329" stroke="#155EEF" stroke-width="1.5" />
+    <text x="18" y="196" font-family="sans-serif" font-size="12" font-weight="800" fill="#FFFFFF">Digital Quality Passport</text>
+    <text x="18" y="214" font-family="monospace" font-size="10" fill="#60A5FA">ID: DQP-2026-ST-88942-IN</text>
+    
+    <!-- Mini QR Representation -->
+    <rect x="18" y="225" width="55" height="55" rx="6" fill="#FFFFFF" />
+    <rect x="26" y="233" width="16" height="16" fill="#000000" />
+    <rect x="49" y="233" width="16" height="16" fill="#000000" />
+    <rect x="26" y="256" width="16" height="16" fill="#000000" />
+    <rect x="49" y="256" width="6" height="6" fill="#155EEF" />
+
+    <text x="86" y="246" font-family="sans-serif" font-size="11" font-weight="700" fill="#E2E8F0">Cryptographically Signed</text>
+    <text x="86" y="264" font-family="sans-serif" font-size="9.5" fill="#94A3B8">Tamper-Evident Mandi &amp; Customs Record</text>
+  </g>
+  
+  </g>
+</svg>

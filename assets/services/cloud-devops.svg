@@ -1,0 +1,107 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F1F5F9" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E53935" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#0284C7" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="480" fill="url(#bgGrad)" />
+
+  <!-- Subtle Tech Grid -->
+  <g opacity="0.4">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    </pattern>
+    <rect width="800" height="480" fill="url(#grid)" />
+  </g>
+
+  <!-- Ambient Decorative Rings -->
+  <circle cx="700" cy="80" r="140" fill="#0284C7" opacity="0.04" />
+  <circle cx="100" cy="420" r="160" fill="#155EEF" opacity="0.04" />
+
+  <!-- Main Illustration Content -->
+  
+  <!-- Central Cloud &amp; Server Stacks -->
+  <g transform="translate(350, 90)" filter="url(#shadow)">
+    <!-- Cloud Contour -->
+    <path d="M 50 100 C 30 100 10 80 10 55 C 10 32 30 16 52 16 C 60 -5 95 -5 110 12 C 125 0 155 8 155 35 C 175 38 190 55 190 75 C 190 100 170 100 150 100 Z" fill="#FFFFFF" stroke="#0284C7" stroke-width="3" filter="url(#glow)" />
+    <text x="100" y="62" font-family="sans-serif" font-size="12" font-weight="900" fill="#0284C7" text-anchor="middle">AWS Cloud</text>
+  </g>
+
+  <!-- Server Racks Bottom -->
+  <g transform="translate(300, 210)" filter="url(#shadow)">
+    <rect width="200" height="130" rx="12" fill="#1E293B" stroke="#475569" stroke-width="2" />
+    <!-- Server Unit 1 -->
+    <rect x="12" y="14" width="176" height="26" rx="6" fill="#0F172A" />
+    <circle cx="28" cy="27" r="4" fill="#10B981" />
+    <circle cx="40" cy="27" r="4" fill="#10B981" />
+    <circle cx="52" cy="27" r="4" fill="#38BDF8" />
+    <line x1="70" y1="27" x2="160" y2="27" stroke="#334155" stroke-width="4" stroke-dasharray="8 6" />
+
+    <!-- Server Unit 2 -->
+    <rect x="12" y="48" width="176" height="26" rx="6" fill="#0F172A" />
+    <circle cx="28" cy="61" r="4" fill="#10B981" />
+    <circle cx="40" cy="61" r="4" fill="#F59E0B" />
+    <circle cx="52" cy="61" r="4" fill="#38BDF8" />
+    <line x1="70" y1="61" x2="160" y2="61" stroke="#334155" stroke-width="4" stroke-dasharray="8 6" />
+
+    <!-- Server Unit 3 -->
+    <rect x="12" y="82" width="176" height="26" rx="6" fill="#0F172A" />
+    <circle cx="28" cy="95" r="4" fill="#10B981" />
+    <circle cx="40" cy="95" r="4" fill="#10B981" />
+    <circle cx="52" cy="95" r="4" fill="#E53935" />
+    <line x1="70" y1="95" x2="160" y2="95" stroke="#334155" stroke-width="4" stroke-dasharray="8 6" />
+  </g>
+
+  <!-- Left: CI/CD Pipeline Step Indicator -->
+  <g transform="translate(100, 140)" filter="url(#shadow)">
+    <rect width="160" height="170" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="18" y="32" font-family="sans-serif" font-size="11" font-weight="800" fill="#172033">GitHub Actions</text>
+    <rect x="18" y="48" width="124" height="24" rx="6" fill="#F8FAFC" stroke="#E2E8F0" />
+    <text x="26" y="64" font-family="monospace" font-size="9" fill="#1E293B">1. Test &amp; Build ✓</text>
+    <rect x="18" y="80" width="124" height="24" rx="6" fill="#F8FAFC" stroke="#E2E8F0" />
+    <text x="26" y="96" font-family="monospace" font-size="9" fill="#1E293B">2. Docker Build ✓</text>
+    <rect x="18" y="112" width="124" height="24" rx="6" fill="#EFF4FF" stroke="#BFDBFE" />
+    <text x="26" y="128" font-family="monospace" font-size="9" font-weight="700" fill="#155EEF">3. Cloud Push 🚀</text>
+  </g>
+
+  <!-- Right: Docker Containers -->
+  <g transform="translate(540, 150)" filter="url(#shadow)">
+    <rect width="160" height="150" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="18" y="32" font-family="sans-serif" font-size="11" font-weight="800" fill="#0284C7">Docker Containers</text>
+    <rect x="20" y="50" width="48" height="36" rx="6" fill="#0284C7" />
+    <rect x="76" y="50" width="48" height="36" rx="6" fill="#0369A1" />
+    <rect x="20" y="94" width="48" height="36" rx="6" fill="#0284C7" />
+    <rect x="76" y="94" width="48" height="36" rx="6" fill="#E53935" />
+  </g>
+  
+
+  <!-- Brand Label Overlay Bar -->
+  <g transform="translate(40, 420)">
+    <rect width="720" height="38" rx="10" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)" />
+    <rect x="12" y="10" width="8" height="18" rx="4" fill="#0284C7" />
+    <text x="30" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="800" fill="#172033">SUDHARSHAN_TECH</text>
+    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• Cloud &amp; DevOps (AWS Cloud Infrastructure, Docker Containers &amp; CI/CD Pipelines)</text>
+    <text x="690" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#0284C7" text-anchor="end">PRO VERIFIED</text>
+  </g>
+</svg>

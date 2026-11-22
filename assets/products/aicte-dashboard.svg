@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <linearGradient id="panelG" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.03" />
+    </linearGradient>
+    <linearGradient id="accentG" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3B82F6" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Dark Tech Canvas -->
+  <rect width="800" height="450" fill="url(#bgG)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.12">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#3B82F6" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">AICTE Grievance 360 • Institutional Dispute Redressal Portal</text>
+    <rect x="580" y="12" width="124" height="20" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
+    <text x="642" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">GOVTECH MVP</text>
+
+    <!-- App Body Content -->
+    
+  <g transform="translate(24, 55)">
+    <!-- Metrics Row -->
+    <rect width="156" height="64" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="14" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">ACTIVE CASES</text>
+    <text x="14" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#F8FAFC">1,428</text>
+
+    <rect x="172" width="156" height="64" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="186" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">RB-PGRC OVERLAP</text>
+    <text x="186" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#F59E0B">0 DUAL</text>
+
+    <rect x="344" width="156" height="64" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="358" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">RESOLVED RATE</text>
+    <text x="358" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#10B981">94.2%</text>
+
+    <rect x="516" width="156" height="64" rx="8" fill="#1E293B" stroke="#334155" />
+    <text x="530" y="22" font-family="sans-serif" font-size="9.5" font-weight="700" fill="#94A3B8">AVG SLA DAYS</text>
+    <text x="530" y="48" font-family="sans-serif" font-size="20" font-weight="900" fill="#60A5FA">4.2 DAYS</text>
+  </g>
+
+  <!-- Case Table -->
+  <g transform="translate(24, 132)">
+    <rect width="672" height="225" rx="10" fill="#1E293B" stroke="#334155" />
+    
+    <!-- Table Header -->
+    <rect width="672" height="34" rx="10" fill="#0F172A" />
+    <text x="18" y="22" font-family="sans-serif" font-size="10" font-weight="800" fill="#94A3B8">GRIEVANCE ID</text>
+    <text x="140" y="22" font-family="sans-serif" font-size="10" font-weight="800" fill="#94A3B8">INSTITUTION</text>
+    <text x="320" y="22" font-family="sans-serif" font-size="10" font-weight="800" fill="#94A3B8">CATEGORY</text>
+    <text x="460" y="22" font-family="sans-serif" font-size="10" font-weight="800" fill="#94A3B8">STATUS</text>
+    <text x="580" y="22" font-family="sans-serif" font-size="10" font-weight="800" fill="#94A3B8">AUDIT SLA</text>
+
+    <!-- Row 1 -->
+    <line x1="0" y1="34" x2="672" y2="34" stroke="#334155" />
+    <text x="18" y="60" font-family="monospace" font-size="10.5" font-weight="700" fill="#60A5FA">GRV-2026-881</text>
+    <text x="140" y="60" font-family="sans-serif" font-size="10.5" fill="#E2E8F0">PSG Tech Coimbatore</text>
+    <text x="320" y="60" font-family="sans-serif" font-size="10.5" fill="#94A3B8">Faculty Allocation</text>
+    <rect x="460" y="46" width="70" height="20" rx="4" fill="#10B981" fill-opacity="0.2" />
+    <text x="495" y="60" font-family="sans-serif" font-size="9.5" font-weight="800" fill="#34D399" text-anchor="middle">VERIFIED</text>
+    <text x="580" y="60" font-family="sans-serif" font-size="10" fill="#10B981">Within SLA ✓</text>
+
+    <!-- Row 2 -->
+    <line x1="0" y1="80" x2="672" y2="80" stroke="#334155" />
+    <text x="18" y="106" font-family="monospace" font-size="10.5" font-weight="700" fill="#60A5FA">GRV-2026-904</text>
+    <text x="140" y="106" font-family="sans-serif" font-size="10.5" fill="#E2E8F0">CIT Coimbatore</text>
+    <text x="320" y="106" font-family="sans-serif" font-size="10.5" fill="#94A3B8">Syllabus Compliance</text>
+    <rect x="460" y="92" width="80" height="20" rx="4" fill="#3B82F6" fill-opacity="0.2" />
+    <text x="500" y="106" font-family="sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">IN REVIEW</text>
+    <text x="580" y="106" font-family="sans-serif" font-size="10" fill="#F59E0B">2 Days Rem.</text>
+
+    <!-- Row 3 -->
+    <line x1="0" y1="126" x2="672" y2="126" stroke="#334155" />
+    <text x="18" y="152" font-family="monospace" font-size="10.5" font-weight="700" fill="#60A5FA">GRV-2026-921</text>
+    <text x="140" y="152" font-family="sans-serif" font-size="10.5" fill="#E2E8F0">SKCET Autonomous</text>
+    <text x="320" y="152" font-family="sans-serif" font-size="10.5" fill="#94A3B8">Curriculum Update</text>
+    <rect x="460" y="138" width="70" height="20" rx="4" fill="#10B981" fill-opacity="0.2" />
+    <text x="495" y="152" font-family="sans-serif" font-size="9.5" font-weight="800" fill="#34D399" text-anchor="middle">RESOLVED</text>
+    <text x="580" y="152" font-family="sans-serif" font-size="10" fill="#10B981">Within SLA ✓</text>
+  </g>
+  
+  </g>
+</svg>

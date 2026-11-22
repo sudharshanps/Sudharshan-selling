@@ -1,0 +1,117 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgG_155EEF" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B132B" />
+      <stop offset="100%" stop-color="#1C2541" />
+    </linearGradient>
+    <filter id="cardShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="450" fill="url(#bgG_155EEF)" />
+
+  <!-- Ambient Grid -->
+  <g opacity="0.10">
+    <pattern id="gridPattern" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M 24 0 L 0 0 0 24" fill="none" stroke="#FFFFFF" stroke-width="0.75" />
+    </pattern>
+    <rect width="800" height="450" fill="url(#gridPattern)" />
+  </g>
+
+  <!-- Ambient Soft Glow -->
+  <circle cx="680" cy="90" r="140" fill="#155EEF" opacity="0.18" />
+  <circle cx="120" cy="360" r="120" fill="#00D2FF" opacity="0.12" />
+
+  <!-- Software Window Container (16:9 inner frame) -->
+  <g transform="translate(40, 30)" filter="url(#cardShadow)">
+    <!-- Window Outer Shell -->
+    <rect width="720" height="390" rx="14" fill="#0F172A" stroke="#334155" stroke-width="1.5" />
+
+    <!-- Window Titlebar -->
+    <rect width="720" height="42" rx="14" fill="#1E293B" />
+    <rect y="30" width="720" height="12" fill="#1E293B" />
+    <line x1="0" y1="42" x2="720" y2="42" stroke="#334155" stroke-width="1" />
+
+    <!-- Traffic Lights -->
+    <circle cx="24" cy="21" r="5" fill="#EF4444" />
+    <circle cx="42" cy="21" r="5" fill="#F59E0B" />
+    <circle cx="60" cy="21" r="5" fill="#10B981" />
+
+    <!-- Window Title -->
+    <text x="85" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="700" fill="#E2E8F0">SUDHARSHAN_TECH • Code. Create. Elevate. • Digital Solutions Platform</text>
+    <rect x="560" y="11" width="144" height="22" rx="6" fill="#155EEF" fill-opacity="0.25" stroke="#155EEF" stroke-width="1" />
+    <text x="632" y="25" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="9.5" font-weight="800" fill="#60A5FA" text-anchor="middle">OFFICIAL PORTAL</text>
+
+    <!-- App Body Content -->
+    
+  <!-- Main Platform Hero Header -->
+  <g transform="translate(24, 55)">
+    <rect width="672" height="74" rx="10" fill="#1E293B" stroke="#155EEF" stroke-width="1.5" />
+    
+    <!-- Stylized ST Logo Icon -->
+    <rect x="18" y="16" width="42" height="42" rx="8" fill="#0B1736" stroke="#155EEF" />
+    <text x="39" y="44" font-family="sans-serif" font-size="18" font-weight="900" fill="#00D2FF" text-anchor="middle">ST</text>
+    
+    <text x="72" y="36" font-family="sans-serif" font-size="13" font-weight="900" fill="#FFFFFF">SUDHARSHAN<tspan fill="#155EEF">_TECH</tspan></text>
+    <text x="72" y="52" font-family="sans-serif" font-size="9.5" font-weight="600" fill="#94A3B8">Code. Create. Elevate. • Premium Digital Services Marketplace</text>
+    
+    <rect x="520" y="22" width="134" height="28" rx="6" fill="#155EEF" />
+    <text x="587" y="40" font-family="sans-serif" font-size="9.5" font-weight="800" fill="#FFFFFF" text-anchor="middle">Explore Solutions →</text>
+  </g>
+
+  <!-- 3 Service Columns in Portal Interface -->
+  <g transform="translate(24, 140)">
+    <!-- Column 1: Custom Web &amp; Mobile Apps -->
+    <rect width="214" height="210" rx="8" fill="#1E293B" stroke="#334155" />
+    <rect x="12" y="12" width="32" height="32" rx="6" fill="#0F172A" stroke="#155EEF" />
+    <text x="28" y="32" font-family="sans-serif" font-size="14" fill="#60A5FA" text-anchor="middle">💻</text>
+    <text x="52" y="26" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF">Full-Stack Web</text>
+    <text x="52" y="38" font-family="sans-serif" font-size="8.5" fill="#94A3B8">&amp; Mobile Engineering</text>
+    
+    <text x="14" y="66" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• React, TypeScript &amp; Next.js</text>
+    <text x="14" y="82" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• REST &amp; GraphQL Architectures</text>
+    <text x="14" y="98" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• High-Performance UI/UX</text>
+    <text x="14" y="114" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Cross-Platform React Native</text>
+
+    <rect x="12" y="170" width="190" height="26" rx="6" fill="#0F172A" stroke="#334155" />
+    <text x="107" y="186" font-family="sans-serif" font-size="8.5" font-weight="700" fill="#60A5FA" text-anchor="middle">Starting ₹12,999</text>
+
+    <!-- Column 2: AI &amp; Computer Vision -->
+    <g transform="translate(229, 0)">
+      <rect width="214" height="210" rx="8" fill="#1E293B" stroke="#00D2FF" stroke-width="1.2" />
+      <rect x="12" y="12" width="32" height="32" rx="6" fill="#0F172A" stroke="#00D2FF" />
+      <text x="28" y="32" font-family="sans-serif" font-size="14" fill="#00D2FF" text-anchor="middle">🧠</text>
+      <text x="52" y="26" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF">AI &amp; Automation</text>
+      <text x="52" y="38" font-family="sans-serif" font-size="8.5" fill="#00D2FF">Edge Vision &amp; LLMs</text>
+
+      <text x="14" y="66" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Computer Vision (OpenCV)</text>
+      <text x="14" y="82" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Gemini API Contextual RAG</text>
+      <text x="14" y="98" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Automated AI Ingestion</text>
+      <text x="14" y="114" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Custom PyTorch / ML Models</text>
+
+      <rect x="12" y="170" width="190" height="26" rx="6" fill="#0F172A" stroke="#00D2FF" stroke-width="1" />
+      <text x="107" y="186" font-family="sans-serif" font-size="8.5" font-weight="800" fill="#00D2FF" text-anchor="middle">Custom Engineering</text>
+    </g>
+
+    <!-- Column 3: Cybersecurity &amp; Cloud -->
+    <g transform="translate(458, 0)">
+      <rect width="214" height="210" rx="8" fill="#1E293B" stroke="#334155" />
+      <rect x="12" y="12" width="32" height="32" rx="6" fill="#0F172A" stroke="#EF4444" />
+      <text x="28" y="32" font-family="sans-serif" font-size="14" fill="#EF4444" text-anchor="middle">🛡️</text>
+      <text x="52" y="26" font-family="sans-serif" font-size="10.5" font-weight="800" fill="#FFFFFF">Cybersecurity</text>
+      <text x="52" y="38" font-family="sans-serif" font-size="8.5" fill="#94A3B8">&amp; Cloud DevOps</text>
+
+      <text x="14" y="66" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• VAPT &amp; Web Penetration Testing</text>
+      <text x="14" y="82" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Phishing Threat Intelligence</text>
+      <text x="14" y="98" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• Docker &amp; CI/CD Pipelines</text>
+      <text x="14" y="114" font-family="sans-serif" font-size="8.5" fill="#E2E8F0">• AWS / GCP Cloud Hardening</text>
+
+      <rect x="12" y="170" width="190" height="26" rx="6" fill="#0F172A" stroke="#334155" />
+      <text x="107" y="186" font-family="sans-serif" font-size="8.5" font-weight="700" fill="#60A5FA" text-anchor="middle">Enterprise Ready</text>
+    </g>
+  </g>
+  
+  </g>
+</svg>

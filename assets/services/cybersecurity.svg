@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F1F5F9" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#155EEF" />
+      <stop offset="100%" stop-color="#00D2FF" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E53935" />
+      <stop offset="100%" stop-color="#FF6B6B" />
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" />
+      <stop offset="100%" stop-color="#F8FAFC" />
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0F172A" flood-opacity="0.08" />
+    </filter>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#155EEF" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="480" fill="url(#bgGrad)" />
+
+  <!-- Subtle Tech Grid -->
+  <g opacity="0.4">
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#E2E8F0" stroke-width="1" />
+    </pattern>
+    <rect width="800" height="480" fill="url(#grid)" />
+  </g>
+
+  <!-- Ambient Decorative Rings -->
+  <circle cx="700" cy="80" r="140" fill="#155EEF" opacity="0.04" />
+  <circle cx="100" cy="420" r="160" fill="#155EEF" opacity="0.04" />
+
+  <!-- Main Illustration Content -->
+  
+  <!-- Central Digital Security Shield -->
+  <g transform="translate(400, 200)" filter="url(#glow)">
+    <!-- Glowing Outer Shield -->
+    <path d="M 0 -110 L 85 -70 C 85 40, 45 95, 0 120 C -45 95, -85 40, -85 -70 Z" fill="url(#primaryGrad)" opacity="0.2" />
+    <!-- Solid Shield -->
+    <path d="M 0 -95 L 75 -60 C 75 35, 40 85, 0 105 C -40 85, -75 35, -75 -60 Z" fill="#FFFFFF" stroke="#155EEF" stroke-width="3" filter="url(#shadow)" />
+    <!-- Padlock Graphic inside Shield -->
+    <rect x="-24" y="-10" width="48" height="40" rx="8" fill="#172033" />
+    <path d="M -16 -10 L -16 -24 C -16 -34, 16 -34, 16 -24 L 16 -10" fill="none" stroke="#172033" stroke-width="5" stroke-linecap="round" />
+    <circle cx="0" cy="8" r="4" fill="#E53935" />
+    <path d="M 0 10 L 0 18" stroke="#E53935" stroke-width="2" />
+  </g>
+
+  <!-- Left Card: Threat Monitor -->
+  <g transform="translate(110, 110)" filter="url(#shadow)">
+    <rect width="180" height="160" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="18" y="32" font-family="sans-serif" font-size="11" font-weight="800" fill="#172033">Audit Parameters</text>
+    <rect x="18" y="48" width="144" height="24" rx="6" fill="#F0FDF4" stroke="#BBF7D0" />
+    <text x="26" y="64" font-family="sans-serif" font-size="9" font-weight="700" fill="#166534">✓ OWASP Top 10 Audited</text>
+    <rect x="18" y="80" width="144" height="24" rx="6" fill="#F0FDF4" stroke="#BBF7D0" />
+    <text x="26" y="96" font-family="sans-serif" font-size="9" font-weight="700" fill="#166534">✓ TLS 1.3 Strict HTTPS</text>
+    <rect x="18" y="112" width="144" height="24" rx="6" fill="#EFF4FF" stroke="#BFDBFE" />
+    <text x="26" y="128" font-family="sans-serif" font-size="9" font-weight="700" fill="#155EEF">🛡 Rate Limiting Active</text>
+  </g>
+
+  <!-- Right Card: Security Metrics -->
+  <g transform="translate(510, 110)" filter="url(#shadow)">
+    <rect width="180" height="160" rx="14" fill="#FFFFFF" stroke="#E2E8F0" />
+    <text x="18" y="32" font-family="sans-serif" font-size="11" font-weight="800" fill="#172033">Security Score</text>
+    <circle cx="90" cy="85" r="40" fill="none" stroke="#E2E8F0" stroke-width="8" />
+    <circle cx="90" cy="85" r="40" fill="none" stroke="#10B981" stroke-width="8" stroke-dasharray="210 250" stroke-linecap="round" />
+    <text x="90" y="90" font-family="sans-serif" font-size="16" font-weight="900" fill="#172033" text-anchor="middle">A+</text>
+    <text x="90" y="145" font-family="sans-serif" font-size="9" font-weight="700" fill="#10B981" text-anchor="middle">Zero Critical Findings</text>
+  </g>
+  
+
+  <!-- Brand Label Overlay Bar -->
+  <g transform="translate(40, 420)">
+    <rect width="720" height="38" rx="10" fill="#FFFFFF" stroke="#E2E8F0" filter="url(#shadow)" />
+    <rect x="12" y="10" width="8" height="18" rx="4" fill="#155EEF" />
+    <text x="30" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="800" fill="#172033">SUDHARSHAN_TECH</text>
+    <text x="170" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="12" font-weight="600" fill="#64748B">• Cybersecurity &amp; Hardening (Vulnerability Assessments, Security Hardening &amp; OWASP Audits)</text>
+    <text x="690" y="23" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif" font-size="11" font-weight="700" fill="#155EEF" text-anchor="end">PRO VERIFIED</text>
+  </g>
+</svg>
